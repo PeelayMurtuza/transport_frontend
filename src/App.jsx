@@ -1,9 +1,9 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import './App.css'
 import Home from "./Home";
+import AgentHome from "./components/agent/AgentHome";
 
 const App = () => {
   return (
@@ -43,6 +43,16 @@ const App = () => {
             >
               Register
             </NavLink>
+            <NavLink
+              to="/agent"
+              className={({ isActive }) =>
+                `font-semibold hover:text-blue-500 ${
+                  isActive ? "text-blue-600 border-b-2 border-blue-600" : ""
+                }`
+              }
+            >
+              Agent
+            </NavLink>
             
           </div>
         </div>
@@ -54,6 +64,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/agent/*" element={<AgentHome />} />
         </Routes>
       </div>
     </BrowserRouter>
