@@ -7,10 +7,9 @@ import DashBoard from "./DashBoard";
 import MyLoad from "./MyLoad";
 import PostLoad from "./PostLoad";
 import AfterPosting from "./AfterPosting";
-import Wallet from "./Wallet";
+import Wallet from "./PremiumWallet";
 import DriverTracking from "./DriverTracking";
 import Reports from "./Reports";
-import Communication from "./Communication";
 
 const AgentHome = () => {
   const links = [
@@ -20,8 +19,7 @@ const AgentHome = () => {
     { name: "After Posting", path: "afterposting", icon: <FaTruck /> },
     { name: "Wallet", path: "wallet", icon: <FaWallet /> },
     { name: "Driver Tracking", path: "drivertracking", icon: <FaMapMarkerAlt /> },
-    { name: "Reports", path: "reports", icon: <FaChartLine /> },
-    { name: "Communication", path: "communication", icon: <FaEnvelope /> },
+    { name: "Reports", path: "reports", icon: <FaChartLine /> }
   ];
 
   return (
@@ -83,7 +81,7 @@ const AgentHome = () => {
             <Route path="wallet" element={<Wallet />} />
             <Route path="drivertracking" element={<DriverTracking />} />
             <Route path="reports" element={<Reports />} />
-            <Route path="communication" element={<Communication />} />
+            
           </Routes>
         </div>
       </div>
