@@ -176,26 +176,28 @@ function Wallet() {
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50/30">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl shadow-lg">
-                <WalletIcon className="w-8 h-8 text-white" />
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="flex items-center justify-between h-16 sm:h-20 py-2">
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl sm:rounded-2xl shadow-lg">
+                <WalletIcon className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Wallet</h1>
-                <p className="text-gray-600">Manage your earnings and transactions</p>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Wallet</h1>
+                <p className="text-gray-600 text-xs sm:text-sm hidden xs:block">
+                  Manage your earnings and transactions
+                </p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
               <button 
                 onClick={() => setShowBalance(!showBalance)}
-                className="p-3 bg-gray-100 hover:bg-gray-200 rounded-2xl transition-colors"
+                className="p-2 sm:p-3 bg-gray-100 hover:bg-gray-200 rounded-xl sm:rounded-2xl transition-colors"
               >
-                {showBalance ? <EyeOff className="w-5 h-5 text-gray-600" /> : <Eye className="w-5 h-5 text-gray-600" />}
+                {showBalance ? <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" /> : <EyeOff className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />}
               </button>
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold shadow-lg text-sm sm:text-base">
                 JD
               </div>
             </div>
@@ -204,67 +206,67 @@ function Wallet() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Balance & Quick Actions */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Balance Card */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 overflow-hidden"
             >
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">Total Balance</h2>
-                  <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-3 py-1 rounded-full">
-                    <TrendingUp className="w-4 h-4" />
-                    <span className="text-sm font-semibold">+{walletData.weeklyGrowth}%</span>
+              <div className="p-4 sm:p-6 lg:p-8">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900">Total Balance</h2>
+                  <div className="flex items-center space-x-1 sm:space-x-2 text-green-600 bg-green-50 px-2 sm:px-3 py-1 rounded-full">
+                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs sm:text-sm font-semibold">+{walletData.weeklyGrowth}%</span>
                   </div>
                 </div>
 
-                <div className="text-center mb-6">
+                <div className="text-center mb-4 sm:mb-6">
                   {showBalance ? (
-                    <div className="space-y-2">
-                      <div className="text-5xl font-bold text-gray-900">
-                        ${walletData.balance.toLocaleString()}
+                    <div className="space-y-1 sm:space-y-2">
+                      <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
+                        ₹{walletData.balance.toLocaleString()}
                       </div>
-                      <div className="text-green-600 font-semibold text-lg">
-                        +${walletData.weeklyGrowth} this week
+                      <div className="text-green-600 font-semibold text-sm sm:text-base lg:text-lg">
+                        +₹{walletData.weeklyGrowth} this week
                       </div>
                     </div>
                   ) : (
-                    <div className="text-5xl font-bold text-gray-900 blur-md select-none">
-                      $12,450.75
+                    <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 blur-md select-none">
+                      ₹12,450.75
                     </div>
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="text-center p-4 bg-green-50 rounded-2xl border border-green-200">
-                    <div className="text-green-600 font-bold text-xl">
-                      ${walletData.available.toLocaleString()}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6">
+                  <div className="text-center p-3 sm:p-4 bg-green-50 rounded-xl sm:rounded-2xl border border-green-200">
+                    <div className="text-green-600 font-bold text-lg sm:text-xl">
+                      ₹{walletData.available.toLocaleString()}
                     </div>
-                    <div className="text-gray-600 text-sm font-medium">Available</div>
+                    <div className="text-gray-600 text-xs sm:text-sm font-medium">Available</div>
                   </div>
-                  <div className="text-center p-4 bg-amber-50 rounded-2xl border border-amber-200">
-                    <div className="text-amber-600 font-bold text-xl">
-                      ${walletData.onHold.toLocaleString()}
+                  <div className="text-center p-3 sm:p-4 bg-amber-50 rounded-xl sm:rounded-2xl border border-amber-200">
+                    <div className="text-amber-600 font-bold text-lg sm:text-xl">
+                      ₹{walletData.onHold.toLocaleString()}
                     </div>
-                    <div className="text-gray-600 text-sm font-medium">On Hold</div>
+                    <div className="text-gray-600 text-xs sm:text-sm font-medium">On Hold</div>
                   </div>
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex flex-col xs:flex-row space-y-2 xs:space-y-0 xs:space-x-2 sm:space-x-3">
                   <button 
                     onClick={() => setShowAddMoney(true)}
-                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-2xl font-bold hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-3"
+                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 text-sm sm:text-base"
                   >
-                    <Plus className="w-5 h-5" />
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Add Money</span>
                   </button>
-                  <button className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-600 text-white py-4 rounded-2xl font-bold hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-3">
-                    <ArrowUpRight className="w-5 h-5" />
+                  <button className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-600 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 text-sm sm:text-base">
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Withdraw</span>
                   </button>
                 </div>
@@ -276,26 +278,26 @@ function Wallet() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 p-4 sm:p-6"
             >
-              <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center space-x-2">
-                <BarChart3 className="w-5 h-5 text-blue-600" />
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-6 flex items-center space-x-2">
+                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 <span>Earnings Overview</span>
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {[
-                  { label: 'Total Earnings', value: `$${walletData.totalEarnings.toLocaleString()}`, color: 'text-green-600', icon: TrendingUp, bg: 'bg-green-50' },
-                  { label: 'Commission Paid', value: `$${walletData.commissionPaid.toLocaleString()}`, color: 'text-blue-600', icon: TrendingDown, bg: 'bg-blue-50' },
-                  { label: 'Refunds Received', value: `$${walletData.refundsReceived.toLocaleString()}`, color: 'text-purple-600', icon: RefreshCw, bg: 'bg-purple-50' }
+                  { label: 'Total Earnings', value: `₹${walletData.totalEarnings.toLocaleString()}`, color: 'text-green-600', icon: TrendingUp, bg: 'bg-green-50' },
+                  { label: 'Commission Paid', value: `₹${walletData.commissionPaid.toLocaleString()}`, color: 'text-blue-600', icon: TrendingDown, bg: 'bg-blue-50' },
+                  { label: 'Refunds Received', value: `₹${walletData.refundsReceived.toLocaleString()}`, color: 'text-purple-600', icon: RefreshCw, bg: 'bg-purple-50' }
                 ].map((stat, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-colors group">
-                    <div className="flex items-center space-x-4">
-                      <div className={`p-3 rounded-2xl ${stat.bg}`}>
-                        <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                  <div key={index} className="flex items-center justify-between p-3 sm:p-4 hover:bg-gray-50 rounded-xl sm:rounded-2xl transition-colors group">
+                    <div className="flex items-center space-x-3 sm:space-x-4">
+                      <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl ${stat.bg}`}>
+                        <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${stat.color}`} />
                       </div>
-                      <span className="text-gray-700 font-semibold">{stat.label}</span>
+                      <span className="text-gray-700 font-semibold text-sm sm:text-base">{stat.label}</span>
                     </div>
-                    <span className={`font-bold text-lg ${stat.color}`}>{stat.value}</span>
+                    <span className={`font-bold text-base sm:text-lg ${stat.color}`}>{stat.value}</span>
                   </div>
                 ))}
               </div>
@@ -306,30 +308,30 @@ function Wallet() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 p-4 sm:p-6"
             >
-              <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center space-x-2">
-                <CreditCard className="w-5 h-5 text-cyan-600" />
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-6 flex items-center space-x-2">
+                <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600" />
                 <span>Payment Methods</span>
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {[
                   { type: 'Credit Card', last4: '4242', primary: true, icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50' },
                   { type: 'Digital Wallet', last4: 'PayPal', primary: false, icon: Smartphone, color: 'text-green-600', bg: 'bg-green-50' },
                   { type: 'Bank Transfer', last4: '7284', primary: false, icon: Building, color: 'text-purple-600', bg: 'bg-purple-50' }
                 ].map((method, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm">
-                    <div className="flex items-center space-x-4">
-                      <div className={`p-3 rounded-2xl ${method.bg}`}>
-                        <method.icon className={`w-5 h-5 ${method.color}`} />
+                  <div key={index} className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm">
+                    <div className="flex items-center space-x-3 sm:space-x-4">
+                      <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl ${method.bg}`}>
+                        <method.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${method.color}`} />
                       </div>
-                      <div>
-                        <div className="text-gray-900 font-semibold">{method.type}</div>
-                        <div className="text-gray-500 text-sm">**** {method.last4}</div>
+                      <div className="min-w-0">
+                        <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">{method.type}</div>
+                        <div className="text-gray-500 text-xs sm:text-sm">**** {method.last4}</div>
                       </div>
                     </div>
                     {method.primary && (
-                      <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full border border-green-200">
+                      <span className="px-2 sm:px-3 py-1 bg-green-100 text-green-700 text-xs sm:text-sm font-medium rounded-full border border-green-200 whitespace-nowrap">
                         Primary
                       </span>
                     )}
@@ -340,17 +342,17 @@ function Wallet() {
           </div>
 
           {/* Right Column - Transactions & History */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Main Tabs Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 overflow-hidden"
             >
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="p-4 sm:p-6 border-b border-gray-200">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
                   {/* Tabs */}
-                  <div className="flex space-x-1 bg-gray-100 rounded-2xl p-1">
+                  <div className="flex space-x-1 bg-gray-100 rounded-xl sm:rounded-2xl p-1 overflow-x-auto">
                     {[
                       { id: 'transactions', label: 'Transactions', icon: Receipt },
                       { id: 'commissions', label: 'Commissions', icon: Coins },
@@ -359,36 +361,36 @@ function Wallet() {
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all ${
+                        className={`flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all whitespace-nowrap text-xs sm:text-sm ${
                           activeTab === tab.id
                             ? 'bg-white text-gray-900 shadow-sm'
                             : 'text-gray-600 hover:text-gray-900'
                         }`}
                       >
-                        <tab.icon className="w-4 h-4" />
+                        <tab.icon className="w-3 h-3 sm:w-4 sm:h-4" />
                         <span>{tab.label}</span>
                       </button>
                     ))}
                   </div>
 
                   {/* Search and Filter */}
-                  <div className="flex items-center space-x-3">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3 h-3 sm:w-4 sm:h-4" />
                       <input
                         type="text"
                         placeholder="Search transactions..."
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="pl-7 sm:pl-10 pr-3 sm:pr-4 py-2 border border-gray-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
                       />
                     </div>
                     <button className="p-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
-                      <Filter className="w-4 h-4 text-gray-600" />
+                      <Filter className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                     </button>
                   </div>
                 </div>
 
                 {/* Filter Chips */}
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-1 sm:gap-2 mt-3 sm:mt-4">
                   {[
                     { id: 'all', label: 'All' },
                     { id: 'load_payment', label: 'Load Payments' },
@@ -399,7 +401,7 @@ function Wallet() {
                     <button
                       key={chip.id}
                       onClick={() => setFilter(chip.id)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      className={`px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                         filter === chip.id
                           ? 'bg-blue-500 text-white shadow-sm'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -412,7 +414,7 @@ function Wallet() {
               </div>
 
               {/* Content Area */}
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <AnimatePresence mode="wait">
                   {/* Transactions Tab */}
                   {activeTab === 'transactions' && (
@@ -420,41 +422,41 @@ function Wallet() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="space-y-4"
+                      className="space-y-3 sm:space-y-4"
                     >
                       {filteredTransactions.map((transaction) => (
                         <motion.div
                           key={transaction.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-between p-5 border border-gray-200 rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
+                          className="flex items-center justify-between p-3 sm:p-4 lg:p-5 border border-gray-200 rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
                         >
-                          <div className="flex items-center space-x-4">
-                            <div className={`p-3 rounded-2xl border-2 ${getCategoryColor(transaction.category)}`}>
+                          <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0 flex-1">
+                            <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border-2 ${getCategoryColor(transaction.category)} flex-shrink-0`}>
                               {transaction.type === 'credit' ? (
-                                <ArrowDownLeft className="w-5 h-5" />
+                                <ArrowDownLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                               ) : (
-                                <ArrowUpRight className="w-5 h-5" />
+                                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                               )}
                             </div>
-                            <div>
-                              <div className="text-gray-900 font-semibold">
+                            <div className="min-w-0 flex-1">
+                              <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">
                                 {transaction.description}
                               </div>
-                              <div className="flex items-center space-x-3 text-gray-500 text-sm mt-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>{transaction.date}</span>
+                              <div className="flex items-center space-x-2 sm:space-x-3 text-gray-500 text-xs sm:text-sm mt-1">
+                                <Calendar className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                                <span className="truncate">{transaction.date}</span>
                                 {getStatusIcon(transaction.status)}
                               </div>
                             </div>
                           </div>
-                          <div className={`text-right ${
+                          <div className={`text-right ml-2 sm:ml-4 flex-shrink-0 ${
                             transaction.type === 'credit' ? 'text-green-600' : 'text-red-600'
                           }`}>
-                            <div className="font-bold text-xl">
-                              {transaction.type === 'credit' ? '+' : '-'}${transaction.amount.toLocaleString()}
+                            <div className="font-bold text-base sm:text-lg lg:text-xl">
+                              {transaction.type === 'credit' ? '+' : '-'}₹{transaction.amount.toLocaleString()}
                             </div>
-                            <div className="text-gray-500 text-sm capitalize font-medium">
+                            <div className="text-gray-500 text-xs sm:text-sm capitalize font-medium">
                               {transaction.type}
                             </div>
                           </div>
@@ -469,33 +471,33 @@ function Wallet() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="space-y-4"
+                      className="space-y-3 sm:space-y-4"
                     >
                       {commissions.map((commission) => (
                         <motion.div
                           key={commission.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-between p-5 border border-gray-200 rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
+                          className="flex items-center justify-between p-3 sm:p-4 lg:p-5 border border-gray-200 rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
                         >
-                          <div className="flex items-center space-x-4">
-                            <div className="p-3 rounded-2xl border-2 border-blue-200 bg-blue-50">
-                              <TrendingDown className="w-5 h-5 text-blue-600" />
+                          <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0 flex-1">
+                            <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl border-2 border-blue-200 bg-blue-50 flex-shrink-0">
+                              <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                             </div>
-                            <div>
-                              <div className="text-gray-900 font-semibold">
+                            <div className="min-w-0 flex-1">
+                              <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">
                                 Commission - Load #{commission.loadId}
                               </div>
-                              <div className="text-gray-500 text-sm mt-1">
-                                Rate: {commission.rate} • Load: ${commission.loadAmount.toLocaleString()}
+                              <div className="text-gray-500 text-xs sm:text-sm mt-1">
+                                Rate: {commission.rate} • Load: ₹{commission.loadAmount.toLocaleString()}
                               </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-red-600 font-bold text-xl">
-                              -${commission.amount.toLocaleString()}
+                          <div className="text-right ml-2 sm:ml-4 flex-shrink-0">
+                            <div className="text-red-600 font-bold text-base sm:text-lg lg:text-xl">
+                              -₹{commission.amount.toLocaleString()}
                             </div>
-                            <div className="text-gray-500 text-sm font-medium">
+                            <div className="text-gray-500 text-xs sm:text-sm font-medium">
                               Completed
                             </div>
                           </div>
@@ -510,33 +512,33 @@ function Wallet() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="space-y-4"
+                      className="space-y-3 sm:space-y-4"
                     >
                       {refunds.map((refund) => (
                         <motion.div
                           key={refund.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-between p-5 border border-gray-200 rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
+                          className="flex items-center justify-between p-3 sm:p-4 lg:p-5 border border-gray-200 rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
                         >
-                          <div className="flex items-center space-x-4">
-                            <div className="p-3 rounded-2xl border-2 border-purple-200 bg-purple-50">
-                              <RefreshCw className="w-5 h-5 text-purple-600" />
+                          <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0 flex-1">
+                            <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl border-2 border-purple-200 bg-purple-50 flex-shrink-0">
+                              <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
                             </div>
-                            <div>
-                              <div className="text-gray-900 font-semibold">
+                            <div className="min-w-0 flex-1">
+                              <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">
                                 {refund.reason}
                               </div>
-                              <div className="text-gray-500 text-sm mt-1">
-                                Original: ${refund.originalCommission.toLocaleString()}
+                              <div className="text-gray-500 text-xs sm:text-sm mt-1">
+                                Original: ₹{refund.originalCommission.toLocaleString()}
                               </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-green-600 font-bold text-xl">
-                              +${refund.amount.toLocaleString()}
+                          <div className="text-right ml-2 sm:ml-4 flex-shrink-0">
+                            <div className="text-green-600 font-bold text-base sm:text-lg lg:text-xl">
+                              +₹{refund.amount.toLocaleString()}
                             </div>
-                            <div className="text-gray-500 text-sm font-medium">
+                            <div className="text-gray-500 text-xs sm:text-sm font-medium">
                               Completed
                             </div>
                           </div>
@@ -547,9 +549,9 @@ function Wallet() {
                 </AnimatePresence>
 
                 {/* Export Button */}
-                <div className="flex justify-center mt-8 pt-6 border-t border-gray-200">
-                  <button className="flex items-center space-x-3 px-6 py-3 border border-gray-300 text-gray-700 rounded-2xl font-semibold hover:bg-gray-50 transition-colors hover:shadow-sm">
-                    <Download className="w-4 h-4" />
+                <div className="flex justify-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
+                  <button className="flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-gray-700 rounded-xl sm:rounded-2xl font-semibold hover:bg-gray-50 transition-colors hover:shadow-sm text-xs sm:text-sm">
+                    <Download className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>Export Statement</span>
                   </button>
                 </div>
@@ -562,51 +564,51 @@ function Wallet() {
       {/* Add Money Modal */}
       <AnimatePresence>
         {showAddMoney && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-gray-200"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full border border-gray-200"
             >
-              <div className="p-6 border-b border-gray-200">
+              <div className="p-4 sm:p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-gray-900">Add Money</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">Add Money</h3>
                   <button
                     onClick={() => setShowAddMoney(false)}
-                    className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                    className="p-1 sm:p-2 hover:bg-gray-100 rounded-xl transition-colors"
                   >
-                    <XCircle className="w-5 h-5 text-gray-600" />
+                    <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                   </button>
                 </div>
               </div>
 
-              <div className="p-6">
-                <div className="space-y-6">
+              <div className="p-4 sm:p-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                       Amount
                     </label>
                     <input
                       type="number"
                       placeholder="0.00"
-                      className="w-full px-4 py-4 border border-gray-300 rounded-2xl text-2xl font-bold text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-3 sm:py-4 border border-gray-300 rounded-xl sm:rounded-2xl text-xl sm:text-2xl font-bold text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                       Payment Method
                     </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <select className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base">
                       <option>Credit Card (4242)</option>
                       <option>Digital Wallet</option>
                       <option>Bank Transfer</option>
                     </select>
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-2xl font-bold text-lg hover:shadow-xl transition-all duration-300">
-                    Add $1,000.00
+                  <button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:shadow-xl transition-all duration-300">
+                    Add ₹1,000.00
                   </button>
                 </div>
               </div>

@@ -151,10 +151,8 @@ function MyJobs() {
 
   const filteredJobs = completedJobs.filter(job => {
     if (activeFilter === 'week') {
-      // Filter for this week (mock logic)
       return job.completedDate >= '2024-01-15';
     } else if (activeFilter === 'month') {
-      // Filter for this month (mock logic)
       return job.completedDate >= '2024-01-01';
     } else if (activeFilter === 'highValue') {
       return job.payment >= 4000;
@@ -177,13 +175,10 @@ function MyJobs() {
   });
 
   const downloadInvoice = (jobId, invoiceId) => {
-    // Mock invoice download
     console.log(`Downloading invoice ${invoiceId} for job ${jobId}`);
-    // In real app, this would generate and download PDF
   };
 
   const shareJobDetails = (job) => {
-    // Mock share functionality
     console.log('Sharing job details:', job);
   };
 
@@ -191,24 +186,26 @@ function MyJobs() {
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50/30">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-lg">
-                <Trophy className="w-8 h-8 text-white" />
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="flex items-center justify-between h-16 sm:h-20 py-2">
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl sm:rounded-2xl shadow-lg">
+                <Trophy className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">My Jobs</h1>
-                <p className="text-gray-600">Completed deliveries and performance history</p>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">My Jobs</h1>
+                <p className="text-gray-600 text-xs sm:text-sm hidden xs:block">
+                  Completed deliveries and performance history
+                </p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <div className="text-sm text-gray-600">Total Completed</div>
-                <div className="text-2xl font-bold text-gray-900">{stats.totalJobs} Jobs</div>
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
+              <div className="text-right hidden xs:block">
+                <div className="text-xs sm:text-sm text-gray-600">Total Completed</div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">{stats.totalJobs} Jobs</div>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold shadow-lg text-sm sm:text-base">
                 JD
               </div>
             </div>
@@ -217,11 +214,11 @@ function MyJobs() {
       </div>
 
       {/* Stats Overview */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8"
         >
           {[
             { 
@@ -257,15 +254,15 @@ function MyJobs() {
               trend: '12 loads'
             }
           ].map((stat, index) => (
-            <div key={index} className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-2xl ${stat.bg}`}>
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+            <div key={index} className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl ${stat.bg}`}>
+                  <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 ${stat.color}`} />
                 </div>
-                <span className="text-sm font-semibold text-green-600">{stat.trend}</span>
+                <span className="text-xs sm:text-sm font-semibold text-green-600">{stat.trend}</span>
               </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-              <div className="text-gray-600 text-sm">{stat.label}</div>
+              <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 truncate">{stat.value}</div>
+              <div className="text-gray-600 text-xs sm:text-sm">{stat.label}</div>
             </div>
           ))}
         </motion.div>
@@ -275,16 +272,16 @@ function MyJobs() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 mb-8"
+          className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8"
         >
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
             {/* Filter Chips */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1 sm:gap-2">
               {filters.map((filter) => (
                 <button
                   key={filter.id}
                   onClick={() => setActiveFilter(filter.id)}
-                  className={`px-4 py-2 rounded-2xl text-sm font-semibold transition-all ${
+                  className={`px-3 sm:px-4 py-1 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-semibold transition-all ${
                     activeFilter === filter.id
                       ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -296,15 +293,15 @@ function MyJobs() {
             </div>
 
             {/* Search and Sort */}
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col xs:flex-row xs:items-center gap-2 sm:gap-3 lg:gap-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3 h-3 sm:w-4 sm:h-4" />
                 <input
                   type="text"
                   placeholder="Search jobs..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-2xl text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="pl-8 sm:pl-10 pr-4 py-2 border border-gray-300 rounded-xl sm:rounded-2xl text-xs sm:text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full"
                 />
               </div>
               
@@ -312,115 +309,117 @@ function MyJobs() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none pl-4 pr-10 py-2 border border-gray-300 rounded-2xl text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="appearance-none pl-3 sm:pl-4 pr-8 sm:pr-10 py-2 border border-gray-300 rounded-xl sm:rounded-2xl text-xs sm:text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full"
                 >
                   {sortOptions.map(option => (
                     <option key={option.id} value={option.id}>{option.label}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+                <ChevronDown className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3 h-3 sm:w-4 sm:h-4 pointer-events-none" />
               </div>
             </div>
           </div>
         </motion.div>
 
         {/* Jobs List */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {filteredJobs.map((job, index) => (
             <motion.div
               key={job.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden hover:shadow-2xl transition-all duration-300"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 overflow-hidden hover:shadow-xl sm:hover:shadow-2xl transition-all duration-300"
             >
               {/* Job Header */}
               <div 
-                className="p-6 cursor-pointer"
+                className="p-4 sm:p-6 cursor-pointer"
                 onClick={() => setExpandedJob(expandedJob === job.id ? null : job.id)}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-4 mb-3">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col xs:flex-row xs:items-center gap-2 sm:gap-3 lg:gap-4 mb-3">
                       <div className="flex items-center space-x-2">
-                        <div className="p-2 bg-green-100 rounded-xl">
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                        <div className="p-1 sm:p-2 bg-green-100 rounded-lg sm:rounded-xl">
+                          <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                         </div>
-                        <span className="text-lg font-bold text-gray-900">Load #{job.id}</span>
+                        <span className="text-base sm:text-lg font-bold text-gray-900 truncate">Load #{job.id}</span>
                       </div>
-                      <div className="flex items-center space-x-1 bg-amber-50 px-3 py-1 rounded-full">
-                        <Star className="w-4 h-4 text-amber-500 fill-current" />
-                        <span className="text-sm font-semibold text-amber-700">{job.rating}</span>
+                      <div className="flex items-center space-x-1 bg-amber-50 px-2 sm:px-3 py-1 rounded-full">
+                        <Star className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500 fill-current" />
+                        <span className="text-xs sm:text-sm font-semibold text-amber-700">{job.rating}</span>
                       </div>
                       {job.rating === 5.0 && (
-                        <div className="flex items-center space-x-1 bg-purple-50 px-3 py-1 rounded-full">
-                          <Crown className="w-4 h-4 text-purple-500" />
-                          <span className="text-sm font-semibold text-purple-700">Perfect Score</span>
+                        <div className="flex items-center space-x-1 bg-purple-50 px-2 sm:px-3 py-1 rounded-full">
+                          <Crown className="w-3 h-3 sm:w-4 sm:h-4 text-purple-500" />
+                          <span className="text-xs sm:text-sm font-semibold text-purple-700 hidden xs:inline">Perfect Score</span>
+                          <span className="text-xs sm:text-sm font-semibold text-purple-700 xs:hidden">Perfect</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                      <div className="flex items-center space-x-3">
-                        <MapPin className="w-5 h-5 text-blue-600" />
-                        <div>
-                          <div className="text-sm text-gray-600">Route</div>
-                          <div className="font-semibold text-gray-900">{job.from} → {job.to}</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-3 sm:mb-4">
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm text-gray-600">Route</div>
+                          <div className="font-semibold text-gray-900 text-sm sm:text-base truncate">{job.from} → {job.to}</div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-3">
-                        <Calendar className="w-5 h-5 text-green-600" />
-                        <div>
-                          <div className="text-sm text-gray-600">Completed</div>
-                          <div className="font-semibold text-gray-900">{job.completedDate}</div>
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm text-gray-600">Completed</div>
+                          <div className="font-semibold text-gray-900 text-sm sm:text-base">{job.completedDate}</div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-3">
-                        <DollarSign className="w-5 h-5 text-emerald-600" />
-                        <div>
-                          <div className="text-sm text-gray-600">Net Earnings</div>
-                          <div className="font-bold text-emerald-600 text-lg">${job.netEarnings.toLocaleString()}</div>
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm text-gray-600">Net Earnings</div>
+                          <div className="font-bold text-emerald-600 text-base sm:text-lg truncate">${job.netEarnings.toLocaleString()}</div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-6 text-sm text-gray-600">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-600">
                       <div className="flex items-center space-x-1">
-                        <Truck className="w-4 h-4" />
+                        <Truck className="w-3 h-3 sm:w-4 sm:h-4" />
                         <span>{job.distance} miles</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Clock className="w-4 h-4" />
-                        <span>{job.duration}</span>
+                        <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                        <span className="truncate">{job.duration}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Package className="w-4 h-4" />
-                        <span>{job.loadType}</span>
+                        <Package className="w-3 h-3 sm:w-4 sm:h-4" />
+                        <span className="truncate">{job.loadType}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2 ml-4">
+                  <div className="flex items-center justify-between sm:justify-end space-x-2 sm:space-x-2 sm:ml-4">
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
                         downloadInvoice(job.id, job.invoiceId);
                       }}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-2xl font-semibold hover:bg-blue-600 transition-colors"
+                      className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-blue-500 text-white rounded-xl sm:rounded-2xl font-semibold hover:bg-blue-600 transition-colors text-xs sm:text-sm"
                     >
-                      <Download className="w-4 h-4" />
-                      <span>Invoice</span>
+                      <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="hidden xs:inline">Invoice</span>
+                      <span className="xs:hidden">PDF</span>
                     </button>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
                         setExpandedJob(expandedJob === job.id ? null : job.id);
                       }}
-                      className="p-2 bg-gray-100 hover:bg-gray-200 rounded-2xl transition-colors"
+                      className="p-2 bg-gray-100 hover:bg-gray-200 rounded-xl sm:rounded-2xl transition-colors"
                     >
                       {expandedJob === job.id ? 
-                        <ChevronUp className="w-5 h-5 text-gray-600" /> : 
-                        <ChevronDown className="w-5 h-5 text-gray-600" />
+                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" /> : 
+                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                       }
                     </button>
                   </div>
@@ -436,44 +435,44 @@ function MyJobs() {
                     exit={{ opacity: 0, height: 0 }}
                     className="border-t border-gray-200"
                   >
-                    <div className="p-6">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="p-4 sm:p-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
                         {/* Payment Breakdown */}
-                        <div className="space-y-6">
-                          <h3 className="text-lg font-bold text-gray-900 flex items-center space-x-2">
-                            <Calculator className="w-5 h-5 text-purple-600" />
+                        <div className="space-y-4 sm:space-y-6">
+                          <h3 className="text-base sm:text-lg font-bold text-gray-900 flex items-center space-x-2">
+                            <Calculator className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
                             <span>Payment Summary</span>
                           </h3>
                           
-                          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
-                            <div className="space-y-3">
+                          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-green-200">
+                            <div className="space-y-2 sm:space-y-3">
                               <div className="flex justify-between items-center">
-                                <span className="text-gray-700">Load Payment</span>
-                                <span className="font-semibold text-gray-900">${job.payment.toLocaleString()}</span>
+                                <span className="text-gray-700 text-sm sm:text-base">Load Payment</span>
+                                <span className="font-semibold text-gray-900 text-sm sm:text-base">${job.payment.toLocaleString()}</span>
                               </div>
-                              <div className="flex justify-between items-center text-sm">
+                              <div className="flex justify-between items-center text-xs sm:text-sm">
                                 <span className="text-gray-600">Platform Commission (3.5%)</span>
                                 <span className="text-red-600">-${job.commission.toLocaleString()}</span>
                               </div>
-                              <div className="border-t border-green-200 pt-3">
+                              <div className="border-t border-green-200 pt-2 sm:pt-3">
                                 <div className="flex justify-between items-center">
-                                  <span className="font-semibold text-gray-900">Net Earnings</span>
-                                  <span className="font-bold text-emerald-600 text-xl">${job.netEarnings.toLocaleString()}</span>
+                                  <span className="font-semibold text-gray-900 text-sm sm:text-base">Net Earnings</span>
+                                  <span className="font-bold text-emerald-600 text-lg sm:text-xl">${job.netEarnings.toLocaleString()}</span>
                                 </div>
                               </div>
                             </div>
                           </div>
 
                           {/* Performance Metrics */}
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
                             {[
                               { label: 'On Time', value: job.performance.onTime ? 'Yes' : 'No', color: job.performance.onTime ? 'text-green-600' : 'text-red-600' },
                               { label: 'Damage Free', value: job.performance.damageFree ? 'Yes' : 'No', color: job.performance.damageFree ? 'text-green-600' : 'text-red-600' },
                               { label: 'Communication', value: job.performance.communication, color: 'text-blue-600' },
                               { label: 'Efficiency', value: job.performance.efficiency, color: 'text-purple-600' }
                             ].map((metric, idx) => (
-                              <div key={idx} className="text-center p-3 bg-gray-50 rounded-2xl">
-                                <div className={`text-sm font-semibold ${metric.color}`}>{metric.value}</div>
+                              <div key={idx} className="text-center p-2 sm:p-3 bg-gray-50 rounded-xl sm:rounded-2xl">
+                                <div className={`text-xs sm:text-sm font-semibold ${metric.color}`}>{metric.value}</div>
                                 <div className="text-xs text-gray-600">{metric.label}</div>
                               </div>
                             ))}
@@ -481,40 +480,40 @@ function MyJobs() {
                         </div>
 
                         {/* Job Timeline */}
-                        <div className="space-y-6">
-                          <h3 className="text-lg font-bold text-gray-900 flex items-center space-x-2">
-                            <Clock className="w-5 h-5 text-blue-600" />
+                        <div className="space-y-4 sm:space-y-6">
+                          <h3 className="text-base sm:text-lg font-bold text-gray-900 flex items-center space-x-2">
+                            <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                             <span>Delivery Timeline</span>
                           </h3>
                           
-                          <div className="space-y-4">
+                          <div className="space-y-3 sm:space-y-4">
                             {job.milestones.map((milestone, idx) => (
-                              <div key={idx} className="flex items-center space-x-4">
-                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                              <div key={idx} className="flex items-center space-x-3 sm:space-x-4">
+                                <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0">
                                   ✓
                                 </div>
-                                <div className="flex-1">
-                                  <div className="font-semibold text-gray-900">{milestone.action}</div>
-                                  <div className="text-sm text-gray-600">{milestone.time}</div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-semibold text-gray-900 text-sm sm:text-base">{milestone.action}</div>
+                                  <div className="text-gray-600 text-xs sm:text-sm">{milestone.time}</div>
                                 </div>
                               </div>
                             ))}
                           </div>
 
                           {/* Additional Actions */}
-                          <div className="flex space-x-3 pt-4">
+                          <div className="flex flex-col xs:flex-row space-y-2 xs:space-y-0 xs:space-x-2 sm:space-x-3 pt-3 sm:pt-4">
                             <button 
                               onClick={() => downloadInvoice(job.id, job.invoiceId)}
-                              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 border border-blue-500 text-blue-600 rounded-2xl font-semibold hover:bg-blue-50 transition-colors"
+                              className="flex-1 flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-3 border border-blue-500 text-blue-600 rounded-xl sm:rounded-2xl font-semibold hover:bg-blue-50 transition-colors text-xs sm:text-sm"
                             >
-                              <FileText className="w-4 h-4" />
+                              <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                               <span>Download PDF</span>
                             </button>
                             <button 
                               onClick={() => shareJobDetails(job)}
-                              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 border border-purple-500 text-purple-600 rounded-2xl font-semibold hover:bg-purple-50 transition-colors"
+                              className="flex-1 flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-3 border border-purple-500 text-purple-600 rounded-xl sm:rounded-2xl font-semibold hover:bg-purple-50 transition-colors text-xs sm:text-sm"
                             >
-                              <Share2 className="w-4 h-4" />
+                              <Share2 className="w-3 h-3 sm:w-4 sm:h-4" />
                               <span>Share</span>
                             </button>
                           </div>
@@ -533,16 +532,16 @@ function MyJobs() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-12"
+            className="text-center py-8 sm:py-12"
           >
-            <div className="w-24 h-24 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
-              <Receipt className="w-12 h-12 text-gray-400" />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gray-100 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <Receipt className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">No jobs found</h3>
-            <p className="text-gray-600 mb-6">Try adjusting your filters or search terms</p>
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">No jobs found</h3>
+            <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">Try adjusting your filters or search terms</p>
             <button 
               onClick={() => { setActiveFilter('all'); setSearchTerm(''); }}
-              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl font-semibold hover:shadow-lg transition-all"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl sm:rounded-2xl font-semibold hover:shadow-lg transition-all text-sm sm:text-base"
             >
               Clear Filters
             </button>

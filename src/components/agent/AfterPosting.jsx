@@ -63,10 +63,10 @@ const AfterPosting = ({ load = {
 
   const Confetti = () => (
     <div className="fixed inset-0 pointer-events-none z-50">
-      {[...Array(50)].map((_, i) => (
+      {[...Array(30)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
+          className="absolute w-1.5 h-1.5 xs:w-2 xs:h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
           initial={{ 
             x: Math.random() * window.innerWidth, 
             y: -20,
@@ -92,15 +92,15 @@ const AfterPosting = ({ load = {
   const StatCard = ({ icon, label, value, color }) => (
     <motion.div
       whileHover={{ scale: 1.05, y: -2 }}
-      className={`p-6 rounded-3xl backdrop-blur-sm border ${color} shadow-lg`}
+      className={`p-3 xs:p-4 sm:p-5 lg:p-6 rounded-xl xs:rounded-2xl lg:rounded-3xl backdrop-blur-sm border ${color} shadow-lg min-h-[80px] xs:min-h-[90px] sm:min-h-[100px] flex flex-col justify-center`}
     >
-      <div className="flex items-center gap-3 mb-3">
-        <div className="p-2 bg-white/20 rounded-2xl">
-          {icon}
+      <div className="flex items-center gap-2 xs:gap-3 mb-2 xs:mb-3">
+        <div className="p-1 xs:p-2 bg-white/20 rounded-lg xs:rounded-xl flex-shrink-0">
+          {React.cloneElement(icon, { className: "size-3 xs:size-4 sm:size-5" + (icon.props.className || "") })}
         </div>
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-xs xs:text-sm font-medium text-gray-600 truncate">{label}</div>
       </div>
-      <div className="text-2xl font-bold text-gray-900">{value}</div>
+      <div className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{value}</div>
     </motion.div>
   );
 
@@ -109,19 +109,19 @@ const AfterPosting = ({ load = {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold transition-all ${
+      className={`flex items-center gap-2 xs:gap-3 px-3 xs:px-4 sm:px-5 lg:px-6 py-2 xs:py-3 sm:py-4 rounded-lg xs:rounded-xl lg:rounded-2xl font-semibold transition-all text-xs xs:text-sm ${
         variant === "primary" 
           ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl"
           : "bg-white/80 text-gray-700 border border-gray-200 hover:bg-white"
       }`}
     >
-      {icon}
-      <span>{label}</span>
+      {React.cloneElement(icon, { className: "size-3 xs:size-4 sm:size-5" })}
+      <span className="truncate">{label}</span>
     </motion.button>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50/30 to-purple-50/30 p-4 lg:p-8 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50/30 to-purple-50/30 p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center">
       {/* Confetti Animation */}
       <AnimatePresence>
         {showConfetti && <Confetti />}
@@ -132,29 +132,29 @@ const AfterPosting = ({ load = {
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.6, type: "spring" }}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden"
+          className="bg-white/80 backdrop-blur-xl rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl lg:shadow-2xl border border-white/20 overflow-hidden"
         >
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-8 lg:p-10 text-center relative overflow-hidden">
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 xs:p-5 sm:p-6 lg:p-8 xl:p-10 text-center relative overflow-hidden">
             {/* Background Pattern */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -translate-x-24 translate-y-24" />
+            <div className="absolute top-0 right-0 w-32 h-32 xs:w-40 xs:h-40 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-white/10 rounded-full -translate-y-16 xs:-translate-y-20 sm:-translate-y-24 lg:-translate-y-32 translate-x-16 xs:translate-x-20 sm:translate-x-24 lg:translate-x-32" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 xs:w-28 xs:h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 bg-white/5 rounded-full -translate-x-12 xs:-translate-x-14 sm:-translate-x-16 lg:-translate-x-24 translate-y-12 xs:translate-y-14 sm:translate-y-16 lg:translate-y-24" />
             
             <div className="relative z-10">
               <motion.div
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ delay: 0.2, type: "spring" }}
-                className="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm"
+                className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-white/20 rounded-xl xs:rounded-2xl lg:rounded-3xl flex items-center justify-center mx-auto mb-3 xs:mb-4 sm:mb-5 lg:mb-6 backdrop-blur-sm"
               >
-                <PartyPopper size={40} />
+                <PartyPopper className="size-5 xs:size-6 sm:size-7 lg:size-10" />
               </motion.div>
               
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-3xl lg:text-4xl font-bold mb-4"
+                className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 xs:mb-3 sm:mb-4 leading-tight"
               >
                 Load Posted Successfully!
               </motion.h1>
@@ -163,7 +163,7 @@ const AfterPosting = ({ load = {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-green-100 text-lg max-w-2xl mx-auto"
+                className="text-green-100 text-xs xs:text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed"
               >
                 Your load is now live and being matched with verified drivers. 
                 You should receive driver responses within minutes.
@@ -172,32 +172,32 @@ const AfterPosting = ({ load = {
           </div>
 
           {/* Load Summary */}
-          <div className="p-6 lg:p-8">
+          <div className="p-3 xs:p-4 sm:p-5 lg:p-6 xl:p-8">
             {/* Load ID with Copy */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-col lg:flex-row items-center justify-between gap-4 mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-3xl border border-blue-200/50"
+              className="flex flex-col lg:flex-row items-center justify-between gap-3 xs:gap-4 mb-4 xs:mb-5 sm:mb-6 lg:mb-8 p-3 xs:p-4 sm:p-5 lg:p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl xs:rounded-2xl lg:rounded-3xl border border-blue-200/50"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center">
-                  <Truck className="text-white" size={24} />
+              <div className="flex items-center gap-2 xs:gap-3 min-w-0">
+                <div className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg xs:rounded-xl lg:rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <Truck className="text-white size-3 xs:size-4 sm:size-5 lg:size-6" />
                 </div>
-                <div>
-                  <div className="text-sm text-gray-600">Load Reference</div>
-                  <div className="text-2xl font-bold text-gray-900">#{load.id}</div>
+                <div className="min-w-0">
+                  <div className="text-xs xs:text-sm text-gray-600">Load Reference</div>
+                  <div className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">#{load.id}</div>
                 </div>
               </div>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 xs:gap-2 mt-2 lg:mt-0">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={copyToClipboard}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-2 bg-white border border-gray-200 rounded-lg xs:rounded-xl lg:rounded-2xl hover:bg-gray-50 transition-colors text-xs xs:text-sm"
                 >
-                  <Copy size={18} />
+                  <Copy className="size-3 xs:size-4" />
                   <span>{copiedId ? "Copied!" : "Copy ID"}</span>
                 </motion.button>
                 
@@ -205,9 +205,9 @@ const AfterPosting = ({ load = {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={shareLoad}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-2 bg-white border border-gray-200 rounded-lg xs:rounded-xl lg:rounded-2xl hover:bg-gray-50 transition-colors text-xs xs:text-sm"
                 >
-                  <Share2 size={18} />
+                  <Share2 className="size-3 xs:size-4" />
                   <span>Share</span>
                 </motion.button>
               </div>
@@ -218,28 +218,28 @@ const AfterPosting = ({ load = {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+              className="grid grid-cols-2 xs:grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 mb-4 xs:mb-5 sm:mb-6 lg:mb-8"
             >
               <StatCard
-                icon={<MapPin className="text-blue-500" size={20} />}
+                icon={<MapPin className="text-blue-500" />}
                 label="Total Distance"
                 value={load.distance}
                 color="bg-blue-50/50 border-blue-200"
               />
               <StatCard
-                icon={<IndianRupee className="text-green-500" size={20} />}
+                icon={<IndianRupee className="text-green-500" />}
                 label="Expected Freight"
                 value={load.freight}
                 color="bg-green-50/50 border-green-200"
               />
               <StatCard
-                icon={<Users className="text-purple-500" size={20} />}
+                icon={<Users className="text-purple-500" />}
                 label="Driver Matches"
                 value={load.driverMatches}
                 color="bg-purple-50/50 border-purple-200"
               />
               <StatCard
-                icon={<Clock className="text-orange-500" size={20} />}
+                icon={<Clock className="text-orange-500" />}
                 label="Avg Response"
                 value="< 15min"
                 color="bg-orange-50/50 border-orange-200"
@@ -251,34 +251,34 @@ const AfterPosting = ({ load = {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="p-6 bg-gray-50/50 rounded-3xl border border-gray-200 mb-8"
+              className="p-3 xs:p-4 sm:p-5 lg:p-6 bg-gray-50/50 rounded-xl xs:rounded-2xl lg:rounded-3xl border border-gray-200 mb-4 xs:mb-5 sm:mb-6 lg:mb-8"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900">Route Overview</h3>
+              <div className="flex items-center justify-between mb-3 xs:mb-4">
+                <h3 className="font-semibold text-gray-900 text-sm xs:text-base">Route Overview</h3>
                 <div className="flex items-center gap-1 text-green-600">
-                  <Sparkles size={16} />
-                  <span className="text-sm font-medium">Live Tracking Ready</span>
+                  <Sparkles className="size-3 xs:size-4" />
+                  <span className="text-xs xs:text-sm font-medium">Live Tracking Ready</span>
                 </div>
               </div>
               
               <div className="flex items-center justify-between">
-                <div className="text-center">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full mx-auto mb-2"></div>
-                  <div className="font-medium text-gray-900">{load.from}</div>
-                  <div className="text-sm text-gray-600">Pickup</div>
+                <div className="text-center min-w-0 flex-1">
+                  <div className="w-2 h-2 xs:w-3 xs:h-3 bg-blue-500 rounded-full mx-auto mb-1 xs:mb-2"></div>
+                  <div className="font-medium text-gray-900 text-xs xs:text-sm truncate">{load.from}</div>
+                  <div className="text-gray-600 text-xs">Pickup</div>
                 </div>
                 
-                <div className="flex-1 mx-4 relative">
+                <div className="flex-1 mx-2 xs:mx-3 sm:mx-4 relative">
                   <div className="h-1 bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 rounded-full"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Truck className="text-gray-400 animate-pulse" size={20} />
+                    <Truck className="text-gray-400 animate-pulse size-3 xs:size-4 sm:size-5" />
                   </div>
                 </div>
                 
-                <div className="text-center">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mx-auto mb-2"></div>
-                  <div className="font-medium text-gray-900">{load.to}</div>
-                  <div className="text-sm text-gray-600">Delivery</div>
+                <div className="text-center min-w-0 flex-1">
+                  <div className="w-2 h-2 xs:w-3 xs:h-3 bg-green-500 rounded-full mx-auto mb-1 xs:mb-2"></div>
+                  <div className="font-medium text-gray-900 text-xs xs:text-sm truncate">{load.to}</div>
+                  <div className="text-gray-600 text-xs">Delivery</div>
                 </div>
               </div>
             </motion.div>
@@ -288,38 +288,38 @@ const AfterPosting = ({ load = {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="space-y-4"
+              className="space-y-3 xs:space-y-4"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4">
                 <QuickAction
-                  icon={<Eye size={20} />}
+                  icon={<Eye />}
                   label="View My Loads"
                   onClick={() => navigate("/agent/myload")}
                   variant="primary"
                 />
                 <QuickAction
-                  icon={<Zap size={20} />}
+                  icon={<Zap />}
                   label="Post Another Load"
                   onClick={() => navigate("/agent/postload")}
                   variant="secondary"
                 />
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-2 xs:gap-3 sm:gap-4">
                 <QuickAction
-                  icon={<MessageCircle size={18} />}
+                  icon={<MessageCircle />}
                   label="Chat with Drivers"
                   onClick={() => navigate("/communication")}
                   variant="secondary"
                 />
                 <QuickAction
-                  icon={<Download size={18} />}
+                  icon={<Download />}
                   label="Download Details"
                   onClick={() => window.print()}
                   variant="secondary"
                 />
                 <QuickAction
-                  icon={<Star size={18} />}
+                  icon={<Star />}
                   label="Rate Experience"
                   onClick={() => {}}
                   variant="secondary"
@@ -332,28 +332,28 @@ const AfterPosting = ({ load = {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
-              className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl border border-green-200"
+              className="mt-4 xs:mt-5 sm:mt-6 lg:mt-8 p-3 xs:p-4 sm:p-5 lg:p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl xs:rounded-2xl lg:rounded-3xl border border-green-200"
             >
-              <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <CheckCircle className="text-green-500" size={20} />
+              <h4 className="font-semibold text-gray-900 text-sm xs:text-base mb-2 xs:mb-3 flex items-center gap-1 xs:gap-2">
+                <CheckCircle className="text-green-500 size-4 xs:size-5" />
                 What happens next?
               </h4>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm text-gray-700">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Drivers will start bidding within minutes</span>
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3 text-xs xs:text-sm text-gray-700">
+                <div className="flex items-center gap-1 xs:gap-2">
+                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                  <span className="leading-tight">Drivers will start bidding within minutes</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>You'll receive push notifications for new bids</span>
+                <div className="flex items-center gap-1 xs:gap-2">
+                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                  <span className="leading-tight">You'll receive push notifications for new bids</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Chat directly with interested drivers</span>
+                <div className="flex items-center gap-1 xs:gap-2">
+                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                  <span className="leading-tight">Chat directly with interested drivers</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Track all activity in your loads dashboard</span>
+                <div className="flex items-center gap-1 xs:gap-2">
+                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                  <span className="leading-tight">Track all activity in your loads dashboard</span>
                 </div>
               </div>
             </motion.div>

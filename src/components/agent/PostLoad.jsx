@@ -74,11 +74,11 @@ const PostLoad = () => {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileFocus={{ scale: 1.02 }}
-      className="space-y-2"
+      className="space-y-1 xs:space-y-2"
     >
-      <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-        {icon}
-        {label}
+      <label className="flex items-center gap-1 xs:gap-2 text-xs xs:text-sm font-medium text-gray-700">
+        {React.cloneElement(icon, { className: "size-3 xs:size-4" + (icon.props.className || "") })}
+        <span className="truncate">{label}</span>
       </label>
       
       {type === "select" ? (
@@ -86,7 +86,7 @@ const PostLoad = () => {
           name={name}
           value={form[name]}
           onChange={handleChange}
-          className="w-full p-4 bg-white/90 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm"
+          className="w-full p-2 xs:p-3 sm:p-4 bg-white/90 border border-gray-200 rounded-lg xs:rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm text-xs xs:text-sm"
           required
           {...props}
         >
@@ -103,8 +103,8 @@ const PostLoad = () => {
           value={form[name]}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-full p-4 bg-white/90 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm resize-none"
-          rows={3}
+          className="w-full p-2 xs:p-3 sm:p-4 bg-white/90 border border-gray-200 rounded-lg xs:rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm resize-none text-xs xs:text-sm"
+          rows={2}
           {...props}
         />
       )}
@@ -112,7 +112,7 @@ const PostLoad = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50/30 to-purple-50/30 p-4 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50/30 to-purple-50/30 p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Success Message */}
         <AnimatePresence>
@@ -121,13 +121,15 @@ const PostLoad = () => {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
-              className="mb-6 p-6 bg-green-500/10 border border-green-500/20 rounded-3xl backdrop-blur-sm"
+              className="mb-4 xs:mb-5 sm:mb-6 p-3 xs:p-4 sm:p-6 bg-green-500/10 border border-green-500/20 rounded-xl xs:rounded-2xl sm:rounded-3xl backdrop-blur-sm"
             >
-              <div className="flex items-center gap-3 text-green-700">
-                <CheckCircle2 size={24} />
-                <div>
-                  <div className="font-semibold">Load Posted Successfully!</div>
-                  <div className="text-sm">Your load has been published and drivers are being notified.</div>
+              <div className="flex items-center gap-2 xs:gap-3 text-green-700">
+                <CheckCircle2 className="size-4 xs:size-5 sm:size-6" />
+                <div className="min-w-0 flex-1">
+                  <div className="font-semibold text-xs xs:text-sm sm:text-base">Load Posted Successfully!</div>
+                  <div className="text-green-600 text-xs xs:text-sm mt-0.5">
+                    Your load has been published and drivers are being notified.
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -137,27 +139,31 @@ const PostLoad = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden"
+          className="bg-white/80 backdrop-blur-xl rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl lg:shadow-2xl border border-white/20 overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                <Truck size={32} />
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 xs:p-5 sm:p-6 lg:p-8">
+            <div className="flex items-center gap-2 xs:gap-3 sm:gap-4">
+              <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white/20 rounded-lg xs:rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                <Truck className="size-4 xs:size-5 sm:size-6 lg:size-8" />
               </div>
-              <div>
-                <h1 className="text-3xl lg:text-4xl font-bold">Post New Load</h1>
-                <p className="text-blue-100 mt-2">Fill in the details to connect with verified drivers</p>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold leading-tight">
+                  Post New Load
+                </h1>
+                <p className="text-blue-100 mt-1 text-xs xs:text-sm sm:text-base leading-relaxed">
+                  Fill in the details to connect with verified drivers
+                </p>
               </div>
             </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6 lg:p-8 space-y-6">
+          <form onSubmit={handleSubmit} className="p-3 xs:p-4 sm:p-5 lg:p-6 xl:p-8 space-y-4 xs:space-y-5 sm:space-y-6">
             {/* Route Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 lg:gap-6">
               <FormField
-                icon={<MapPin className="text-blue-500" size={18} />}
+                icon={<MapPin className="text-blue-500" />}
                 label="Pickup Location"
                 name="from"
                 placeholder="Select pickup location"
@@ -165,7 +171,7 @@ const PostLoad = () => {
               />
               
               <FormField
-                icon={<MapPin className="text-green-500" size={18} />}
+                icon={<MapPin className="text-green-500" />}
                 label="Delivery Location"
                 name="to"
                 placeholder="Select delivery location"
@@ -174,9 +180,9 @@ const PostLoad = () => {
             </div>
 
             {/* Load Details */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 lg:gap-6">
               <FormField
-                icon={<Package className="text-orange-500" size={18} />}
+                icon={<Package className="text-orange-500" />}
                 label="Load Weight"
                 name="weight"
                 placeholder="Select load weight"
@@ -190,7 +196,7 @@ const PostLoad = () => {
               />
               
               <FormField
-                icon={<IndianRupee className="text-green-500" size={18} />}
+                icon={<IndianRupee className="text-green-500" />}
                 label="Expected Freight"
                 name="freight"
                 placeholder="Select freight range"
@@ -206,9 +212,9 @@ const PostLoad = () => {
             </div>
 
             {/* Timing & Vehicle */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 lg:gap-6">
               <FormField
-                icon={<Calendar className="text-purple-500" size={18} />}
+                icon={<Calendar className="text-purple-500" />}
                 label="Preferred Date & Time"
                 name="datetime"
                 placeholder="Select pickup timing"
@@ -225,7 +231,7 @@ const PostLoad = () => {
               />
               
               <FormField
-                icon={<Truck className="text-gray-600" size={18} />}
+                icon={<Truck className="text-gray-600" />}
                 label="Vehicle Type Required"
                 name="vehicle"
                 placeholder="Select vehicle type"
@@ -234,9 +240,9 @@ const PostLoad = () => {
             </div>
 
             {/* Additional Details */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 lg:gap-6">
               <FormField
-                icon={<CreditCard className="text-yellow-500" size={18} />}
+                icon={<CreditCard className="text-yellow-500" />}
                 label="Additional Charges"
                 name="charges"
                 placeholder="Select additional charges"
@@ -251,7 +257,7 @@ const PostLoad = () => {
               />
               
               <FormField
-                icon={<MessageCircle className="text-blue-400" size={18} />}
+                icon={<MessageCircle className="text-blue-400" />}
                 label="Special Instructions"
                 name="notes"
                 type="textarea"
@@ -264,23 +270,23 @@ const PostLoad = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-blue-50/50 rounded-2xl border border-blue-200/50"
+              className="grid grid-cols-2 xs:grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 p-3 xs:p-4 sm:p-5 lg:p-6 bg-blue-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl border border-blue-200/50"
             >
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">50+</div>
-                <div className="text-sm text-blue-600">Active Drivers</div>
+                <div className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold text-blue-600 leading-tight">50+</div>
+                <div className="text-blue-600 text-xs xs:text-sm mt-0.5 xs:mt-1">Active Drivers</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">15min</div>
-                <div className="text-sm text-green-600">Avg Response</div>
+                <div className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold text-green-600 leading-tight">15min</div>
+                <div className="text-green-600 text-xs xs:text-sm mt-0.5 xs:mt-1">Avg Response</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">98%</div>
-                <div className="text-sm text-purple-600">Success Rate</div>
+                <div className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold text-purple-600 leading-tight">98%</div>
+                <div className="text-purple-600 text-xs xs:text-sm mt-0.5 xs:mt-1">Success Rate</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-orange-600">24/7</div>
-                <div className="text-sm text-orange-600">Support</div>
+                <div className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold text-orange-600 leading-tight">24/7</div>
+                <div className="text-orange-600 text-xs xs:text-sm mt-0.5 xs:mt-1">Support</div>
               </div>
             </motion.div>
 
@@ -290,25 +296,25 @@ const PostLoad = () => {
               disabled={isSubmitting}
               whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
               whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white py-4 rounded-2xl font-semibold shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white py-2 xs:py-3 sm:py-4 rounded-lg xs:rounded-xl sm:rounded-2xl font-semibold shadow-lg sm:shadow-xl lg:shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 xs:gap-2 sm:gap-3 text-xs xs:text-sm sm:text-base"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="animate-spin" size={20} />
-                  <span>Posting Load...</span>
+                  <Loader2 className="animate-spin size-3 xs:size-4 sm:size-5" />
+                  <span className="truncate">Posting Load...</span>
                 </>
               ) : (
                 <>
-                  <Zap size={20} />
-                  <span>Post Load & Connect with Drivers</span>
-                  <ArrowRight size={20} />
+                  <Zap className="size-3 xs:size-4 sm:size-5" />
+                  <span className="truncate">Post Load & Connect with Drivers</span>
+                  <ArrowRight className="size-3 xs:size-4 sm:size-5 hidden xs:block" />
                 </>
               )}
             </motion.button>
 
             {/* Footer Note */}
             <div className="text-center">
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 text-xs xs:text-sm">
                 ⚡ Your load will be visible to 50+ verified drivers instantly
               </p>
             </div>

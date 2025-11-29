@@ -26,7 +26,9 @@ import {
   Wifi,
   Battery,
   Cloud,
-  Sparkles
+  Sparkles,
+  Menu,
+  X
 } from "lucide-react";
 import {
   LineChart,
@@ -46,12 +48,13 @@ import {
   Area
 } from "recharts";
 
-const PremiumDashboard = () => {
+const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
   const [timeRange, setTimeRange] = useState("week");
   const [connectionStatus, setConnectionStatus] = useState("online");
   const [batteryLevel, setBatteryLevel] = useState(100);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Simulate loading
   useEffect(() => {
@@ -82,7 +85,7 @@ const PremiumDashboard = () => {
       change: "+2",
       changeType: "increase",
       color: "from-blue-500 to-cyan-500",
-      icon: <Truck size={24} />,
+      icon: <Truck className="size-4 xs:size-5 sm:size-6" />,
       description: "Currently in transit"
     },
     {
@@ -91,7 +94,7 @@ const PremiumDashboard = () => {
       change: "+8",
       changeType: "increase",
       color: "from-green-500 to-emerald-500",
-      icon: <Package size={24} />,
+      icon: <Package className="size-4 xs:size-5 sm:size-6" />,
       description: "This month"
     },
     {
@@ -100,7 +103,7 @@ const PremiumDashboard = () => {
       change: "+12%",
       changeType: "increase",
       color: "from-purple-500 to-pink-500",
-      icon: <DollarSign size={24} />,
+      icon: <DollarSign className="size-4 xs:size-5 sm:size-6" />,
       description: "Monthly earnings"
     },
     {
@@ -109,7 +112,7 @@ const PremiumDashboard = () => {
       change: "+2.1%",
       changeType: "increase",
       color: "from-orange-500 to-red-500",
-      icon: <Clock size={24} />,
+      icon: <Clock className="size-4 xs:size-5 sm:size-6" />,
       description: "Delivery performance"
     }
   ];
@@ -157,7 +160,7 @@ const PremiumDashboard = () => {
       message: "New load posted: Mumbai → Delhi",
       time: "2 hours ago",
       status: "active",
-      icon: <Truck className="text-blue-500" />
+      icon: <Truck className="text-blue-500 size-3 xs:size-4 sm:size-5" />
     },
     {
       id: 2,
@@ -165,7 +168,7 @@ const PremiumDashboard = () => {
       message: "Job completed: Pune → Surat",
       time: "5 hours ago",
       status: "completed",
-      icon: <CheckCircle2 className="text-green-500" />
+      icon: <CheckCircle2 className="text-green-500 size-3 xs:size-4 sm:size-5" />
     },
     {
       id: 3,
@@ -173,7 +176,7 @@ const PremiumDashboard = () => {
       message: "Payment received: ₹2,000",
       time: "1 day ago",
       status: "payment",
-      icon: <DollarSign className="text-purple-500" />
+      icon: <DollarSign className="text-purple-500 size-3 xs:size-4 sm:size-5" />
     },
     {
       id: 4,
@@ -181,7 +184,7 @@ const PremiumDashboard = () => {
       message: "Delay alert: Bangalore → Hyderabad",
       time: "2 days ago",
       status: "alert",
-      icon: <AlertCircle className="text-orange-500" />
+      icon: <AlertCircle className="text-orange-500 size-3 xs:size-4 sm:size-5" />
     }
   ];
 
@@ -216,10 +219,10 @@ const PremiumDashboard = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-2xl p-4 shadow-2xl">
-          <p className="font-semibold text-gray-900">{label}</p>
+        <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 shadow-2xl text-xs sm:text-sm">
+          <p className="font-semibold text-gray-900 text-xs sm:text-sm">{label}</p>
           {payload.map((entry, index) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
+            <p key={index} className="text-xs sm:text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value}
             </p>
           ))}
@@ -230,56 +233,116 @@ const PremiumDashboard = () => {
   };
 
   const StatusBar = () => (
-    <div className="flex items-center justify-between text-sm mb-6">
-      <div className="flex items-center gap-4">
-        <div className={`flex items-center gap-1 px-3 py-1 rounded-full ${
+    <div className="flex items-center justify-between text-xs xs:text-sm mb-3 sm:mb-4 md:mb-6">
+      <div className="flex items-center gap-1 xs:gap-2 sm:gap-3 md:gap-4 flex-wrap">
+        <div className={`flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full text-xs ${
           connectionStatus === "online" 
             ? "bg-green-500/20 text-green-400" 
             : "bg-red-500/20 text-red-400"
         }`}>
-          <Wifi size={14} />
-          <span className="capitalize">{connectionStatus}</span>
+          <Wifi className="size-2 xs:size-3 sm:size-3 md:size-4" />
+          <span className="capitalize hidden xs:inline">{connectionStatus}</span>
+          <span className="capitalize xs:hidden">Online</span>
         </div>
         
-        <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-blue-500/20 text-blue-400">
-          <Battery size={14} />
+        <div className="flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs">
+          <Battery className="size-2 xs:size-3 sm:size-3 md:size-4" />
           <span>{batteryLevel}%</span>
         </div>
 
-        <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-purple-500/20 text-purple-400">
-          <Cloud size={14} />
-          <span>Live Sync</span>
+        <div className="flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">
+          <Cloud className="size-2 xs:size-3 sm:size-3 md:size-4" />
+          <span className="hidden sm:inline">Live Sync</span>
+          <span className="sm:hidden">Sync</span>
         </div>
       </div>
       
-      <div className="flex items-center gap-2 text-gray-500">
-        <Sparkles size={14} />
-        <span>TransConnect Premium</span>
+      <div className="flex items-center gap-1 text-gray-500 text-xs xs:text-sm">
+        <Sparkles className="size-2 xs:size-3 sm:size-3 md:size-4" />
+        <span className="hidden xs:inline">TransConnect Premium</span>
+        <span className="xs:hidden">Premium</span>
       </div>
     </div>
   );
 
+  const MobileMenu = () => (
+    <AnimatePresence>
+      {isMobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Menu */}
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: "spring", damping: 30 }}
+            className="fixed top-0 right-0 h-full w-64 bg-white/95 backdrop-blur-sm z-50 lg:hidden p-3 sm:p-4"
+          >
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Menu</h3>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-1 sm:p-2 hover:bg-gray-100 rounded-lg sm:rounded-xl"
+              >
+                <X className="size-4 sm:size-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-1 sm:space-y-2">
+              {["overview", "analytics", "drivers", "reports"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => {
+                    setActiveTab(tab);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium capitalize transition-all ${
+                    activeTab === tab 
+                      ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white" 
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-3 sm:p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <div className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 border-3 xs:border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2 xs:mb-3 sm:mb-4"></div>
+          <div className="text-lg xs:text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             TransConnect
           </div>
-          <div className="text-gray-500 mt-2">Loading your dashboard...</div>
+          <div className="text-gray-500 mt-1 xs:mt-2 text-xs xs:text-sm sm:text-base">Loading your dashboard...</div>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 p-4 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8">
+      <MobileMenu />
+      
+      <div className="max-w-7xl mx-auto space-y-3 xs:space-y-4 sm:space-y-5 md:space-y-6">
         {/* Status Bar */}
         <StatusBar />
 
@@ -287,22 +350,36 @@ const PremiumDashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4"
+          className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 xs:gap-3 sm:gap-4"
         >
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">
-              Welcome back, <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Rajesh!</span>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+              Welcome back,{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block xs:inline">
+                Rajesh!
+              </span>
             </h1>
-            <p className="text-gray-600 mt-2">Here's what's happening with your logistics today</p>
+            <p className="text-gray-600 mt-1 text-xs xs:text-sm sm:text-base leading-relaxed">
+              Here's what's happening with your logistics today
+            </p>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div className="flex bg-white/80 backdrop-blur-sm rounded-2xl p-1 border border-gray-200">
+          <div className="flex items-center gap-1 xs:gap-2 sm:gap-3 w-full lg:w-auto mt-2 xs:mt-0">
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="lg:hidden p-1 xs:p-2 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg sm:rounded-xl hover:shadow-lg transition-all flex-shrink-0"
+            >
+              <Menu className="size-3 xs:size-4 sm:size-5" />
+            </button>
+
+            {/* Desktop Tabs */}
+            <div className="hidden lg:flex bg-white/80 backdrop-blur-sm rounded-xl p-1 border border-gray-200">
               {["overview", "analytics", "drivers", "reports"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium capitalize transition-all ${
+                  className={`px-2 xs:px-3 py-1 xs:py-2 rounded-lg text-xs xs:text-sm font-medium capitalize transition-all ${
                     activeTab === tab 
                       ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg" 
                       : "text-gray-600 hover:text-gray-900"
@@ -313,8 +390,8 @@ const PremiumDashboard = () => {
               ))}
             </div>
             
-            <button className="p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl hover:shadow-lg transition-all">
-              <Filter size={20} />
+            <button className="p-1 xs:p-2 sm:p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg sm:rounded-xl lg:rounded-2xl hover:shadow-lg transition-all flex-shrink-0">
+              <Filter className="size-3 xs:size-4 sm:size-5" />
             </button>
           </div>
         </motion.div>
@@ -324,36 +401,41 @@ const PremiumDashboard = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 md:gap-5 lg:gap-6"
         >
           {stats.map((stat, index) => (
             <motion.div
               key={stat.title}
-              whileHover={{ scale: 1.02, y: -5 }}
-              className={`bg-gradient-to-br ${stat.color} text-white rounded-3xl p-6 shadow-2xl backdrop-blur-sm relative overflow-hidden`}
+              whileHover={{ scale: 1.02, y: -2 }}
+              className={`bg-gradient-to-br ${stat.color} text-white rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl backdrop-blur-sm relative overflow-hidden min-h-[80px] xs:min-h-[90px] sm:min-h-[110px] md:min-h-[120px] lg:min-h-[140px]`}
             >
               {/* Background pattern */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
+              <div className="absolute top-0 right-0 w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 bg-white/10 rounded-full -translate-y-6 xs:-translate-y-8 sm:-translate-y-10 lg:-translate-y-16 translate-x-6 xs:translate-x-8 sm:translate-x-10 lg:translate-x-16" />
               
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <div className="relative z-10 h-full flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-1 xs:mb-2 sm:mb-3 lg:mb-4">
+                  <div className="p-1 xs:p-2 sm:p-2 lg:p-3 bg-white/20 rounded-lg xs:rounded-xl lg:rounded-2xl backdrop-blur-sm">
                     {stat.icon}
                   </div>
-                  <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                  <div className={`flex items-center gap-0.5 xs:gap-1 px-1 xs:px-2 py-0.5 xs:py-1 rounded-full text-xs font-semibold ${
                     stat.changeType === "increase" 
                       ? "bg-green-500/30 text-green-100" 
                       : "bg-red-500/30 text-red-100"
                   }`}>
-                    {stat.changeType === "increase" ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                    {stat.change}
+                    {stat.changeType === "increase" ? 
+                      <ArrowUpRight className="size-2 xs:size-3" /> : 
+                      <ArrowDownRight className="size-2 xs:size-3" />
+                    }
+                    <span className="text-xs">{stat.change}</span>
                   </div>
                 </div>
                 
-                <div className="space-y-1">
-                  <p className="text-white/80 text-sm font-medium">{stat.title}</p>
-                  <p className="text-3xl font-bold">{stat.value}</p>
-                  <p className="text-white/60 text-xs">{stat.description}</p>
+                <div className="space-y-0.5 xs:space-y-1">
+                  <p className="text-white/80 text-xs xs:text-sm font-medium truncate">{stat.title}</p>
+                  <p className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold truncate leading-tight">
+                    {stat.value}
+                  </p>
+                  <p className="text-white/60 text-xs truncate">{stat.description}</p>
                 </div>
               </div>
             </motion.div>
@@ -361,34 +443,38 @@ const PremiumDashboard = () => {
         </motion.div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
           {/* Performance Chart */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-gray-200/50"
+            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
           >
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Load Performance</h3>
-                <p className="text-gray-600 text-sm">Weekly overview of active and completed loads</p>
+            <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 truncate">
+                  Load Performance
+                </h3>
+                <p className="text-gray-600 text-xs xs:text-sm truncate mt-0.5">
+                  Weekly overview of active and completed loads
+                </p>
               </div>
-              <div className="flex items-center gap-2">
-                <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                  <Download size={18} />
+              <div className="flex items-center gap-1 xs:gap-2 flex-shrink-0 ml-2">
+                <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
+                  <Download className="size-3 xs:size-4 sm:size-5" />
                 </button>
-                <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                  <MoreVertical size={18} />
+                <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
+                  <MoreVertical className="size-3 xs:size-4 sm:size-5" />
                 </button>
               </div>
             </div>
             
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={performanceData}>
+            <ResponsiveContainer width="100%" height={180} className="text-xs">
+              <AreaChart data={performanceData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="day" />
-                <YAxis />
+                <XAxis dataKey="day" tick={{ fontSize: 10 }} />
+                <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area type="monotone" dataKey="active" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} />
                 <Area type="monotone" dataKey="completed" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.2} />
@@ -401,19 +487,23 @@ const PremiumDashboard = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-gray-200/50"
+            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
           >
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Revenue Analytics</h3>
-                <p className="text-gray-600 text-sm">Monthly revenue and profit trends</p>
+            <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 truncate">
+                  Revenue Analytics
+                </h3>
+                <p className="text-gray-600 text-xs xs:text-sm truncate mt-0.5">
+                  Monthly revenue and profit trends
+                </p>
               </div>
-              <div className="flex bg-gray-100 rounded-xl p-1">
+              <div className="flex bg-gray-100 rounded-lg xs:rounded-xl p-0.5 xs:p-1 flex-shrink-0 ml-2">
                 {["week", "month", "quarter"].map((range) => (
                   <button
                     key={range}
                     onClick={() => setTimeRange(range)}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium capitalize ${
+                    className={`px-1 xs:px-2 py-0.5 xs:py-1 rounded-md xs:rounded-lg text-xs font-medium capitalize ${
                       timeRange === range 
                         ? "bg-white text-gray-900 shadow-sm" 
                         : "text-gray-600 hover:text-gray-900"
@@ -425,14 +515,14 @@ const PremiumDashboard = () => {
               </div>
             </div>
             
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={revenueData}>
+            <ResponsiveContainer width="100%" height={180} className="text-xs">
+              <BarChart data={revenueData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="month" />
-                <YAxis />
+                <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="revenue" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="profit" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="revenue" fill="#8b5cf6" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="profit" fill="#10b981" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </motion.div>
@@ -442,23 +532,23 @@ const PremiumDashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-gray-200/50"
+            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Load Distribution</h3>
-              <Eye size={18} className="text-gray-400" />
+            <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
+              <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Load Distribution</h3>
+              <Eye className="size-3 xs:size-4 sm:size-5 text-gray-400" />
             </div>
             
-            <div className="flex items-center justify-center h-64">
+            <div className="flex items-center justify-center h-32 xs:h-36 sm:h-40 md:h-48 lg:h-56 xl:h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={loadDistributionData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
+                    innerRadius={30}
+                    outerRadius={45}
+                    paddingAngle={2}
                     dataKey="value"
                   >
                     {loadDistributionData.map((entry, index) => (
@@ -466,7 +556,6 @@ const PremiumDashboard = () => {
                     ))}
                   </Pie>
                   <Tooltip content={<CustomTooltip />} />
-                  <Legend />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -477,23 +566,23 @@ const PremiumDashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-gray-200/50"
+            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Top Drivers</h3>
-              <Users size={18} className="text-gray-400" />
+            <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
+              <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Top Drivers</h3>
+              <Users className="size-3 xs:size-4 sm:size-5 text-gray-400" />
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-2 xs:space-y-2 sm:space-y-3 md:space-y-4">
               {driverPerformanceData.map((driver, index) => (
-                <div key={driver.driver} className="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl hover:bg-gray-100/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center text-white font-semibold text-sm">
+                <div key={driver.driver} className="flex items-center justify-between p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-100/50 transition-colors">
+                  <div className="flex items-center gap-2 xs:gap-3 min-w-0 flex-1">
+                    <div className="w-6 h-6 xs:w-8 xs:h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg xs:rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-semibold text-xs xs:text-sm flex-shrink-0">
                       {driver.driver.split(' ').map(n => n[0]).join('')}
                     </div>
-                    <div>
-                      <div className="font-semibold text-gray-900">{driver.driver}</div>
-                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-gray-900 text-xs xs:text-sm truncate">{driver.driver}</div>
+                      <div className="flex items-center gap-1 text-xs text-gray-600 mt-0.5">
                         <span>⭐ {driver.rating}</span>
                         <span>•</span>
                         <span>{driver.loads} loads</span>
@@ -501,8 +590,8 @@ const PremiumDashboard = () => {
                     </div>
                   </div>
                   
-                  <div className="text-right">
-                    <div className="font-semibold text-green-600">{driver.onTime}%</div>
+                  <div className="text-right flex-shrink-0 ml-2">
+                    <div className="font-semibold text-green-600 text-xs xs:text-sm">{driver.onTime}%</div>
                     <div className="text-xs text-gray-600">On-time</div>
                   </div>
                 </div>
@@ -512,37 +601,39 @@ const PremiumDashboard = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
           {/* Recent Activity */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-gray-200/50"
+            className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
-              <RefreshCw size={18} className="text-gray-400 cursor-pointer hover:text-gray-600" />
+            <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
+              <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Recent Activity</h3>
+              <RefreshCw className="size-3 xs:size-4 sm:size-5 text-gray-400 cursor-pointer hover:text-gray-600" />
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-2 xs:space-y-2 sm:space-y-3 md:space-y-4">
               {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-center gap-4 p-4 bg-gray-50/50 rounded-2xl hover:bg-gray-100/50 transition-colors group">
-                  <div className="p-2 bg-white rounded-xl shadow-sm group-hover:shadow-md transition-shadow">
+                <div key={activity.id} className="flex items-center gap-2 xs:gap-3 p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-100/50 transition-colors group">
+                  <div className="p-1 xs:p-2 bg-white rounded-lg xs:rounded-xl shadow-sm group-hover:shadow-md transition-shadow flex-shrink-0">
                     {activity.icon}
                   </div>
                   
-                  <div className="flex-1">
-                    <div className="font-medium text-gray-900">{activity.message}</div>
-                    <div className="text-sm text-gray-600">{activity.time}</div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium text-gray-900 text-xs xs:text-sm sm:text-base truncate">
+                      {activity.message}
+                    </div>
+                    <div className="text-gray-600 text-xs xs:text-sm mt-0.5">{activity.time}</div>
                   </div>
                   
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 hover:bg-gray-200 rounded-xl transition-colors">
-                      <Eye size={16} />
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                    <button className="p-1 xs:p-2 hover:bg-gray-200 rounded-lg xs:rounded-xl transition-colors">
+                      <Eye className="size-2 xs:size-3 sm:size-4" />
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded-xl transition-colors">
-                      <MessageCircle size={16} />
+                    <button className="p-1 xs:p-2 hover:bg-gray-200 rounded-lg xs:rounded-xl transition-colors">
+                      <MessageCircle className="size-2 xs:size-3 sm:size-4" />
                     </button>
                   </div>
                 </div>
@@ -555,42 +646,48 @@ const PremiumDashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-3xl p-6 shadow-2xl relative overflow-hidden"
+            className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl relative overflow-hidden"
           >
             {/* Background pattern */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8" />
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -translate-x-8 translate-y-8" />
+            <div className="absolute top-0 right-0 w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 bg-white/10 rounded-full -translate-y-4 xs:-translate-y-6 sm:-translate-y-8 translate-x-4 xs:translate-x-6 sm:translate-x-8" />
+            <div className="absolute bottom-0 left-0 w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white/5 rounded-full -translate-x-4 xs:-translate-x-6 sm:-translate-x-8 translate-y-4 xs:translate-y-6 sm:translate-y-8" />
             
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold">Upcoming Loads</h3>
-                <Calendar size={20} className="text-white/80" />
+              <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
+                <h3 className="text-sm xs:text-base sm:text-lg font-semibold">Upcoming Loads</h3>
+                <Calendar className="size-3 xs:size-4 sm:size-5 text-white/80" />
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-2 xs:space-y-2 sm:space-y-3 md:space-y-4">
                 {upcomingLoads.map((load) => (
-                  <div key={load.id} className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/15 transition-colors">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="font-semibold">{load.route}</div>
-                      <div className="text-white/80 text-sm">{load.value}</div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between text-sm text-white/70">
-                      <div className="flex items-center gap-1">
-                        <Clock size={14} />
-                        <span>{load.date}</span>
+                  <div key={load.id} className="p-2 xs:p-3 sm:p-4 bg-white/10 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl border border-white/20 hover:bg-white/15 transition-colors">
+                    <div className="flex items-center justify-between mb-1 xs:mb-2">
+                      <div className="font-semibold text-xs xs:text-sm sm:text-base truncate flex-1 mr-2">
+                        {load.route}
                       </div>
-                      <div>{load.driver}</div>
+                      <div className="text-white/80 text-xs xs:text-sm flex-shrink-0">
+                        {load.value}
+                      </div>
                     </div>
                     
-                    <div className="flex items-center gap-2 mt-3">
-                      <button className="flex-1 bg-white/20 hover:bg-white/30 text-white py-2 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-1">
-                        <Phone size={14} />
-                        Call
+                    <div className="flex items-center justify-between text-xs text-white/70 mb-2 xs:mb-3">
+                      <div className="flex items-center gap-1 truncate flex-1">
+                        <Clock className="size-2 xs:size-3 flex-shrink-0" />
+                        <span className="truncate">{load.date}</span>
+                      </div>
+                      <div className="text-xs truncate ml-2 flex-shrink-0">{load.driver}</div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1 xs:gap-2">
+                      <button className="flex-1 bg-white/20 hover:bg-white/30 text-white py-1 xs:py-2 rounded-lg xs:rounded-xl text-xs font-medium transition-colors flex items-center justify-center gap-1">
+                        <Phone className="size-2 xs:size-3" />
+                        <span className="hidden xs:inline">Call</span>
+                        <span className="xs:hidden">Call</span>
                       </button>
-                      <button className="flex-1 bg-white/20 hover:bg-white/30 text-white py-2 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-1">
-                        <Mail size={14} />
-                        Message
+                      <button className="flex-1 bg-white/20 hover:bg-white/30 text-white py-1 xs:py-2 rounded-lg xs:rounded-xl text-xs font-medium transition-colors flex items-center justify-center gap-1">
+                        <Mail className="size-2 xs:size-3" />
+                        <span className="hidden xs:inline">Message</span>
+                        <span className="xs:hidden">Msg</span>
                       </button>
                     </div>
                   </div>
@@ -604,4 +701,4 @@ const PremiumDashboard = () => {
   );
 };
 
-export default PremiumDashboard;
+export default Dashboard;

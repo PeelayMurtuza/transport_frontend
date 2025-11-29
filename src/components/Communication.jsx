@@ -8,7 +8,6 @@ import {
   Sun,
   Moon,
   Check,
-  CheckCheck,
   ChevronLeft,
   LogOut,
   StopCircle,
@@ -16,42 +15,32 @@ import {
   Clock,
   Users,
   Shield,
-  Zap,
   Download,
   Copy,
   Search,
   Pin,
   MoreVertical,
-  ImageIcon,
-  VideoIcon,
+  Image,
+  Video,
   FileText,
   Music,
-  UserPlus,
   Settings,
   Bell,
   BellOff,
   Eye,
   EyeOff,
-  Share,
-  Archive,
-  Filter,
-  Grid,
-  List,
-  Camera,
-  MapPin,
-  Calendar,
-  BarChart3,
+  MessageCircle,
+  Wifi,
+  WifiOff,
+  BatteryCharging,
+  Smartphone,
+  Laptop,
+  X,
   Sparkles,
   Rocket,
   Cloud,
   Cpu,
-  Globe,
-  Wifi,
-  WifiOff,
-  Battery,
-  BatteryCharging,
-  Smartphone,
-  Laptop
+  Globe
 } from "lucide-react";
 
 export default function Communication() {
@@ -75,6 +64,7 @@ export default function Communication() {
   const [connectionStatus, setConnectionStatus] = useState("online");
   const [batteryLevel, setBatteryLevel] = useState(100);
   const [recordingDuration, setRecordingDuration] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -496,23 +486,24 @@ export default function Communication() {
     setMessage("");
     setStagedFiles([]);
     setViewMode("chat");
+    setMobileMenuOpen(false);
   };
 
   // Enhanced components
   const ConnectionStatus = () => (
-    <div className="flex items-center gap-2 text-xs">
+    <div className="flex items-center gap-1 sm:gap-2 text-xs">
       <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${
         connectionStatus === "online" 
           ? "bg-green-500/20 text-green-400" 
           : "bg-red-500/20 text-red-400"
       }`}>
-        {connectionStatus === "online" ? <Wifi size={12} /> : <WifiOff size={12} />}
-        <span className="capitalize">{connectionStatus}</span>
+        {connectionStatus === "online" ? <Wifi size={10} className="sm:w-3 sm:h-3" /> : <WifiOff size={10} className="sm:w-3 sm:h-3" />}
+        <span className="capitalize hidden xs:inline">{connectionStatus}</span>
       </div>
       
       <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-blue-500/20 text-blue-400">
-        <BatteryCharging size={12} />
-        <span>{batteryLevel}%</span>
+        <BatteryCharging size={10} className="sm:w-3 sm:h-3" />
+        <span className="text-xs">{batteryLevel}%</span>
       </div>
     </div>
   );
@@ -521,7 +512,7 @@ export default function Communication() {
     const sizes = {
       sm: "w-6 h-6 text-xs",
       md: "w-8 h-8 text-sm",
-      lg: "w-12 h-12 text-lg"
+      lg: "w-10 h-10 sm:w-12 sm:h-12 text-base sm:text-lg"
     };
     
     return (
@@ -529,7 +520,7 @@ export default function Communication() {
         <div className={`w-full h-full rounded-full bg-gradient-to-br ${currentTheme.primary} flex items-center justify-center font-bold shadow-lg`}>
           {user.username[0]?.toUpperCase()}
         </div>
-        <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 ${currentTheme.surface} ${
+        <div className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 ${currentTheme.surface} ${
           user.status === "online" ? "bg-green-400" : "bg-gray-400"
         }`} />
       </div>
@@ -547,47 +538,47 @@ export default function Communication() {
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-        className={`group relative flex ${isOwn ? "justify-end" : "justify-start"} mb-4`}
+        className={`group relative flex ${isOwn ? "justify-end" : "justify-start"} mb-3 sm:mb-4`}
         onMouseEnter={() => setShowActions(true)}
         onMouseLeave={() => setShowActions(false)}
       >
-        <div className={`flex gap-3 max-w-[85%] ${isOwn ? "flex-row-reverse" : "flex-row"}`}>
+        <div className={`flex gap-2 sm:gap-3 max-w-[90%] sm:max-w-[85%] ${isOwn ? "flex-row-reverse" : "flex-row"}`}>
           {!isOwn && <UserAvatar user={{ username: msg.from }} size="sm" />}
           
-          <div className={`relative rounded-3xl px-4 py-3 shadow-2xl backdrop-blur-sm ${
+          <div className={`relative rounded-2xl sm:rounded-3xl px-3 sm:px-4 py-2 sm:py-3 shadow-xl sm:shadow-2xl backdrop-blur-sm ${
             isOwn 
-              ? `bg-gradient-to-br ${currentTheme.secondary} text-white rounded-br-md`
-              : `${currentTheme.surface} ${currentTheme.text} rounded-bl-md border ${currentTheme.border}`
+              ? `bg-gradient-to-br ${currentTheme.secondary} text-white rounded-br-md sm:rounded-br-lg`
+              : `${currentTheme.surface} ${currentTheme.text} rounded-bl-md sm:rounded-bl-lg border ${currentTheme.border}`
           }`}>
             
             {/* Message header */}
             {!isOwn && (
-              <div className="flex items-center gap-2 mb-2">
-                <span className="font-semibold text-sm">{msg.from}</span>
+              <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
+                <span className="font-semibold text-xs sm:text-sm">{msg.from}</span>
                 <div className="flex items-center gap-1 text-xs opacity-60">
-                  {msg.metadata?.device === "mobile" && <Smartphone size={12} />}
-                  {msg.metadata?.device === "desktop" && <Laptop size={12} />}
+                  {msg.metadata?.device === "mobile" && <Smartphone size={10} className="sm:w-3 sm:h-3" />}
+                  {msg.metadata?.device === "desktop" && <Laptop size={10} className="sm:w-3 sm:h-3" />}
                 </div>
               </div>
             )}
 
             {/* Message content */}
             {msg.text && (
-              <p className="whitespace-pre-wrap text-sm leading-relaxed mb-2">
+              <p className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed mb-1 sm:mb-2">
                 {msg.text}
               </p>
             )}
 
             {/* Attachments */}
             {msg.attachments && msg.attachments.length > 0 && (
-              <div className="space-y-3 mb-2">
+              <div className="space-y-2 sm:space-y-3 mb-1 sm:mb-2">
                 {msg.attachments.map((att, idx) => (
-                  <div key={idx} className="rounded-2xl overflow-hidden border border-white/20 bg-black/20">
+                  <div key={idx} className="rounded-xl sm:rounded-2xl overflow-hidden border border-white/20 bg-black/20">
                     {att.type === "image" && (
                       <img 
                         src={att.dataURL} 
                         alt={att.name} 
-                        className="max-w-full max-h-80 object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
+                        className="max-w-full max-h-48 sm:max-h-80 object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
                         onClick={() => window.open(att.dataURL, '_blank')}
                       />
                     )}
@@ -595,26 +586,26 @@ export default function Communication() {
                       <video 
                         src={att.dataURL} 
                         controls 
-                        className="max-w-full max-h-80"
+                        className="max-w-full max-h-48 sm:max-h-80"
                         poster={att.thumbnail}
                       />
                     )}
                     {att.type === "audio" && (
-                      <div className="p-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20">
-                        <div className="flex items-center gap-3">
-                          <Music className="text-purple-400" size={24} />
-                          <audio src={att.dataURL} controls className="flex-1" />
+                      <div className="p-2 sm:p-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <Music size={16} className="text-purple-400 sm:w-6 sm:h-6" />
+                          <audio src={att.dataURL} controls className="flex-1 max-w-[120px] sm:max-w-none" />
                           <div className="text-xs text-gray-400">{att.duration}s</div>
                         </div>
                       </div>
                     )}
-                    <div className="px-3 py-2 bg-black/40 text-xs flex justify-between items-center">
-                      <span className="truncate flex-1">{att.name}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-400">{Math.round(att.size / 1024)}KB</span>
+                    <div className="px-2 sm:px-3 py-1 sm:py-2 bg-black/40 text-xs flex justify-between items-center">
+                      <span className="truncate flex-1 text-xs">{att.name}</span>
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <span className="text-gray-400 text-xs">{Math.round(att.size / 1024)}KB</span>
                         <Download 
-                          size={14} 
-                          className="cursor-pointer hover:text-blue-400 transition-colors"
+                          size={12} 
+                          className="sm:w-3 sm:h-3 cursor-pointer hover:text-blue-400 transition-colors"
                           onClick={() => {
                             const link = document.createElement('a');
                             link.href = att.dataURL;
@@ -631,19 +622,19 @@ export default function Communication() {
 
             {/* Message footer */}
             <div className="flex items-center justify-between text-xs opacity-70">
-              <div className="flex items-center gap-3">
-                <span>{msg.time}</span>
-                {msg.pinned && <Pin size={12} className="text-yellow-400" />}
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="text-xs">{msg.time}</span>
+                {msg.pinned && <Pin size={10} className="sm:w-3 sm:h-3 text-yellow-400" />}
                 <div className="flex items-center gap-1">
-                  <Clock size={10} />
-                  <span>{minutesLeft}m</span>
+                  <Clock size={8} className="sm:w-2 sm:h-2" />
+                  <span className="text-xs">{minutesLeft}m</span>
                 </div>
               </div>
               
               <div className="flex items-center gap-1">
                 {isOwn && (msg.read ? 
-                  <CheckCheck size={14} className="text-blue-300" /> : 
-                  <Check size={14} />
+                  <Check size={12} className="sm:w-3 sm:h-3 text-blue-300" /> : 
+                  <Check size={12} className="sm:w-3 sm:h-3" />
                 )}
               </div>
             </div>
@@ -653,30 +644,30 @@ export default function Communication() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className={`absolute top-2 ${isOwn ? "left-0 -translate-x-full" : "right-0 translate-x-full"} flex gap-1 px-2`}
+                className={`absolute top-1 sm:top-2 ${isOwn ? "left-0 -translate-x-full" : "right-0 translate-x-full"} flex gap-1 px-1 sm:px-2`}
               >
                 {isOwn && (
                   <button
                     onClick={() => deleteMessage(msg.id)}
-                    className="p-2 bg-red-500/90 hover:bg-red-600 rounded-full shadow-lg transition-all backdrop-blur-sm"
+                    className="p-1 sm:p-2 bg-red-500/90 hover:bg-red-600 rounded-full shadow-lg transition-all backdrop-blur-sm"
                     title="Delete message"
                   >
-                    <Trash2 size={14} />
+                    <Trash2 size={12} className="sm:w-3 sm:h-3" />
                   </button>
                 )}
                 <button 
                   onClick={() => pinMessage(msg.id)}
-                  className="p-2 bg-yellow-500/90 hover:bg-yellow-600 rounded-full shadow-lg transition-all backdrop-blur-sm"
+                  className="p-1 sm:p-2 bg-yellow-500/90 hover:bg-yellow-600 rounded-full shadow-lg transition-all backdrop-blur-sm"
                   title="Pin message"
                 >
-                  <Pin size={14} />
+                  <Pin size={12} className="sm:w-3 sm:h-3" />
                 </button>
                 <button 
                   onClick={() => copyMessage(msg.text)}
-                  className="p-2 bg-blue-500/90 hover:bg-blue-600 rounded-full shadow-lg transition-all backdrop-blur-sm"
+                  className="p-1 sm:p-2 bg-blue-500/90 hover:bg-blue-600 rounded-full shadow-lg transition-all backdrop-blur-sm"
                   title="Copy message"
                 >
-                  <Copy size={14} />
+                  <Copy size={12} className="sm:w-3 sm:h-3" />
                 </button>
               </motion.div>
             )}
@@ -691,23 +682,23 @@ export default function Communication() {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
-      className="relative group bg-white/10 rounded-2xl p-4 border border-white/20 backdrop-blur-sm"
+      className="relative group bg-white/10 rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20 backdrop-blur-sm"
     >
-      <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-2xl ${
+      <div className="flex items-center gap-2 sm:gap-4">
+        <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl ${
           att.type === "image" ? "bg-blue-500/20" :
           att.type === "video" ? "bg-purple-500/20" :
           att.type === "audio" ? "bg-green-500/20" : "bg-gray-500/20"
         }`}>
-          {att.type === "image" && <ImageIcon className="text-blue-400" size={24} />}
-          {att.type === "video" && <VideoIcon className="text-purple-400" size={24} />}
-          {att.type === "audio" && <Music className="text-green-400" size={24} />}
-          {att.type === "file" && <FileText className="text-gray-400" size={24} />}
+          {att.type === "image" && <Image size={16} className="text-blue-400 sm:w-6 sm:h-6" />}
+          {att.type === "video" && <Video size={16} className="text-purple-400 sm:w-6 sm:h-6" />}
+          {att.type === "audio" && <Music size={16} className="text-green-400 sm:w-6 sm:h-6" />}
+          {att.type === "file" && <FileText size={16} className="text-gray-400 sm:w-6 sm:h-6" />}
         </div>
         
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-semibold truncate">{att.name}</div>
-          <div className="text-xs text-gray-400 flex items-center gap-3 mt-1">
+          <div className="text-xs sm:text-sm font-semibold truncate">{att.name}</div>
+          <div className="text-xs text-gray-400 flex items-center gap-2 sm:gap-3 mt-1">
             <span>{att.type}</span>
             <span>{Math.round(att.size / 1024)}KB</span>
             {att.duration && <span>{att.duration}s</span>}
@@ -716,9 +707,9 @@ export default function Communication() {
         
         <button
           onClick={() => onRemove(idx)}
-          className="p-2 hover:bg-red-500/20 rounded-xl transition-all group-hover:scale-110"
+          className="p-1 sm:p-2 hover:bg-red-500/20 rounded-lg sm:rounded-xl transition-all group-hover:scale-110"
         >
-          <Trash2 size={18} className="text-red-400" />
+          <Trash2 size={14} className="sm:w-4 sm:h-4 text-red-400" />
         </button>
       </div>
     </motion.div>
@@ -727,108 +718,108 @@ export default function Communication() {
   // Enhanced login screen
   if (!user) {
     return (
-      <div className={`min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-br ${currentTheme.background} transition-all duration-1000`}>
+      <div className={`min-h-screen w-full flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br ${currentTheme.background} transition-all duration-1000`}>
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, type: "spring" }}
-          className={`w-full max-w-2xl rounded-3xl shadow-2xl border ${currentTheme.border} ${currentTheme.surface} overflow-hidden`}
+          className={`w-full max-w-2xl rounded-2xl sm:rounded-3xl shadow-2xl border ${currentTheme.border} ${currentTheme.surface} overflow-hidden`}
         >
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col lg:flex-row">
             {/* Left Side - Branding */}
-            <div className={`md:w-2/5 p-8 bg-gradient-to-br ${currentTheme.primary} text-white`}>
+            <div className={`lg:w-2/5 p-6 sm:p-8 bg-gradient-to-br ${currentTheme.primary} text-white`}>
               <div className="flex flex-col h-full justify-between">
                 <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                      <Rocket className="text-white" size={28} />
+                  <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                      <Rocket size={20} className="text-white sm:w-7 sm:h-7" />
                     </div>
                     <div>
-                      <h1 className="text-2xl font-bold">TransConnect</h1>
-                      <p className="text-white/80 text-sm">Premium Chat</p>
+                      <h1 className="text-xl sm:text-2xl font-bold">TransConnect</h1>
+                      <p className="text-white/80 text-xs sm:text-sm">Premium Chat</p>
                     </div>
                   </div>
                   
-                  <div className="space-y-4 mt-8">
-                    <div className="flex items-center gap-3 text-white/80">
-                      <Shield size={20} />
-                      <span className="text-sm">End-to-End Encrypted</span>
+                  <div className="space-y-3 sm:space-y-4 mt-6 sm:mt-8">
+                    <div className="flex items-center gap-2 sm:gap-3 text-white/80">
+                      <Shield size={16} className="sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm">End-to-End Encrypted</span>
                     </div>
-                    <div className="flex items-center gap-3 text-white/80">
-                      <Clock size={20} />
-                      <span className="text-sm">1-Hour Auto-Delete</span>
+                    <div className="flex items-center gap-2 sm:gap-3 text-white/80">
+                      <Clock size={16} className="sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm">1-Hour Auto-Delete</span>
                     </div>
-                    <div className="flex items-center gap-3 text-white/80">
-                      <Sparkles size={20} />
-                      <span className="text-sm">Premium Features</span>
+                    <div className="flex items-center gap-2 sm:gap-3 text-white/80">
+                      <Sparkles size={16} className="sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm">Premium Features</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-8">
+                <div className="mt-6 sm:mt-8">
                   <ConnectionStatus />
                 </div>
               </div>
             </div>
             
             {/* Right Side - Login Form */}
-            <div className="md:w-3/5 p-8 ">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <div className="lg:w-3/5 p-6 sm:p-8">
+              <div className="text-center mb-6 sm:mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Join Chat Room
                 </h2>
-                <p className="text-gray-500 mt-2">Secure team communication platform</p>
+                <p className="text-gray-500 mt-2 text-sm sm:text-base">Secure team communication platform</p>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold mb-3">Your Name</label>
+                  <label className="block text-sm font-semibold mb-2 sm:mb-3">Your Name</label>
                   <input
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter your display name"
-                    className={`w-full px-4 py-4 rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg`}
+                    className={`w-full px-3 sm:px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-base sm:text-lg`}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold mb-3">Room Code</label>
+                  <label className="block text-sm font-semibold mb-2 sm:mb-3">Room Code</label>
                   <input
                     value={room}
                     onChange={(e) => setRoom(e.target.value)}
                     placeholder="Enter room code"
-                    className={`w-full px-4 py-4 rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg`}
+                    className={`w-full px-3 sm:px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-base sm:text-lg`}
                   />
                 </div>
 
-                <div className="flex gap-4 pt-4">
+                <div className="flex gap-3 sm:gap-4 pt-4">
                   <button
                     onClick={() => {
                       if (username.trim() && room.trim()) joinRoom(username.trim(), room.trim());
                     }}
-                    className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-4 rounded-2xl font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
                   >
                     Join Room
                   </button>
-                  {/* <button
+                  <button
                     onClick={() => setDarkMode((d) => !d)}
-                    className="p-4 rounded-2xl bg-gray-500/10 hover:bg-gray-500/20 transition-all transform hover:scale-105"
+                    className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-500/10 hover:bg-gray-500/20 transition-all transform hover:scale-105"
                   >
-                    {darkMode ? <Sun size={24} /> : <Moon size={24} />}
-                  </button> */}
+                    {darkMode ? <Sun size={20} className="sm:w-6 sm:h-6" /> : <Moon size={20} className="sm:w-6 sm:h-6" />}
+                  </button>
                 </div>
 
-                <div className="flex items-center justify-center gap-6 pt-6 text-sm text-gray-500">
-                  <div className="flex items-center gap-2">
-                    <Cloud size={16} />
+                <div className="flex items-center justify-center gap-4 sm:gap-6 pt-4 sm:pt-6 text-xs sm:text-sm text-gray-500">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Cloud size={14} className="sm:w-4 sm:h-4" />
                     <span>Cloud Sync</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Cpu size={16} />
-                    <span></span>
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Cpu size={14} className="sm:w-4 sm:h-4" />
+                    <span>Fast</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Globe size={16} />
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Globe size={14} className="sm:w-4 sm:h-4" />
                     <span>Global</span>
                   </div>
                 </div>
@@ -844,31 +835,32 @@ export default function Communication() {
   return (
     <div className={`h-screen w-full flex flex-col bg-gradient-to-br ${currentTheme.background} ${currentTheme.text} transition-all duration-500 overflow-hidden`}>
       {/* Enhanced Header */}
-      <div className={`px-6 py-4 border-b ${currentTheme.border} backdrop-blur-xl bg-white/5 shadow-lg`}>
+      <div className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b ${currentTheme.border} backdrop-blur-xl bg-white/5 shadow-lg`}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
             <button 
               onClick={leaveRoom}
-              className="p-3 hover:bg-white/10 rounded-2xl transition-all transform hover:scale-105"
+              className="p-2 sm:p-3 hover:bg-white/10 rounded-xl sm:rounded-2xl transition-all transform hover:scale-105"
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={18} className="sm:w-5 sm:h-5" />
             </button>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
               <UserAvatar user={user} size="md" />
               <div>
-                <h1 className="text-xl font-bold">Room {user.room}</h1>
-                <div className="flex items-center gap-3 text-sm text-gray-500">
-                  <Users size={14} />
+                <h1 className="text-lg sm:text-xl font-bold">Room {user.room}</h1>
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500">
+                  <Users size={12} className="sm:w-3 sm:h-3" />
                   <span>{(connectedUsers[user.room] || []).length} members</span>
                   {typingUsers[user.room]?.length > 0 && (
-                    <span className="text-blue-400 animate-pulse flex items-center gap-1">
+                    <span className="text-blue-400 animate-pulse flex items-center gap-1 text-xs">
                       <div className="flex space-x-1">
                         <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce"></div>
                         <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                         <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
-                      {typingUsers[user.room].join(", ")} typing...
+                      <span className="hidden xs:inline">{typingUsers[user.room].join(", ")} typing...</span>
+                      <span className="xs:hidden">typing...</span>
                     </span>
                   )}
                 </div>
@@ -876,87 +868,205 @@ export default function Communication() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <ConnectionStatus />
             
-            {/* View Mode Toggle */}
-            <div className="flex bg-white/10 rounded-2xl p-1 backdrop-blur-sm">
-              {[
-                { mode: "chat", icon: <MessageCircle size={16} /> },
-                { mode: "files", icon: <Paperclip size={16} /> },
-                { mode: "media", icon: <ImageIcon size={16} /> }
-              ].map(({ mode, icon }) => (
-                <button
-                  key={mode}
-                  onClick={() => setViewMode(mode)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
-                    viewMode === mode 
-                      ? "bg-white/20 text-white shadow-lg" 
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  {icon}
-                  <span className="capitalize">{mode}</span>
-                </button>
-              ))}
-            </div>
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 hover:bg-white/10 rounded-xl transition-all"
+            >
+              <MoreVertical size={18} className="sm:w-5 sm:h-5" />
+            </button>
 
-            <button 
-              onClick={() => setNotifications(!notifications)}
-              className="p-3 hover:bg-white/10 rounded-2xl transition-all"
-            >
-              {notifications ? <Bell size={20} /> : <BellOff size={20} />}
-            </button>
-            
-            <button 
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-3 hover:bg-white/10 rounded-2xl transition-all"
-            >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            
-            <button 
-              onClick={() => setActiveRoomSettings(!activeRoomSettings)}
-              className="p-3 hover:bg-white/10 rounded-2xl transition-all"
-            >
-              <Settings size={20} />
-            </button>
+            {/* Desktop Controls */}
+            <div className="hidden lg:flex items-center gap-2">
+              {/* View Mode Toggle */}
+              <div className="flex bg-white/10 rounded-xl sm:rounded-2xl p-1 backdrop-blur-sm">
+                {[
+                  { mode: "chat", icon: <MessageCircle size={14} className="sm:w-4 sm:h-4" /> },
+                  { mode: "files", icon: <Paperclip size={14} className="sm:w-4 sm:h-4" /> },
+                  { mode: "media", icon: <Image size={14} className="sm:w-4 sm:h-4" /> }
+                ].map(({ mode, icon }) => (
+                  <button
+                    key={mode}
+                    onClick={() => setViewMode(mode)}
+                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
+                      viewMode === mode 
+                        ? "bg-white/20 text-white shadow-lg" 
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    {icon}
+                    <span className="capitalize hidden sm:inline">{mode}</span>
+                  </button>
+                ))}
+              </div>
+
+              <button 
+                onClick={() => setNotifications(!notifications)}
+                className="p-2 hover:bg-white/10 rounded-xl transition-all"
+              >
+                {notifications ? <Bell size={18} className="sm:w-5 sm:h-5" /> : <BellOff size={18} className="sm:w-5 sm:h-5" />}
+              </button>
+              
+              <button 
+                onClick={() => setDarkMode(!darkMode)}
+                className="p-2 hover:bg-white/10 rounded-xl transition-all"
+              >
+                {darkMode ? <Sun size={18} className="sm:w-5 sm:h-5" /> : <Moon size={18} className="sm:w-5 sm:h-5" />}
+              </button>
+              
+              <button 
+                onClick={() => setActiveRoomSettings(!activeRoomSettings)}
+                className="p-2 hover:bg-white/10 rounded-xl transition-all"
+              >
+                <Settings size={18} className="sm:w-5 sm:h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 300 }}
+              className={`fixed top-0 right-0 h-full w-80 max-w-full ${currentTheme.surface} border-l ${currentTheme.border} z-50 lg:hidden overflow-y-auto`}
+            >
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-bold">Menu</h3>
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 hover:bg-white/10 rounded-xl"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Mobile View Mode Toggle */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-3">View Mode</label>
+                  <div className="flex bg-white/10 rounded-xl p-1">
+                    {[
+                      { mode: "chat", icon: <MessageCircle size={16} />, label: "Chat" },
+                      { mode: "files", icon: <Paperclip size={16} />, label: "Files" },
+                      { mode: "media", icon: <Image size={16} />, label: "Media" }
+                    ].map(({ mode, icon, label }) => (
+                      <button
+                        key={mode}
+                        onClick={() => {
+                          setViewMode(mode);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                          viewMode === mode 
+                            ? "bg-white/20 text-white shadow-lg" 
+                            : "text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        {icon}
+                        <span>{label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobile Settings */}
+                <div className="space-y-4">
+                  <button
+                    onClick={() => setNotifications(!notifications)}
+                    className={`w-full flex items-center justify-between p-3 rounded-xl transition-all ${
+                      notifications ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'
+                    }`}
+                  >
+                    <span>Notifications</span>
+                    {notifications ? <Bell size={16} /> : <BellOff size={16} />}
+                  </button>
+                  
+                  <button
+                    onClick={() => setDarkMode(!darkMode)}
+                    className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl transition-all"
+                  >
+                    <span>Theme</span>
+                    {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setActiveRoomSettings(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full flex items-center justify-between p-3 bg-white/10 rounded-xl transition-all"
+                  >
+                    <span>Room Settings</span>
+                    <Settings size={16} />
+                  </button>
+                </div>
+
+                <div className="pt-6 mt-6 border-t border-white/10">
+                  <button
+                    onClick={leaveRoom}
+                    className="w-full p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all flex items-center justify-center gap-2"
+                  >
+                    <LogOut size={16} />
+                    Leave Room
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Enhanced Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Chat Area */}
         <div className="flex-1 flex flex-col">
           {/* Connected Users Bar */}
-          <div className="px-6 py-4 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex gap-3 flex-wrap">
-                {(connectedUsers[user.room] || []).map((u, idx) => (
-                  <div key={idx} className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-2xl text-sm backdrop-blur-sm border border-white/10">
+          <div className="px-3 sm:px-4 lg:px-6 py-2 sm:py-4 border-b border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+              <div className="flex gap-2 flex-wrap">
+                {(connectedUsers[user.room] || []).slice(0, 3).map((u, idx) => (
+                  <div key={idx} className="flex items-center gap-2 bg-white/10 px-2 sm:px-3 py-1 sm:py-2 rounded-xl text-xs backdrop-blur-sm border border-white/10">
                     <UserAvatar user={u} size="sm" />
-                    <div>
-                      <div className="font-medium">{u.username}</div>
-                      <div className="text-xs text-gray-400 flex items-center gap-1">
-                        {u.device === "mobile" && <Smartphone size={10} />}
-                        {u.device === "desktop" && <Laptop size={10} />}
-                        <span className="capitalize">{u.status}</span>
+                    <div className="hidden xs:block">
+                      <div className="font-medium text-xs">{u.username}</div>
+                      <div className="text-gray-400 flex items-center gap-1">
+                        {u.device === "mobile" && <Smartphone size={8} />}
+                        {u.device === "desktop" && <Laptop size={8} />}
                       </div>
                     </div>
                   </div>
                 ))}
+                {(connectedUsers[user.room] || []).length > 3 && (
+                  <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-xl text-xs backdrop-blur-sm border border-white/10">
+                    <span>+{(connectedUsers[user.room] || []).length - 3} more</span>
+                  </div>
+                )}
               </div>
               
               <div className="flex items-center gap-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <div className="relative flex-1 min-w-[120px]">
+                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                   <input
                     type="text"
-                    placeholder="Search messages..."
+                    placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`pl-10 pr-4 py-2 rounded-2xl border transition-all ${currentTheme.input} focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm`}
+                    className={`pl-8 pr-3 py-2 rounded-xl border transition-all ${currentTheme.input} focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs w-full`}
                   />
                 </div>
               </div>
@@ -964,13 +1074,13 @@ export default function Communication() {
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6">
             <div className="max-w-4xl mx-auto space-y-1">
               <AnimatePresence>
                 {(messages[user.room] || [])
                   .filter(msg => 
-                    msg.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    msg.from.toLowerCase().includes(searchQuery.toLowerCase())
+                    (msg.text || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (msg.from || '').toLowerCase().includes(searchQuery.toLowerCase())
                   )
                   .map((msg) => (
                     <MessageItem 
@@ -990,11 +1100,11 @@ export default function Communication() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="px-6 py-4 border-t border-white/10 bg-white/5 backdrop-blur-sm"
+              className="px-3 sm:px-4 lg:px-6 py-2 sm:py-4 border-t border-white/10 bg-white/5 backdrop-blur-sm"
             >
               <div className="max-w-4xl mx-auto">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="text-sm font-semibold text-gray-400">Ready to send ({stagedFiles.length})</div>
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <div className="text-xs sm:text-sm font-semibold text-gray-400">Ready to send ({stagedFiles.length})</div>
                   <button
                     onClick={() => setStagedFiles([])}
                     className="text-xs text-red-400 hover:text-red-300 transition-colors"
@@ -1002,7 +1112,7 @@ export default function Communication() {
                     Clear all
                   </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                   {stagedFiles.map((att, i) => (
                     <StagedAttachment key={i} att={att} idx={i} onRemove={removeStaged} />
                   ))}
@@ -1012,18 +1122,18 @@ export default function Communication() {
           )}
 
           {/* Enhanced Input Area */}
-          <div className={`p-6 border-t ${currentTheme.border} backdrop-blur-xl bg-white/5 shadow-2xl`}>
+          <div className={`p-3 sm:p-4 lg:p-6 border-t ${currentTheme.border} backdrop-blur-xl bg-white/5 shadow-2xl`}>
             <div className="max-w-4xl mx-auto">
-              <div className="flex gap-4 items-end">
+              <div className="flex gap-2 sm:gap-3 lg:gap-4 items-end">
                 {/* Action Buttons */}
-                <div className="flex gap-2">
+                <div className="flex gap-1 sm:gap-2">
                   {/* Emoji Picker */}
                   <div className="relative">
                     <button
                       onClick={() => setEmojiOpen((s) => !s)}
-                      className="p-3 hover:bg-white/10 rounded-2xl transition-all transform hover:scale-110"
+                      className="p-2 sm:p-3 hover:bg-white/10 rounded-xl sm:rounded-2xl transition-all transform hover:scale-110"
                     >
-                      <Smile size={24} />
+                      <Smile size={18} className="sm:w-6 sm:h-6" />
                     </button>
 
                     <AnimatePresence>
@@ -1032,13 +1142,13 @@ export default function Communication() {
                           initial={{ opacity: 0, scale: 0.8, y: 20 }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.8, y: 20 }}
-                          className="absolute bottom-16 left-0 p-4 bg-white/20 backdrop-blur-xl rounded-3xl shadow-2xl grid grid-cols-8 gap-2 w-80 border border-white/20"
+                          className="absolute bottom-14 sm:bottom-16 left-0 p-3 sm:p-4 bg-white/20 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl grid grid-cols-6 sm:grid-cols-8 gap-1 sm:gap-2 w-64 sm:w-80 border border-white/20 z-50"
                         >
                           {["😀", "😂", "😍", "🥰", "😎", "🥳", "😢", "😡", "🤔", "👀", "👍", "❤️", "🔥", "✨", "🎉", "💀", "🙏", "🚀", "💯", "⭐", "🌈", "🎊", "🎈", "💪"].map((e) => (
                             <button
                               key={e}
                               onClick={() => insertEmoji(e)}
-                              className="text-xl hover:scale-125 transform transition-all duration-200 hover:bg-white/30 rounded-xl p-1"
+                              className="text-lg sm:text-xl hover:scale-125 transform transition-all duration-200 hover:bg-white/30 rounded-lg sm:rounded-xl p-1"
                             >
                               {e}
                             </button>
@@ -1049,7 +1159,7 @@ export default function Communication() {
                   </div>
 
                   {/* File Upload */}
-                  <label className="p-3 hover:bg-white/10 rounded-2xl cursor-pointer transition-all transform hover:scale-110">
+                  <label className="p-2 sm:p-3 hover:bg-white/10 rounded-xl sm:rounded-2xl cursor-pointer transition-all transform hover:scale-110">
                     <input 
                       ref={fileInputRef}
                       type="file" 
@@ -1058,25 +1168,25 @@ export default function Communication() {
                       onChange={handleFileChange} 
                       multiple 
                     />
-                    <Paperclip size={24} />
+                    <Paperclip size={18} className="sm:w-6 sm:h-6" />
                   </label>
 
                   {/* Voice Recording */}
                   {!isRecording ? (
                     <button 
                       onClick={startRecording}
-                      className="p-3 hover:bg-white/10 rounded-2xl transition-all transform hover:scale-110"
+                      className="p-2 sm:p-3 hover:bg-white/10 rounded-xl sm:rounded-2xl transition-all transform hover:scale-110"
                     >
-                      <Mic size={24} />
+                      <Mic size={18} className="sm:w-6 sm:h-6" />
                     </button>
                   ) : (
                     <button 
                       onClick={stopRecording} 
-                      className="p-3 bg-red-500 hover:bg-red-600 rounded-2xl text-white transition-all animate-pulse transform hover:scale-110"
+                      className="p-2 sm:p-3 bg-red-500 hover:bg-red-600 rounded-xl sm:rounded-2xl text-white transition-all animate-pulse transform hover:scale-110"
                     >
-                      <div className="flex items-center gap-2">
-                        <StopCircle size={20} />
-                        <span className="text-sm font-medium">{recordingDuration}s</span>
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <StopCircle size={16} className="sm:w-5 sm:h-5" />
+                        <span className="text-xs sm:text-sm font-medium">{recordingDuration}s</span>
                       </div>
                     </button>
                   )}
@@ -1089,16 +1199,16 @@ export default function Communication() {
                     placeholder="Type your message..."
                     value={message}
                     onChange={onInputChange}
-                    className={`w-full px-6 py-4 rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg pr-32`}
+                    className={`w-full px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 rounded-xl sm:rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-sm sm:text-base lg:text-lg pr-24 sm:pr-32`}
                   />
                   
                   {/* Input Actions */}
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1 sm:gap-2">
                     <button
                       onClick={() => setPrivacyMode(!privacyMode)}
-                      className="p-2 hover:bg-white/10 rounded-xl transition-all"
+                      className="p-1 sm:p-2 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all"
                     >
-                      {privacyMode ? <EyeOff size={18} /> : <Eye size={18} />}
+                      {privacyMode ? <EyeOff size={14} className="sm:w-4 sm:h-4" /> : <Eye size={14} className="sm:w-4 sm:h-4" />}
                     </button>
                   </div>
                 </div>
@@ -1107,13 +1217,13 @@ export default function Communication() {
                 <button 
                   onClick={handleSend} 
                   disabled={!message.trim() && stagedFiles.length === 0}
-                  className={`p-4 rounded-2xl transition-all shadow-2xl transform hover:scale-105 ${
+                  className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all shadow-xl sm:shadow-2xl transform hover:scale-105 ${
                     (message.trim() || stagedFiles.length > 0)
                       ? `bg-gradient-to-r ${currentTheme.secondary} hover:shadow-2xl text-white`
                       : "bg-gray-500/30 text-gray-400 cursor-not-allowed"
                   }`}
                 >
-                  <Send size={24} />
+                  <Send size={18} className="sm:w-6 sm:h-6" />
                 </button>
               </div>
             </div>
@@ -1127,7 +1237,7 @@ export default function Communication() {
               initial={{ opacity: 0, x: 300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 300 }}
-              className={`w-80 border-l ${currentTheme.border} ${currentTheme.surface} p-6 overflow-y-auto`}
+              className={`w-80 max-w-full border-l ${currentTheme.border} ${currentTheme.surface} p-4 sm:p-6 overflow-y-auto hidden lg:block`}
             >
               <div className="space-y-6">
                 <h3 className="text-lg font-bold">Room Settings</h3>
@@ -1137,7 +1247,7 @@ export default function Communication() {
                     <label className="block text-sm font-medium mb-2">Notifications</label>
                     <button
                       onClick={() => setNotifications(!notifications)}
-                      className={`w-full p-3 rounded-2xl transition-all ${
+                      className={`w-full p-3 rounded-xl transition-all ${
                         notifications ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'
                       }`}
                     >
@@ -1149,7 +1259,7 @@ export default function Communication() {
                     <label className="block text-sm font-medium mb-2">Privacy Mode</label>
                     <button
                       onClick={() => setPrivacyMode(!privacyMode)}
-                      className={`w-full p-3 rounded-2xl transition-all ${
+                      className={`w-full p-3 rounded-xl transition-all ${
                         privacyMode ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400'
                       }`}
                     >
@@ -1161,7 +1271,7 @@ export default function Communication() {
                     <label className="block text-sm font-medium mb-2">Theme</label>
                     <button
                       onClick={() => setDarkMode(!darkMode)}
-                      className="w-full p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-2xl transition-all transform hover:scale-105"
+                      className="w-full p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl transition-all transform hover:scale-105"
                     >
                       Switch to {darkMode ? 'Light' : 'Dark'} Mode
                     </button>
@@ -1171,7 +1281,7 @@ export default function Communication() {
                 <div className="pt-6 border-t border-white/10">
                   <button
                     onClick={leaveRoom}
-                    className="w-full p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-2xl transition-all flex items-center justify-center gap-2"
+                    className="w-full p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all flex items-center justify-center gap-2"
                   >
                     <LogOut size={16} />
                     Leave Room
@@ -1185,10 +1295,3 @@ export default function Communication() {
     </div>
   );
 }
-
-// Add missing icon component
-const MessageCircle = (props) => (
-  <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-  </svg>
-);
