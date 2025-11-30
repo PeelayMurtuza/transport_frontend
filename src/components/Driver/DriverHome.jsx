@@ -63,21 +63,16 @@ const DriverHome = () => {
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-slate-100 via-gray-50 to-slate-200">
-      {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
-        <div className="p-4 flex items-center justify-between">
-          <h2 className={`${getResponsiveClasses.subheading} text-indigo-600`}>
-            Driver Panel 🚚
-          </h2>
+      {/* Mobile Header (positioned below main navbar) */}
+      <div className="md:hidden fixed top-16 left-0 right-0 bg-white shadow-lg z-40">
+        <div className="p-3 flex items-center justify-between">
+          <h2 className={`${getResponsiveClasses.subheading} text-indigo-600`}>Driver Panel 🚚</h2>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-gray-600 hover:text-indigo-600 transition-colors rounded-lg hover:bg-indigo-50"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? 
-              <FaTimes className="w-6 h-6" /> : 
-              <FaBars className="w-6 h-6" />
-            }
+            {mobileMenuOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -190,7 +185,7 @@ const DriverHome = () => {
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <main className={`flex-1 w-full ${getResponsiveClasses.container} ${getResponsiveClasses.section} mt-16 md:mt-0`}>
+      <main className={`flex-1 w-full ${getResponsiveClasses.container} ${getResponsiveClasses.section} pt-16 md:pt-0`}>
         {/* Header Card */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
