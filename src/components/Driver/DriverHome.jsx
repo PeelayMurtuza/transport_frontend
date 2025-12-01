@@ -11,6 +11,7 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import { useTheme } from "../../context/ThemeContext";
 
 // Import all child components
 import DashBoard from "./DashBoard";
@@ -22,6 +23,13 @@ import Wallet from "./Wallet";
 
 const DriverHome = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  const { isDark } = useTheme();
+  const gradientPrimary = isDark ? "from-purple-600 via-blue-600 to-cyan-500" : "from-blue-500 via-purple-500 to-pink-500";
+  const backgroundGradient = isDark ? "from-gray-900 via-blue-900/20 to-purple-900/30" : "from-slate-100 via-gray-50 to-slate-200";
+  const surface = isDark ? "bg-gray-800/80 backdrop-blur-xl" : "bg-white/90 backdrop-blur-xl";
+  const textClass = isDark ? "text-white" : "text-gray-900";
+  const borderClass = isDark ? "border-gray-700/50" : "border-gray-200/50";
 
   const links = [
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
@@ -62,9 +70,9 @@ const DriverHome = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-slate-100 via-gray-50 to-slate-200">
+    <div className={`min-h-screen flex bg-gradient-to-br ${backgroundGradient}`}>
       {/* Mobile Header (positioned below main navbar) */}
-      <div className="md:hidden fixed top-16 left-0 right-0 bg-white shadow-lg z-40">
+      <div className={`md:hidden fixed top-16 left-0 right-0 ${surface} shadow-lg z-40`}>
         <div className="p-3 flex items-center justify-between">
           <h2 className={`${getResponsiveClasses.subheading} text-indigo-600`}>Driver Panel 🚚</h2>
           <button
@@ -79,7 +87,7 @@ const DriverHome = () => {
 
       {/* Sidebar for Desktop */}
       <motion.aside
-        className="hidden md:flex w-64 lg:w-72 xl:w-80 bg-white shadow-2xl flex-col p-6"
+        className={`hidden md:flex w-64 lg:w-72 xl:w-80 ${surface} shadow-2xl flex-col p-6`}
         initial={{ x: -100 }}
         animate={{ x: 0 }}
         transition={{ duration: 0.3 }}
@@ -98,7 +106,7 @@ const DriverHome = () => {
                 `flex items-center gap-4 p-4 rounded-xl font-medium transition-all duration-200 text-lg ${
                   isActive
                     ? "bg-indigo-600 text-white shadow-lg transform scale-105"
-                    : "hover:bg-indigo-50 text-gray-700 hover:text-indigo-600 hover:shadow-md"
+                    : `hover:bg-indigo-50 ${isDark ? 'text-gray-300 hover:text-indigo-300 hover:shadow-md' : 'text-gray-700 hover:text-indigo-600 hover:shadow-md'}`
                 }`
               }
             >
@@ -111,8 +119,8 @@ const DriverHome = () => {
         </nav>
 
         {/* Desktop Footer */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-500 text-center">
+        <div className={`mt-8 pt-6 border-t ${borderClass}`}>
+          <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'} text-center`}>
             Safe driving! 🛣️
           </p>
         </div>
@@ -123,7 +131,7 @@ const DriverHome = () => {
         {mobileMenuOpen && (
           <>
             <motion.aside
-              className="md:hidden fixed inset-0 z-40 bg-white shadow-2xl flex flex-col p-6"
+              className={`${surface} md:hidden fixed inset-0 z-40 shadow-2xl flex flex-col p-6`}
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
@@ -165,8 +173,8 @@ const DriverHome = () => {
                 ))}
               </nav>
 
-              <div className="mt-8 pt-6 border-t border-gray-200">
-                <p className="text-sm text-gray-500 text-center">
+              <div className={`mt-8 pt-6 border-t ${borderClass}`}>
+                <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'} text-center`}>
                   Tap outside to close
                 </p>
               </div>
@@ -191,13 +199,13 @@ const DriverHome = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden"
+          className={`${surface} rounded-2xl shadow-lg overflow-hidden`}
         >
           <div className={getResponsiveClasses.card}>
-            <h1 className={`${getResponsiveClasses.heading} text-gray-800`}>
+            <h1 className={`${getResponsiveClasses.heading} ${textClass}`}>
               Welcome, Driver! 👋
             </h1>
-            <p className={`${getResponsiveClasses.body} text-gray-600 mt-4`}>
+            <p className={`${getResponsiveClasses.body} ${isDark ? 'text-gray-300' : 'text-gray-600'} mt-4`}>
               Manage your active loads, browse new jobs, and track your earnings.
             </p>
           </div>
@@ -208,7 +216,7 @@ const DriverHome = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-white rounded-2xl shadow-xl overflow-hidden"
+          className={`${surface} rounded-2xl shadow-xl overflow-hidden`}
         >
           <div className={getResponsiveClasses.card}>
             <Routes>

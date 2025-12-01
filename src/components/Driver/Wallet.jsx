@@ -8,11 +8,23 @@ import {
   History, Receipt, Coins, PiggyBank
 } from 'lucide-react';
 
+import { useTheme } from '../../context/ThemeContext';
+
 function Wallet() {
   const [activeTab, setActiveTab] = useState('transactions');
   const [showBalance, setShowBalance] = useState(true);
   const [showAddMoney, setShowAddMoney] = useState(false);
   const [filter, setFilter] = useState('all');
+
+  const { isDark } = useTheme();
+
+  const surface = isDark ? 'bg-gray-800' : 'bg-white';
+  const textClass = isDark ? 'text-gray-100' : 'text-gray-900';
+  const subText = isDark ? 'text-gray-300' : 'text-gray-600';
+  const borderClass = isDark ? 'border-gray-700' : 'border-gray-200';
+  const smallBtn = isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200';
+  const backgroundGradient = isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900' : 'bg-gradient-to-br from-white via-gray-50 to-blue-50/30';
+  const inputClass = `pl-7 pr-3 sm:pr-4 py-2 border ${borderClass} rounded-xl text-xs sm:text-sm ${isDark ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'} focus:outline-none`;
 
   // Mock wallet data
   const walletData = {
@@ -173,9 +185,9 @@ function Wallet() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50/30">
+    <div className={`min-h-screen ${backgroundGradient}`}>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <div className={`${surface} border-b ${borderClass} sticky top-0 z-50 shadow-sm`}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-16 sm:h-20 py-2">
             <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
@@ -183,8 +195,8 @@ function Wallet() {
                 <WalletIcon className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Wallet</h1>
-                <p className="text-gray-600 text-xs sm:text-sm hidden xs:block">
+                <h1 className={`text-xl sm:text-2xl lg:text-3xl font-bold ${textClass}`}>Wallet</h1>
+                <p className={`${subText} text-xs sm:text-sm hidden xs:block`}>
                   Manage your earnings and transactions
                 </p>
               </div>
@@ -193,9 +205,9 @@ function Wallet() {
             <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
               <button 
                 onClick={() => setShowBalance(!showBalance)}
-                className="p-2 sm:p-3 bg-gray-100 hover:bg-gray-200 rounded-xl sm:rounded-2xl transition-colors"
+                className={`p-2 sm:p-3 ${smallBtn} rounded-xl sm:rounded-2xl transition-colors`}
               >
-                {showBalance ? <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" /> : <EyeOff className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />}
+                {showBalance ? <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" /> : <EyeOff className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />}
               </button>
               <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold shadow-lg text-sm sm:text-base">
                 JD
@@ -214,11 +226,11 @@ function Wallet() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 overflow-hidden"
+              className={`${surface} rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border ${borderClass} overflow-hidden`}
             >
               <div className="p-4 sm:p-6 lg:p-8">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-900">Total Balance</h2>
+                  <h2 className={`text-lg sm:text-xl font-bold ${textClass}`}>Total Balance</h2>
                   <div className="flex items-center space-x-1 sm:space-x-2 text-green-600 bg-green-50 px-2 sm:px-3 py-1 rounded-full">
                     <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="text-xs sm:text-sm font-semibold">+{walletData.weeklyGrowth}%</span>
@@ -228,7 +240,7 @@ function Wallet() {
                 <div className="text-center mb-4 sm:mb-6">
                   {showBalance ? (
                     <div className="space-y-1 sm:space-y-2">
-                      <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
+                      <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold ${textClass}`}>
                         ₹{walletData.balance.toLocaleString()}
                       </div>
                       <div className="text-green-600 font-semibold text-sm sm:text-base lg:text-lg">
@@ -236,7 +248,7 @@ function Wallet() {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 blur-md select-none">
+                    <div className={`text-3xl sm:text-4xl lg:text-5xl font-bold ${textClass} blur-md select-none`}>
                       ₹12,450.75
                     </div>
                   )}
@@ -278,9 +290,9 @@ function Wallet() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 p-4 sm:p-6"
+              className={`${surface} rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border ${borderClass} p-4 sm:p-6`}
             >
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-6 flex items-center space-x-2">
+              <h3 className={`text-base sm:text-lg font-bold ${textClass} mb-4 sm:mb-6 flex items-center space-x-2`}>
                 <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 <span>Earnings Overview</span>
               </h3>
@@ -308,9 +320,9 @@ function Wallet() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 p-4 sm:p-6"
+              className={`${surface} rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border ${borderClass} p-4 sm:p-6`}
             >
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-6 flex items-center space-x-2">
+              <h3 className={`text-base sm:text-lg font-bold ${textClass} mb-4 sm:mb-6 flex items-center space-x-2`}>
                 <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600" />
                 <span>Payment Methods</span>
               </h3>
@@ -326,8 +338,8 @@ function Wallet() {
                         <method.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${method.color}`} />
                       </div>
                       <div className="min-w-0">
-                        <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">{method.type}</div>
-                        <div className="text-gray-500 text-xs sm:text-sm">**** {method.last4}</div>
+                        <div className={`${textClass} font-semibold text-sm sm:text-base truncate`}>{method.type}</div>
+                        <div className={`${subText} text-xs sm:text-sm`}>**** {method.last4}</div>
                       </div>
                     </div>
                     {method.primary && (
@@ -347,12 +359,12 @@ function Wallet() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-gray-200 overflow-hidden"
+              className={`${surface} rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border ${borderClass} overflow-hidden`}
             >
               <div className="p-4 sm:p-6 border-b border-gray-200">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
                   {/* Tabs */}
-                  <div className="flex space-x-1 bg-gray-100 rounded-xl sm:rounded-2xl p-1 overflow-x-auto">
+                  <div className={`flex space-x-1 ${isDark ? 'bg-gray-800' : 'bg-gray-100'} rounded-xl sm:rounded-2xl p-1 overflow-x-auto`}>
                     {[
                       { id: 'transactions', label: 'Transactions', icon: Receipt },
                       { id: 'commissions', label: 'Commissions', icon: Coins },
@@ -362,11 +374,10 @@ function Wallet() {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all whitespace-nowrap text-xs sm:text-sm ${
-                          activeTab === tab.id
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-600 hover:text-gray-900'
-                        }`}
-                      >
+                            activeTab === tab.id
+                              ? `${surface} ${textClass} shadow-sm`
+                              : `${subText} hover:text-gray-900`
+                          }`}>
                         <tab.icon className="w-3 h-3 sm:w-4 sm:h-4" />
                         <span>{tab.label}</span>
                       </button>
@@ -380,7 +391,7 @@ function Wallet() {
                       <input
                         type="text"
                         placeholder="Search transactions..."
-                        className="pl-7 sm:pl-10 pr-3 sm:pr-4 py-2 border border-gray-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
+                        className={`${inputClass} w-full`}
                       />
                     </div>
                     <button className="p-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
@@ -404,7 +415,7 @@ function Wallet() {
                       className={`px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                         filter === chip.id
                           ? 'bg-blue-500 text-white shadow-sm'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : isDark ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
                       {chip.label}
@@ -429,7 +440,7 @@ function Wallet() {
                           key={transaction.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-between p-3 sm:p-4 lg:p-5 border border-gray-200 rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
+                          className={`flex items-center justify-between p-3 sm:p-4 lg:p-5 border ${borderClass} rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm`}
                         >
                           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0 flex-1">
                             <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border-2 ${getCategoryColor(transaction.category)} flex-shrink-0`}>
@@ -440,10 +451,10 @@ function Wallet() {
                               )}
                             </div>
                             <div className="min-w-0 flex-1">
-                              <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">
+                              <div className={`${textClass} font-semibold text-sm sm:text-base truncate`}>
                                 {transaction.description}
                               </div>
-                              <div className="flex items-center space-x-2 sm:space-x-3 text-gray-500 text-xs sm:text-sm mt-1">
+                              <div className={`flex items-center space-x-2 sm:space-x-3 ${subText} text-xs sm:text-sm mt-1`}>
                                 <Calendar className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                                 <span className="truncate">{transaction.date}</span>
                                 {getStatusIcon(transaction.status)}
@@ -478,17 +489,17 @@ function Wallet() {
                           key={commission.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-between p-3 sm:p-4 lg:p-5 border border-gray-200 rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
+                          className={`flex items-center justify-between p-3 sm:p-4 lg:p-5 border ${borderClass} rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm`}
                         >
                           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0 flex-1">
                             <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl border-2 border-blue-200 bg-blue-50 flex-shrink-0">
                               <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">
+                              <div className={`${textClass} font-semibold text-sm sm:text-base truncate`}>
                                 Commission - Load #{commission.loadId}
                               </div>
-                              <div className="text-gray-500 text-xs sm:text-sm mt-1">
+                              <div className={`${subText} text-xs sm:text-sm mt-1`}>
                                 Rate: {commission.rate} • Load: ₹{commission.loadAmount.toLocaleString()}
                               </div>
                             </div>
@@ -519,17 +530,17 @@ function Wallet() {
                           key={refund.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-between p-3 sm:p-4 lg:p-5 border border-gray-200 rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm"
+                          className={`flex items-center justify-between p-3 sm:p-4 lg:p-5 border ${borderClass} rounded-xl sm:rounded-2xl hover:border-gray-300 transition-colors group hover:shadow-sm`}
                         >
                           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0 flex-1">
                             <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl border-2 border-purple-200 bg-purple-50 flex-shrink-0">
                               <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <div className="text-gray-900 font-semibold text-sm sm:text-base truncate">
+                              <div className={`${textClass} font-semibold text-sm sm:text-base truncate`}>
                                 {refund.reason}
                               </div>
-                              <div className="text-gray-500 text-xs sm:text-sm mt-1">
+                              <div className={`${subText} text-xs sm:text-sm mt-1`}>
                                 Original: ₹{refund.originalCommission.toLocaleString()}
                               </div>
                             </div>
@@ -549,8 +560,8 @@ function Wallet() {
                 </AnimatePresence>
 
                 {/* Export Button */}
-                <div className="flex justify-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
-                  <button className="flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-gray-700 rounded-xl sm:rounded-2xl font-semibold hover:bg-gray-50 transition-colors hover:shadow-sm text-xs sm:text-sm">
+                <div className={`flex justify-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t ${borderClass}`}>
+                  <button className={`flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 border ${borderClass} ${subText} rounded-xl sm:rounded-2xl font-semibold hover:shadow-sm text-xs sm:text-sm`}>
                     <Download className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>Export Statement</span>
                   </button>
@@ -569,16 +580,16 @@ function Wallet() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full border border-gray-200"
+              className={`${surface} rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full border ${borderClass}`}
             >
-              <div className="p-4 sm:p-6 border-b border-gray-200">
+              <div className={`p-4 sm:p-6 border-b ${borderClass}`}>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">Add Money</h3>
+                  <h3 className={`text-lg sm:text-xl font-bold ${textClass}`}>Add Money</h3>
                   <button
                     onClick={() => setShowAddMoney(false)}
-                    className="p-1 sm:p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                    className={`p-1 sm:p-2 ${smallBtn} rounded-xl transition-colors`}
                   >
-                    <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                    <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                   </button>
                 </div>
               </div>
@@ -586,21 +597,21 @@ function Wallet() {
               <div className="p-4 sm:p-6">
                 <div className="space-y-4 sm:space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
+                    <label className={`${subText} block text-sm font-medium mb-2 sm:mb-3`}>
                       Amount
                     </label>
                     <input
                       type="number"
                       placeholder="0.00"
-                      className="w-full px-3 sm:px-4 py-3 sm:py-4 border border-gray-300 rounded-xl sm:rounded-2xl text-xl sm:text-2xl font-bold text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className={`w-full px-3 sm:px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-xl sm:text-2xl font-bold ${isDark ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'} focus:outline-none border ${borderClass}`}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
+                    <label className={`${subText} block text-sm font-medium mb-2 sm:mb-3`}>
                       Payment Method
                     </label>
-                    <select className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base">
+                    <select className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base border ${borderClass}`}>
                       <option>Credit Card (4242)</option>
                       <option>Digital Wallet</option>
                       <option>Bank Transfer</option>

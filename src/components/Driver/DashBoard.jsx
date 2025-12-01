@@ -8,8 +8,9 @@ import {
   Truck, Package, Wallet, Navigation, MapPin, 
   Clock, DollarSign, TrendingUp, AlertCircle,
   CheckCircle2, RefreshCw, MoreVertical,
-  Menu, X
+  Menu, X, Moon, Sun
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext'; 
 
 function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -17,6 +18,8 @@ function Dashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  
+  const { theme, isDark, toggleTheme } = useTheme();
 
   // Check screen size on mount and resize
   useEffect(() => {
@@ -118,7 +121,7 @@ function Dashboard() {
     setTimeout(() => setRefreshing(false), 1000);
   };
 
-  // Responsive text size classes
+  // Responsive text size classes with theme support
   const getResponsiveText = {
     heading: "text-xl md:text-2xl lg:text-3xl font-bold",
     subheading: "text-lg md:text-xl font-semibold",
@@ -128,10 +131,20 @@ function Dashboard() {
     metric: "text-base md:text-lg font-semibold"
   };
 
+  // Chart color configurations for dark/light mode
+  const chartColors = {
+    earnings: isDark ? '#60a5fa' : '#3b82f6', // Blue
+    miles: isDark ? '#34d399' : '#10b981', // Green
+    grid: isDark ? '#374151' : '#f3f4f6',
+    text: isDark ? '#d1d5db' : '#6b7280',
+    tooltipBg: isDark ? '#1f2937' : '#ffffff',
+    tooltipText: isDark ? '#ffffff' : '#111827',
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${theme.bg.primary} transition-colors duration-200`}>
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className={`${theme.bg.primary} ${theme.border.primary} border-b`}>
         <div className="px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-4">
@@ -139,10 +152,14 @@ function Dashboard() {
                 <Truck className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <h1 className={`${getResponsiveText.heading} text-gray-900`}>DrivePro Logistics</h1>
-                <p className="text-gray-600 flex items-center space-x-1">
+                <h1 className={`${getResponsiveText.heading} ${theme.text.primary}`}>
+                  DrivePro Logistics
+                </h1>
+                <p className={`${theme.text.secondary} flex items-center space-x-1`}>
                   <MapPin className="w-3 h-3 md:w-4 md:h-4" />
-                  <span className={getResponsiveText.small}>Current Location: {currentLocation}</span>
+                  <span className={getResponsiveText.small}>
+                    Current Location: {currentLocation}
+                  </span>
                 </p>
               </div>
             </div>
@@ -153,7 +170,9 @@ function Dashboard() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={refreshData}
-                className="flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                className={`flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 ${
+                  theme.button.secondary
+                } rounded-lg transition-colors`}
               >
                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                 <span className="hidden sm:inline">Refresh</span>
@@ -161,15 +180,15 @@ function Dashboard() {
               
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 md:hidden text-gray-600 hover:text-gray-900"
+                className={`p-2 md:hidden ${theme.text.primary} hover:${theme.text.accent}`}
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
               
               <div className="hidden md:flex items-center space-x-3">
                 <div className="text-right">
-                  <p className="font-semibold text-gray-900">John Driver</p>
-                  <p className="text-sm text-green-600 flex items-center">
+                  <p className={`font-semibold ${theme.text.primary}`}>John Driver</p>
+                  <p className={`${theme.status.success} flex items-center text-sm`}>
                     <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
                     Online
                   </p>
@@ -188,10 +207,12 @@ function Dashboard() {
             {['overview', 'loads', 'earnings', 'analytics'].map((tab) => (
               <button
                 key={tab}
-                className={`block w-full md:w-auto py-2 md:py-3 px-1 border-b-2 font-medium ${getResponsiveText.small} transition-colors ${
+                className={`block w-full md:w-auto py-2 md:py-3 px-1 border-b-2 font-medium ${
+                  getResponsiveText.small
+                } transition-colors ${
                   activeTab === tab
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : `${theme.text.tertiary} hover:${theme.text.secondary} border-transparent hover:border-gray-300`
                 }`}
                 onClick={() => {
                   setActiveTab(tab);
@@ -223,44 +244,54 @@ function Dashboard() {
                     value: `$${dashboardData.wallet.balance.toLocaleString()}`, 
                     change: '+12.5%', 
                     icon: Wallet,
-                    color: 'text-green-600',
-                    bgColor: 'bg-green-50'
+                    color: isDark ? 'text-green-400' : 'text-green-600',
+                    bgColor: isDark ? 'bg-green-900/30' : 'bg-green-50'
                   },
                   { 
                     label: 'Active Job Progress', 
                     value: `${dashboardData.activeJob.progress}%`, 
                     change: 'On track', 
                     icon: Navigation,
-                    color: 'text-blue-600',
-                    bgColor: 'bg-blue-50'
+                    color: isDark ? 'text-blue-400' : 'text-blue-600',
+                    bgColor: isDark ? 'bg-blue-900/30' : 'bg-blue-50'
                   },
                   { 
                     label: 'Weekly Earnings', 
                     value: '$2,845', 
                     change: '+8.2%', 
                     icon: TrendingUp,
-                    color: 'text-purple-600',
-                    bgColor: 'bg-purple-50'
+                    color: isDark ? 'text-purple-400' : 'text-purple-600',
+                    bgColor: isDark ? 'bg-purple-900/30' : 'bg-purple-50'
                   },
                   { 
                     label: 'Nearby Loads', 
                     value: dashboardData.nearbyLoads.length.toString(), 
                     change: 'High match', 
                     icon: Package,
-                    color: 'text-orange-600',
-                    bgColor: 'bg-orange-50'
+                    color: isDark ? 'text-orange-400' : 'text-orange-600',
+                    bgColor: isDark ? 'bg-orange-900/30' : 'bg-orange-50'
                   }
                 ].map((stat, index) => (
                   <motion.div
                     key={index}
                     whileHover={{ y: -2 }}
-                    className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100"
+                    className={`${theme.card.bg} rounded-xl p-4 md:p-6 ${theme.shadow.sm} ${
+                      theme.border.primary
+                    } border transition-all duration-200`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
-                        <p className={`${getResponsiveText.small} font-medium text-gray-600 truncate`}>{stat.label}</p>
-                        <p className={`${getResponsiveText.stat} text-gray-900 mt-1 truncate`}>{stat.value}</p>
-                        <p className={`${getResponsiveText.small} ${stat.color} mt-1 truncate`}>{stat.change}</p>
+                        <p className={`${getResponsiveText.small} font-medium ${
+                          theme.text.secondary
+                        } truncate`}>
+                          {stat.label}
+                        </p>
+                        <p className={`${getResponsiveText.stat} ${theme.text.primary} mt-1 truncate`}>
+                          {stat.value}
+                        </p>
+                        <p className={`${getResponsiveText.small} ${stat.color} mt-1 truncate`}>
+                          {stat.change}
+                        </p>
                       </div>
                       <div className={`p-2 md:p-3 rounded-lg ${stat.bgColor} flex-shrink-0 ml-3`}>
                         <stat.icon className={`w-5 h-5 md:w-6 md:h-6 ${stat.color}`} />
@@ -275,10 +306,16 @@ function Dashboard() {
                 {/* Active Job Summary */}
                 <div className="lg:col-span-2 space-y-4 md:space-y-6">
                   {/* Active Job Card */}
-                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100">
+                  <div className={`${theme.card.bg} rounded-xl p-4 md:p-6 ${
+                    theme.shadow.sm
+                  } ${theme.border.primary} border transition-colors duration-200`}>
                     <div className="flex items-center justify-between mb-4 md:mb-6">
-                      <h2 className={getResponsiveText.subheading}>Active Job</h2>
-                      <span className="px-2 py-1 md:px-3 md:py-1 bg-blue-100 text-blue-800 text-xs md:text-sm font-medium rounded-full">
+                      <h2 className={`${getResponsiveText.subheading} ${theme.text.primary}`}>
+                        Active Job
+                      </h2>
+                      <span className={`px-2 py-1 md:px-3 md:py-1 ${
+                        isDark ? 'bg-blue-800 text-blue-200' : 'bg-blue-100 text-blue-800'
+                      } text-xs md:text-sm font-medium rounded-full`}>
                         In Progress
                       </span>
                     </div>
@@ -290,12 +327,16 @@ function Dashboard() {
                           <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mb-1 md:mb-2 text-xs md:text-base">
                             A
                           </div>
-                          <p className={`${getResponsiveText.small} font-medium text-gray-900 truncate`}>{dashboardData.activeJob.pickup}</p>
+                          <p className={`${getResponsiveText.small} font-medium ${
+                            theme.text.primary
+                          } truncate`}>
+                            {dashboardData.activeJob.pickup}
+                          </p>
                         </div>
                         
                         <div className="flex-1 mx-2 md:mx-4">
                           <div className="relative">
-                            <div className="h-1 bg-gray-200 rounded-full">
+                            <div className={`h-1 ${isDark ? 'bg-gray-700' : 'bg-gray-200'} rounded-full`}>
                               <div 
                                 className="h-1 bg-blue-600 rounded-full transition-all duration-500"
                                 style={{ width: `${dashboardData.activeJob.progress}%` }}
@@ -313,45 +354,69 @@ function Dashboard() {
                           <div className="w-8 h-8 md:w-10 md:h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold mb-1 md:mb-2 text-xs md:text-base">
                             B
                           </div>
-                          <p className={`${getResponsiveText.small} font-medium text-gray-900 truncate`}>{dashboardData.activeJob.delivery}</p>
+                          <p className={`${getResponsiveText.small} font-medium ${
+                            theme.text.primary
+                          } truncate`}>
+                            {dashboardData.activeJob.delivery}
+                          </p>
                         </div>
                       </div>
 
                       {/* Job Details */}
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-4">
-                        <div className="text-center p-2 md:p-3 bg-gray-50 rounded-lg">
-                          <p className={`${getResponsiveText.small} text-gray-600`}>Distance</p>
-                          <p className={`${getResponsiveText.metric} text-gray-900`}>{dashboardData.activeJob.distance} mi</p>
-                        </div>
-                        <div className="text-center p-2 md:p-3 bg-gray-50 rounded-lg">
-                          <p className={`${getResponsiveText.small} text-gray-600`}>Est. Pay</p>
-                          <p className={`${getResponsiveText.metric} text-gray-900`}>${dashboardData.activeJob.estimatedPay}</p>
-                        </div>
-                        <div className="text-center p-2 md:p-3 bg-gray-50 rounded-lg">
-                          <p className={`${getResponsiveText.small} text-gray-600`}>ETA</p>
-                          <p className={`${getResponsiveText.metric} text-gray-900 truncate`}>{dashboardData.activeJob.eta}</p>
-                        </div>
-                        <div className="text-center p-2 md:p-3 bg-gray-50 rounded-lg">
-                          <p className={`${getResponsiveText.small} text-gray-600`}>Current</p>
-                          <p className={`${getResponsiveText.metric} text-gray-900 truncate`}>{dashboardData.activeJob.currentLocation}</p>
-                        </div>
+                        {[
+                          { label: 'Distance', value: `${dashboardData.activeJob.distance} mi`, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' },
+                          { label: 'Est. Pay', value: `$${dashboardData.activeJob.estimatedPay}`, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' },
+                          { label: 'ETA', value: dashboardData.activeJob.eta, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' },
+                          { label: 'Current', value: dashboardData.activeJob.currentLocation, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' }
+                        ].map((detail, index) => (
+                          <div key={index} className={`text-center p-2 md:p-3 ${detail.bg} rounded-lg transition-colors duration-200`}>
+                            <p className={`${getResponsiveText.small} ${theme.text.secondary}`}>
+                              {detail.label}
+                            </p>
+                            <p className={`${getResponsiveText.metric} ${theme.text.primary} truncate`}>
+                              {detail.value}
+                            </p>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
 
                   {/* Earnings Chart */}
-                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100">
-                    <h2 className={`${getResponsiveText.subheading} mb-4 md:mb-6`}>Weekly Performance</h2>
+                  <div className={`${theme.card.bg} rounded-xl p-4 md:p-6 ${
+                    theme.shadow.sm
+                  } ${theme.border.primary} border transition-colors duration-200`}>
+                    <h2 className={`${getResponsiveText.subheading} ${theme.text.primary} mb-4 md:mb-6`}>
+                      Weekly Performance
+                    </h2>
                     <ResponsiveContainer width="100%" height={300}>
                       <AreaChart data={dashboardData.performance}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-                        <XAxis dataKey="day" stroke="#6b7280" fontSize={isMobile ? 10 : 12} />
-                        <YAxis stroke="#6b7280" fontSize={isMobile ? 10 : 12} />
-                        <Tooltip />
+                        <CartesianGrid 
+                          strokeDasharray="3 3" 
+                          stroke={chartColors.grid} 
+                        />
+                        <XAxis 
+                          dataKey="day" 
+                          stroke={chartColors.text}
+                          fontSize={isMobile ? 10 : 12}
+                        />
+                        <YAxis 
+                          stroke={chartColors.text}
+                          fontSize={isMobile ? 10 : 12}
+                        />
+                        <Tooltip 
+                          contentStyle={{
+                            backgroundColor: chartColors.tooltipBg,
+                            borderColor: chartColors.grid,
+                            color: chartColors.tooltipText,
+                            borderRadius: '8px',
+                          }}
+                        />
                         <Area 
                           type="monotone" 
                           dataKey="earnings" 
-                          stroke="#3b82f6" 
+                          stroke={chartColors.earnings}
                           fill="url(#colorEarnings)" 
                           fillOpacity={0.3}
                           strokeWidth={2}
@@ -359,14 +424,14 @@ function Dashboard() {
                         <Line 
                           type="monotone" 
                           dataKey="miles" 
-                          stroke="#10b981" 
+                          stroke={chartColors.miles}
                           strokeWidth={2}
-                          dot={{ fill: '#10b981' }}
+                          dot={{ fill: chartColors.miles }}
                         />
                         <defs>
                           <linearGradient id="colorEarnings" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                            <stop offset="5%" stopColor={chartColors.earnings} stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor={chartColors.earnings} stopOpacity={0}/>
                           </linearGradient>
                         </defs>
                       </AreaChart>
@@ -377,62 +442,133 @@ function Dashboard() {
                 {/* Right Sidebar */}
                 <div className="space-y-4 md:space-y-6">
                   {/* Wallet Balance Card */}
-                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100">
+                  <div className={`${theme.card.bg} rounded-xl p-4 md:p-6 ${
+                    theme.shadow.sm
+                  } ${theme.border.primary} border transition-colors duration-200`}>
                     <div className="flex items-center justify-between mb-4 md:mb-6">
-                      <h2 className={getResponsiveText.subheading}>Wallet</h2>
-                      <Wallet className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+                      <h2 className={`${getResponsiveText.subheading} ${theme.text.primary}`}>
+                        Wallet
+                      </h2>
+                      <Wallet className={`w-4 h-4 md:w-5 md:h-5 ${theme.text.tertiary}`} />
                     </div>
                     
                     <div className="text-center mb-4 md:mb-6">
-                      <p className={`${getResponsiveText.small} text-gray-600`}>Total Balance</p>
-                      <p className={`${getResponsiveText.stat} text-gray-900 mt-1`}>
+                      <p className={`${getResponsiveText.small} ${theme.text.secondary}`}>
+                        Total Balance
+                      </p>
+                      <p className={`${getResponsiveText.stat} ${theme.text.primary} mt-1`}>
                         ${dashboardData.wallet.balance.toLocaleString()}
                       </p>
-                      <p className="text-green-600 text-xs md:text-sm mt-1 flex items-center justify-center">
+                      <p className={`text-green-600 text-xs md:text-sm mt-1 flex items-center justify-center ${
+                        isDark ? 'text-green-400' : 'text-green-600'
+                      }`}>
                         <TrendingUp className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                         +{dashboardData.wallet.weeklyGrowth}% this week
                       </p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 md:gap-4 mb-4 md:mb-6">
-                      <div className="text-center p-2 md:p-3 bg-blue-50 rounded-lg">
-                        <p className={`${getResponsiveText.small} text-blue-600`}>Available</p>
-                        <p className={`${getResponsiveText.metric} text-gray-900`}>${dashboardData.wallet.available.toLocaleString()}</p>
+                      <div className={`text-center p-2 md:p-3 ${
+                        isDark ? 'bg-blue-900/30' : 'bg-blue-50'
+                      } rounded-lg transition-colors duration-200`}>
+                        <p className={`${getResponsiveText.small} ${
+                          isDark ? 'text-blue-400' : 'text-blue-600'
+                        }`}>
+                          Available
+                        </p>
+                        <p className={`${getResponsiveText.metric} ${theme.text.primary}`}>
+                          ${dashboardData.wallet.available.toLocaleString()}
+                        </p>
                       </div>
-                      <div className="text-center p-2 md:p-3 bg-orange-50 rounded-lg">
-                        <p className={`${getResponsiveText.small} text-orange-600`}>Pending</p>
-                        <p className={`${getResponsiveText.metric} text-gray-900`}>${dashboardData.wallet.pending.toLocaleString()}</p>
+                      <div className={`text-center p-2 md:p-3 ${
+                        isDark ? 'bg-orange-900/30' : 'bg-orange-50'
+                      } rounded-lg transition-colors duration-200`}>
+                        <p className={`${getResponsiveText.small} ${
+                          isDark ? 'text-orange-400' : 'text-orange-600'
+                        }`}>
+                          Pending
+                        </p>
+                        <p className={`${getResponsiveText.metric} ${theme.text.primary}`}>
+                          ${dashboardData.wallet.pending.toLocaleString()}
+                        </p>
                       </div>
                     </div>
 
                     <div className="flex space-x-2 md:space-x-3">
-                      <button className="flex-1 bg-blue-600 text-white py-2 md:py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm md:text-base">
+                      <button className={`flex-1 ${
+                        theme.button.primary
+                      } py-2 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base`}>
                         Withdraw
                       </button>
-                      <button className="flex-1 bg-gray-100 text-gray-700 py-2 md:py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm md:text-base">
+                      <button className={`flex-1 ${
+                        theme.button.secondary
+                      } py-2 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base`}>
                         History
                       </button>
                     </div>
                   </div>
 
                   {/* Performance Metrics */}
-                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100">
-                    <h2 className={`${getResponsiveText.subheading} mb-4 md:mb-6`}>Performance</h2>
+                  <div className={`${theme.card.bg} rounded-xl p-4 md:p-6 ${
+                    theme.shadow.sm
+                  } ${theme.border.primary} border transition-colors duration-200`}>
+                    <h2 className={`${getResponsiveText.subheading} ${theme.text.primary} mb-4 md:mb-6`}>
+                      Performance
+                    </h2>
                     <div className="space-y-3 md:space-y-4">
                       {[
-                        { label: 'Driver Rating', value: dashboardData.quickStats.rating, icon: TrendingUp, color: 'text-yellow-500' },
-                        { label: 'Completed Jobs', value: dashboardData.quickStats.completedJobs, icon: CheckCircle2, color: 'text-green-500' },
-                        { label: 'On-time Rate', value: `${dashboardData.quickStats.onTimeRate}%`, icon: Clock, color: 'text-blue-500' },
-                        { label: 'Weekly Miles', value: dashboardData.quickStats.weeklyMiles.toLocaleString(), icon: Navigation, color: 'text-purple-500' }
+                        { 
+                          label: 'Driver Rating', 
+                          value: dashboardData.quickStats.rating, 
+                          icon: TrendingUp, 
+                          color: isDark ? 'text-yellow-400' : 'text-yellow-500',
+                          bg: isDark ? 'bg-gray-700' : 'bg-gray-50'
+                        },
+                        { 
+                          label: 'Completed Jobs', 
+                          value: dashboardData.quickStats.completedJobs, 
+                          icon: CheckCircle2, 
+                          color: isDark ? 'text-green-400' : 'text-green-500',
+                          bg: isDark ? 'bg-gray-700' : 'bg-gray-50'
+                        },
+                        { 
+                          label: 'On-time Rate', 
+                          value: `${dashboardData.quickStats.onTimeRate}%`, 
+                          icon: Clock, 
+                          color: isDark ? 'text-blue-400' : 'text-blue-500',
+                          bg: isDark ? 'bg-gray-700' : 'bg-gray-50'
+                        },
+                        { 
+                          label: 'Weekly Miles', 
+                          value: dashboardData.quickStats.weeklyMiles.toLocaleString(), 
+                          icon: Navigation, 
+                          color: isDark ? 'text-purple-400' : 'text-purple-500',
+                          bg: isDark ? 'bg-gray-700' : 'bg-gray-50'
+                        }
                       ].map((metric, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 md:p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                        <div 
+                          key={index} 
+                          className={`flex items-center justify-between p-2 md:p-3 ${
+                            theme.card.hover
+                          } rounded-lg transition-colors duration-200`}
+                        >
                           <div className="flex items-center space-x-2 md:space-x-3 min-w-0 flex-1">
-                            <div className={`p-1 md:p-2 rounded-lg bg-gray-50 ${metric.color} flex-shrink-0`}>
+                            <div className={`p-1 md:p-2 rounded-lg ${metric.bg} ${
+                              metric.color
+                            } flex-shrink-0 transition-colors duration-200`}>
                               <metric.icon className="w-3 h-3 md:w-4 md:h-4" />
                             </div>
-                            <span className={`${getResponsiveText.small} font-medium text-gray-700 truncate`}>{metric.label}</span>
+                            <span className={`${getResponsiveText.small} font-medium ${
+                              theme.text.secondary
+                            } truncate`}>
+                              {metric.label}
+                            </span>
                           </div>
-                          <span className={`${getResponsiveText.metric} text-gray-900 flex-shrink-0 ml-2`}>{metric.value}</span>
+                          <span className={`${getResponsiveText.metric} ${
+                            theme.text.primary
+                          } flex-shrink-0 ml-2`}>
+                            {metric.value}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -449,76 +585,101 @@ function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-                <div className="p-4 md:p-6 border-b border-gray-200">
+              <div className={`${theme.card.bg} rounded-xl ${
+                theme.shadow.sm
+              } ${theme.border.primary} border transition-colors duration-200`}>
+                <div className={`p-4 md:p-6 ${theme.border.primary} border-b`}>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                     <div className="flex-1 min-w-0">
-                      <h2 className={getResponsiveText.subheading}>Nearby Loads</h2>
-                      <p className={`${getResponsiveText.small} text-gray-600 mt-1`}>Based on your current location in {currentLocation}</p>
+                      <h2 className={`${getResponsiveText.subheading} ${theme.text.primary}`}>
+                        Nearby Loads
+                      </h2>
+                      <p className={`${getResponsiveText.small} ${theme.text.secondary} mt-1`}>
+                        Based on your current location in {currentLocation}
+                      </p>
                     </div>
                     <div className="flex items-center space-x-2 sm:space-x-3">
-                      <button className="px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm md:text-base">
+                      <button className={`px-3 py-2 sm:px-4 sm:py-2 ${
+                        theme.button.secondary
+                      } rounded-lg text-sm md:text-base`}>
                         Filter
                       </button>
-                      <button className="px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                      <button className={`px-3 py-2 sm:px-4 sm:py-2 ${
+                        theme.button.primary
+                      } rounded-lg text-sm md:text-base`}>
                         New Search
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="divide-y divide-gray-200">
+                <div className={`divide-y ${theme.border.primary}`}>
                   {dashboardData.nearbyLoads.map((load) => (
                     <motion.div
                       key={load.id}
-                      whileHover={{ backgroundColor: '#f9fafb' }}
-                      className="p-4 md:p-6 transition-colors"
+                      whileHover={{ backgroundColor: isDark ? 'rgba(55, 65, 81, 0.5)' : '#f9fafb' }}
+                      className="p-4 md:p-6 transition-colors duration-200"
                     >
                       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0">
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-3">
                             <div className="flex items-center space-x-2 min-w-0">
-                              <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                              <span className={`${getResponsiveText.body} font-semibold text-gray-900 truncate`}>{load.from}</span>
-                              <span className="text-gray-300 flex-shrink-0">→</span>
-                              <span className={`${getResponsiveText.body} font-semibold text-gray-900 truncate`}>{load.to}</span>
+                              <MapPin className={`w-4 h-4 ${
+                                theme.text.tertiary
+                              } flex-shrink-0`} />
+                              <span className={`${getResponsiveText.body} font-semibold ${
+                                theme.text.primary
+                              } truncate`}>
+                                {load.from}
+                              </span>
+                              <span className={`${theme.text.tertiary} flex-shrink-0`}>→</span>
+                              <span className={`${getResponsiveText.body} font-semibold ${
+                                theme.text.primary
+                              } truncate`}>
+                                {load.to}
+                              </span>
                             </div>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                               load.match >= 90 
-                                ? 'bg-green-100 text-green-800'
+                                ? isDark ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-800'
                                 : load.match >= 80
-                                ? 'bg-blue-100 text-blue-800'
-                                : 'bg-orange-100 text-orange-800'
-                            } flex-shrink-0 self-start sm:self-auto`}>
+                                ? isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-800'
+                                : isDark ? 'bg-orange-900/30 text-orange-400' : 'bg-orange-100 text-orange-800'
+                            } flex-shrink-0 self-start sm:self-auto transition-colors duration-200`}>
                               {load.match}% match
                             </span>
                           </div>
                           
                           <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                            <div className="min-w-0">
-                              <p className={`${getResponsiveText.small} text-gray-600`}>Distance</p>
-                              <p className={`${getResponsiveText.body} font-medium text-gray-900 truncate`}>{load.distance} miles</p>
-                            </div>
-                            <div className="min-w-0">
-                              <p className={`${getResponsiveText.small} text-gray-600`}>Pay</p>
-                              <p className={`${getResponsiveText.body} font-medium text-gray-900 truncate`}>${load.pay}</p>
-                            </div>
-                            <div className="min-w-0">
-                              <p className={`${getResponsiveText.small} text-gray-600`}>Pickup</p>
-                              <p className={`${getResponsiveText.body} font-medium text-gray-900 truncate`}>{load.pickupTime}</p>
-                            </div>
-                            <div className="min-w-0">
-                              <p className={`${getResponsiveText.small} text-gray-600`}>Type</p>
-                              <p className={`${getResponsiveText.body} font-medium text-gray-900 truncate`}>{load.type}</p>
-                            </div>
+                            {[
+                              { label: 'Distance', value: `${load.distance} miles` },
+                              { label: 'Pay', value: `$${load.pay}` },
+                              { label: 'Pickup', value: load.pickupTime },
+                              { label: 'Type', value: load.type }
+                            ].map((item, idx) => (
+                              <div key={idx} className="min-w-0">
+                                <p className={`${getResponsiveText.small} ${theme.text.secondary}`}>
+                                  {item.label}
+                                </p>
+                                <p className={`${getResponsiveText.body} font-medium ${
+                                  theme.text.primary
+                                } truncate`}>
+                                  {item.value}
+                                </p>
+                              </div>
+                            ))}
                           </div>
                         </div>
                         
                         <div className="flex items-center justify-end space-x-2 sm:space-x-3 lg:ml-6 lg:justify-start">
-                          <button className="px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm md:text-base whitespace-nowrap">
+                          <button className={`px-3 py-2 sm:px-4 sm:py-2 ${
+                            theme.button.primary
+                          } rounded-lg font-medium text-sm md:text-base whitespace-nowrap`}>
                             Accept Load
                           </button>
-                          <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+                          <button className={`p-2 ${theme.text.tertiary} hover:${
+                            theme.text.primary
+                          } rounded-lg ${theme.card.hover}`}>
                             <MoreVertical className="w-4 h-4 md:w-5 md:h-5" />
                           </button>
                         </div>

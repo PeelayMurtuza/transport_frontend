@@ -42,10 +42,11 @@ import {
   Cpu,
   Globe
 } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Communication() {
   // Enhanced state management
-  const [darkMode, setDarkMode] = useState(false);
+  
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
@@ -72,31 +73,16 @@ export default function Communication() {
   const typingTimeoutRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Premium theme system
-  const themes = {
-    dark: {
-      primary: "from-purple-600 via-blue-600 to-cyan-500",
-      secondary: "from-green-400 to-cyan-500",
-      accent: "from-orange-500 to-pink-500",
-      background: "from-gray-900 via-blue-900/20 to-purple-900/30",
-      surface: "bg-gray-800/80 backdrop-blur-xl",
-      text: "text-white",
-      border: "border-gray-700/50",
-      input: "bg-gray-700/50 border-gray-600/50"
-    },
-    light: {
-      primary: "from-blue-500 via-purple-500 to-pink-500",
-      secondary: "from-green-400 to-blue-500",
-      accent: "from-orange-400 to-red-500",
-      background: "from-slate-50 via-blue-50/20 to-purple-50/30",
-      surface: "bg-white/90 backdrop-blur-xl",
-      text: "text-gray-900",
-      border: "border-gray-200/50",
-      input: "bg-white/80 border-gray-300/50"
-    }
-  };
+  // Use centralized theme
+  const { isDark, toggleTheme } = useTheme();
 
-  const currentTheme = darkMode ? themes.dark : themes.light;
+  const gradientPrimary = isDark ? "from-purple-600 via-blue-600 to-cyan-500" : "from-blue-500 via-purple-500 to-pink-500";
+  const gradientSecondary = isDark ? "from-green-400 to-cyan-500" : "from-green-400 to-blue-500";
+  const backgroundGradient = isDark ? "from-gray-900 via-blue-900/20 to-purple-900/30" : "from-slate-50 via-blue-50/20 to-purple-50/30";
+  const surface = isDark ? "bg-gray-800/80 backdrop-blur-xl" : "bg-white/90 backdrop-blur-xl";
+  const textClass = isDark ? "text-white" : "text-gray-900";
+  const borderClass = isDark ? "border-gray-700/50" : "border-gray-200/50";
+  const inputClass = isDark ? "bg-gray-700/50 border-gray-600/50" : "bg-white/80 border-gray-300/50";
 
   // Enhanced initialization with battery monitoring
   useEffect(() => {
@@ -235,7 +221,7 @@ export default function Communication() {
       room: roomIn, 
       profile: userProfile,
       settings: {
-        theme: darkMode ? "dark" : "light",
+        theme: isDark ? "dark" : "light",
         notifications: true,
         privacy: false
       }
@@ -517,10 +503,10 @@ export default function Communication() {
     
     return (
       <div className={`relative ${sizes[size]}`}>
-        <div className={`w-full h-full rounded-full bg-gradient-to-br ${currentTheme.primary} flex items-center justify-center font-bold shadow-lg`}>
+        <div className={`w-full h-full rounded-full bg-gradient-to-br ${gradientPrimary} flex items-center justify-center font-bold shadow-lg`}>
           {user.username[0]?.toUpperCase()}
         </div>
-        <div className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 ${currentTheme.surface} ${
+        <div className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 ${surface} ${
           user.status === "online" ? "bg-green-400" : "bg-gray-400"
         }`} />
       </div>
@@ -547,8 +533,8 @@ export default function Communication() {
           
           <div className={`relative rounded-2xl sm:rounded-3xl px-3 sm:px-4 py-2 sm:py-3 shadow-xl sm:shadow-2xl backdrop-blur-sm ${
             isOwn 
-              ? `bg-gradient-to-br ${currentTheme.secondary} text-white rounded-br-md sm:rounded-br-lg`
-              : `${currentTheme.surface} ${currentTheme.text} rounded-bl-md sm:rounded-bl-lg border ${currentTheme.border}`
+              ? `bg-gradient-to-br ${gradientSecondary} text-white rounded-br-md sm:rounded-br-lg`
+              : `${surface} ${textClass} rounded-bl-md sm:rounded-bl-lg border ${borderClass}`
           }`}>
             
             {/* Message header */}
@@ -718,16 +704,16 @@ export default function Communication() {
   // Enhanced login screen
   if (!user) {
     return (
-      <div className={`min-h-screen w-full flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br ${currentTheme.background} transition-all duration-1000`}>
+      <div className={`min-h-screen w-full flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br ${backgroundGradient} transition-all duration-1000`}>
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, type: "spring" }}
-          className={`w-full max-w-2xl rounded-2xl sm:rounded-3xl shadow-2xl border ${currentTheme.border} ${currentTheme.surface} overflow-hidden`}
+          className={`w-full max-w-2xl rounded-2xl sm:rounded-3xl shadow-2xl border ${borderClass} ${surface} overflow-hidden`}
         >
           <div className="flex flex-col lg:flex-row">
             {/* Left Side - Branding */}
-            <div className={`lg:w-2/5 p-6 sm:p-8 bg-gradient-to-br ${currentTheme.primary} text-white`}>
+            <div className={`lg:w-2/5 p-6 sm:p-8 bg-gradient-to-br ${gradientPrimary} text-white`}>
               <div className="flex flex-col h-full justify-between">
                 <div>
                   <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
@@ -778,7 +764,7 @@ export default function Communication() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter your display name"
-                    className={`w-full px-3 sm:px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-base sm:text-lg`}
+                    className={`w-full px-3 sm:px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border transition-all ${inputClass} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-base sm:text-lg`}
                   />
                 </div>
 
@@ -788,7 +774,7 @@ export default function Communication() {
                     value={room}
                     onChange={(e) => setRoom(e.target.value)}
                     placeholder="Enter room code"
-                    className={`w-full px-3 sm:px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-base sm:text-lg`}
+                    className={`w-full px-3 sm:px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border transition-all ${inputClass} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-base sm:text-lg`}
                   />
                 </div>
 
@@ -802,10 +788,10 @@ export default function Communication() {
                     Join Room
                   </button>
                   <button
-                    onClick={() => setDarkMode((d) => !d)}
+                    onClick={() => toggleTheme()}
                     className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-500/10 hover:bg-gray-500/20 transition-all transform hover:scale-105"
                   >
-                    {darkMode ? <Sun size={20} className="sm:w-6 sm:h-6" /> : <Moon size={20} className="sm:w-6 sm:h-6" />}
+                    {isDark ? <Sun size={20} className="sm:w-6 sm:h-6" /> : <Moon size={20} className="sm:w-6 sm:h-6" />}
                   </button>
                 </div>
 
@@ -833,9 +819,9 @@ export default function Communication() {
 
   // Enhanced chat interface
   return (
-    <div className={`h-screen w-full flex flex-col bg-gradient-to-br ${currentTheme.background} ${currentTheme.text} transition-all duration-500 overflow-hidden`}>
+    <div className={`h-screen w-full flex flex-col bg-gradient-to-br ${backgroundGradient} ${textClass} transition-all duration-500 overflow-hidden`}>
       {/* Enhanced Header */}
-      <div className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b ${currentTheme.border} backdrop-blur-xl bg-white/5 shadow-lg`}>
+      <div className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b ${borderClass} backdrop-blur-xl bg-white/5 shadow-lg`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
             <button 
@@ -911,12 +897,12 @@ export default function Communication() {
               </button>
               
               <button 
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={() => toggleTheme()}
                 className="p-2 hover:bg-white/10 rounded-xl transition-all"
               >
-                {darkMode ? <Sun size={18} className="sm:w-5 sm:h-5" /> : <Moon size={18} className="sm:w-5 sm:h-5" />}
+                {isDark ? <Sun size={18} className="sm:w-5 sm:h-5" /> : <Moon size={18} className="sm:w-5 sm:h-5" />}
               </button>
-              
+
               <button 
                 onClick={() => setActiveRoomSettings(!activeRoomSettings)}
                 className="p-2 hover:bg-white/10 rounded-xl transition-all"
@@ -932,7 +918,7 @@ export default function Communication() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div
+              <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -943,7 +929,7 @@ export default function Communication() {
               initial={{ opacity: 0, x: 300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 300 }}
-              className={`fixed top-0 right-0 h-full w-80 max-w-full ${currentTheme.surface} border-l ${currentTheme.border} z-50 lg:hidden overflow-y-auto`}
+              className={`fixed top-0 right-0 h-full w-80 max-w-full ${surface} border-l ${borderClass} z-50 lg:hidden overflow-y-auto`}
             >
               <div className="p-4">
                 <div className="flex items-center justify-between mb-6">
@@ -997,11 +983,11 @@ export default function Communication() {
                   </button>
                   
                   <button
-                    onClick={() => setDarkMode(!darkMode)}
+                    onClick={() => toggleTheme()}
                     className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl transition-all"
                   >
                     <span>Theme</span>
-                    {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+                    {isDark ? <Sun size={16} /> : <Moon size={16} />}
                   </button>
                   
                   <button
@@ -1034,7 +1020,7 @@ export default function Communication() {
       {/* Enhanced Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Chat Area */}
-        <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col">
           {/* Connected Users Bar */}
           <div className="px-3 sm:px-4 lg:px-6 py-2 sm:py-4 border-b border-white/10 bg-white/5 backdrop-blur-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
@@ -1059,14 +1045,14 @@ export default function Communication() {
               </div>
               
               <div className="flex items-center gap-2">
-                <div className="relative flex-1 min-w-[120px]">
+                  <div className="relative flex-1 min-w-[120px]">
                   <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                   <input
                     type="text"
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`pl-8 pr-3 py-2 rounded-xl border transition-all ${currentTheme.input} focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs w-full`}
+                    className={`pl-8 pr-3 py-2 rounded-xl border transition-all ${inputClass} focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs w-full`}
                   />
                 </div>
               </div>
@@ -1122,7 +1108,7 @@ export default function Communication() {
           )}
 
           {/* Enhanced Input Area */}
-          <div className={`p-3 sm:p-4 lg:p-6 border-t ${currentTheme.border} backdrop-blur-xl bg-white/5 shadow-2xl`}>
+          <div className={`p-3 sm:p-4 lg:p-6 border-t ${borderClass} backdrop-blur-xl bg-white/5 shadow-2xl`}>
             <div className="max-w-4xl mx-auto">
               <div className="flex gap-2 sm:gap-3 lg:gap-4 items-end">
                 {/* Action Buttons */}
@@ -1199,7 +1185,7 @@ export default function Communication() {
                     placeholder="Type your message..."
                     value={message}
                     onChange={onInputChange}
-                    className={`w-full px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 rounded-xl sm:rounded-2xl border transition-all ${currentTheme.input} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-sm sm:text-base lg:text-lg pr-24 sm:pr-32`}
+                    className={`w-full px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 rounded-xl sm:rounded-2xl border transition-all ${inputClass} focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-sm sm:text-base lg:text-lg pr-24 sm:pr-32`}
                   />
                   
                   {/* Input Actions */}
@@ -1219,7 +1205,7 @@ export default function Communication() {
                   disabled={!message.trim() && stagedFiles.length === 0}
                   className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all shadow-xl sm:shadow-2xl transform hover:scale-105 ${
                     (message.trim() || stagedFiles.length > 0)
-                      ? `bg-gradient-to-r ${currentTheme.secondary} hover:shadow-2xl text-white`
+                      ? `bg-gradient-to-r ${gradientSecondary} hover:shadow-2xl text-white`
                       : "bg-gray-500/30 text-gray-400 cursor-not-allowed"
                   }`}
                 >
@@ -1237,7 +1223,7 @@ export default function Communication() {
               initial={{ opacity: 0, x: 300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 300 }}
-              className={`w-80 max-w-full border-l ${currentTheme.border} ${currentTheme.surface} p-4 sm:p-6 overflow-y-auto hidden lg:block`}
+              className={`w-80 max-w-full border-l ${borderClass} ${surface} p-4 sm:p-6 overflow-y-auto hidden lg:block`}
             >
               <div className="space-y-6">
                 <h3 className="text-lg font-bold">Room Settings</h3>
@@ -1270,10 +1256,10 @@ export default function Communication() {
                   <div>
                     <label className="block text-sm font-medium mb-2">Theme</label>
                     <button
-                      onClick={() => setDarkMode(!darkMode)}
+                      onClick={() => toggleTheme()}
                       className="w-full p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl transition-all transform hover:scale-105"
                     >
-                      Switch to {darkMode ? 'Light' : 'Dark'} Mode
+                      Switch to {isDark ? 'Light' : 'Dark'} Mode
                     </button>
                   </div>
                 </div>

@@ -5,8 +5,27 @@ import {
   DollarSign, Weight, Ruler, Filter, Search,
   X, ArrowRight, Star, ChevronDown, ChevronUp
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 function BrowseLoad() {
+  const { isDark } = useTheme();
+
+  const pageBg = isDark ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-gradient-to-br from-slate-50 to-blue-50';
+  const headerBg = isDark ? 'bg-gray-800/80' : 'bg-white/80';
+  const surface = isDark ? 'bg-gray-800' : 'bg-white';
+  const mutedBg = isDark ? 'bg-gray-700' : 'bg-slate-50';
+  const mutedBg2 = isDark ? 'bg-gray-800' : 'bg-slate-100';
+  const borderClass = isDark ? 'border-gray-700' : 'border-slate-200';
+  const textClass = isDark ? 'text-slate-100' : 'text-slate-900';
+  const subText = isDark ? 'text-slate-300' : 'text-slate-600';
+  const inputClass = isDark ? 'border-gray-600 focus:ring-blue-400 focus:border-transparent text-slate-100 bg-gray-700' : 'border-slate-300 focus:ring-blue-500 focus:border-transparent text-slate-900 bg-white';
+
+  const matchBadgeClass = (score) => {
+    if (score >= 90) return isDark ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800';
+    if (score >= 80) return isDark ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-800';
+    return isDark ? 'bg-orange-900 text-orange-300' : 'bg-orange-100 text-orange-800';
+  };
+  const financeBg = isDark ? 'bg-gradient-to-br from-emerald-900 to-green-900' : 'bg-gradient-to-br from-green-50 to-emerald-50';
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'map'
   const [selectedLoad, setSelectedLoad] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -188,9 +207,9 @@ function BrowseLoad() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className={`min-h-screen ${pageBg}`}>
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-40">
+      <div className={`${headerBg} backdrop-blur-lg border-b ${borderClass} sticky top-0 z-40`}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <div className="flex items-center space-x-2 sm:space-x-3">
@@ -198,15 +217,15 @@ function BrowseLoad() {
                 <Truck className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                <h1 className={`text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent`}> 
                   Browse Loads
                 </h1>
-                <p className="text-slate-600 text-xs sm:text-sm hidden xs:block">Find your perfect load match</p>
+                <p className={`${subText} text-xs sm:text-sm hidden xs:block`}>Find your perfect load match</p>
               </div>
             </div>
             
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="flex bg-white rounded-lg sm:rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div className={`${surface} rounded-lg sm:rounded-xl shadow-sm border ${borderClass} overflow-hidden`}>
                 <button
                   onClick={() => setViewMode('list')}
                   className={`px-2 sm:px-3 lg:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
@@ -236,15 +255,15 @@ function BrowseLoad() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         {/* Search and Filter Bar */}
-        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-slate-200 p-4 sm:p-6 mb-6 sm:mb-8">
+        <div className={`${surface} rounded-xl sm:rounded-2xl shadow-lg border ${borderClass} p-4 sm:p-6 mb-6 sm:mb-8`}>
           <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4 sm:w-5 sm:h-5" />
+                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${subText} w-4 h-4 sm:w-5 sm:h-5`} />
                 <input
                   type="text"
                   placeholder="Search by location, commodity, or shipper..."
-                  className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 border border-slate-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                  className={`w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 rounded-lg sm:rounded-xl ${inputClass} text-sm sm:text-base`}
                 />
               </div>
             </div>
@@ -252,11 +271,11 @@ function BrowseLoad() {
             <div className="flex items-center space-x-2 sm:space-x-3">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-3 border border-slate-300 rounded-lg sm:rounded-xl hover:bg-slate-50 transition-colors text-sm sm:text-base"
+                className={`flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl transition-colors text-sm sm:text-base border ${borderClass}`}
               >
-                <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />
-                <span className="font-medium text-slate-700 hidden xs:inline">Filters</span>
-                {showFilters ? <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4" /> : <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />}
+                <Filter className={`w-4 h-4 sm:w-5 sm:h-5 ${subText}`} />
+                <span className={`font-medium ${textClass} hidden xs:inline`}>Filters</span>
+                {showFilters ? <ChevronUp className={`w-3 h-3 sm:w-4 sm:h-4 ${subText}`} /> : <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 ${subText}`} />}
               </button>
               
               <button className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg sm:rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg text-sm sm:text-base">
@@ -272,7 +291,7 @@ function BrowseLoad() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-200 overflow-hidden"
+                className={`mt-4 sm:mt-6 pt-4 sm:pt-6 border-t ${borderClass} overflow-hidden`}
               >
                 <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   <div>
@@ -280,7 +299,7 @@ function BrowseLoad() {
                     <select
                       value={filters.distance}
                       onChange={(e) => setFilters({...filters, distance: e.target.value})}
-                      className="w-full border border-slate-300 rounded-lg px-2 sm:px-3 py-1 sm:py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                      className={`w-full rounded-lg px-2 sm:px-3 py-1 sm:py-2 ${inputClass} text-sm sm:text-base`}
                     >
                       {distanceRanges.map(range => (
                         <option key={range.value} value={range.value}>{range.label}</option>
@@ -289,11 +308,11 @@ function BrowseLoad() {
                   </div>
                   
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">Vehicle Type</label>
+                    <label className={`${subText} block text-xs sm:text-sm font-medium mb-1 sm:mb-2`}>Vehicle Type</label>
                     <select
                       value={filters.vehicleType}
                       onChange={(e) => setFilters({...filters, vehicleType: e.target.value})}
-                      className="w-full border border-slate-300 rounded-lg px-2 sm:px-3 py-1 sm:py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                      className={`w-full rounded-lg px-2 sm:px-3 py-1 sm:py-2 ${inputClass} text-sm sm:text-base`}
                     >
                       <option value="all">All Types</option>
                       {vehicleTypes.map(type => (
@@ -303,7 +322,7 @@ function BrowseLoad() {
                   </div>
                   
                   <div className="xs:col-span-2 lg:col-span-1">
-                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
+                    <label className={`${subText} block text-xs sm:text-sm font-medium mb-1 sm:mb-2`}>
                       Max Weight: {filters.maxWeight.toLocaleString()} lbs
                     </label>
                     <input
@@ -318,7 +337,7 @@ function BrowseLoad() {
                   </div>
                   
                   <div className="xs:col-span-2 lg:col-span-1">
-                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
+                    <label className={`${subText} block text-xs sm:text-sm font-medium mb-1 sm:mb-2`}>
                       Min Pay: ${filters.minPay}
                     </label>
                     <input
@@ -344,10 +363,10 @@ function BrowseLoad() {
           {/* Loads List */}
           <div className={`${viewMode === 'map' ? 'lg:col-span-2' : 'w-full'}`}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2">
-              <h2 className="text-lg sm:text-xl font-bold text-slate-900">
-                Available Loads <span className="text-slate-500">({filteredLoads.length})</span>
+              <h2 className={`text-lg sm:text-xl font-bold ${textClass}`}>
+                Available Loads <span className={`${subText}`}>({filteredLoads.length})</span>
               </h2>
-              <div className="text-xs sm:text-sm text-slate-600">
+              <div className={`text-xs sm:text-sm ${subText}`}>
                 Sorted by: <span className="font-semibold text-blue-600">Best Match</span>
               </div>
             </div>
@@ -358,7 +377,7 @@ function BrowseLoad() {
                   key={load.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300"
+                  className={`${surface} rounded-xl sm:rounded-2xl shadow-lg border ${borderClass} overflow-hidden hover:shadow-xl transition-all duration-300`}
                 >
                   <div className="p-4 sm:p-6">
                     {/* Header */}
@@ -366,21 +385,17 @@ function BrowseLoad() {
                       <div className="flex-1">
                         <div className="flex flex-col xs:flex-row xs:items-center space-y-2 xs:space-y-0 xs:space-x-3 mb-2">
                           <div className="flex items-center space-x-2">
-                            <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
-                            <span className="font-bold text-slate-900 text-sm sm:text-base">{load.from}</span>
-                            <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 text-slate-400" />
-                            <span className="font-bold text-slate-900 text-sm sm:text-base">{load.to}</span>
+                            <MapPin className={`w-3 h-3 sm:w-4 sm:h-4 text-blue-600`} />
+                            <span className={`font-bold ${textClass} text-sm sm:text-base`}>{load.from}</span>
+                            <ArrowRight className={`w-3 h-3 sm:w-4 sm:h-4 ${subText}`} />
+                            <span className={`font-bold ${textClass} text-sm sm:text-base`}>{load.to}</span>
                           </div>
-                          <div className={`px-2 py-1 rounded-full text-xs font-bold ${
-                            load.matchScore >= 90 ? 'bg-green-100 text-green-800' :
-                            load.matchScore >= 80 ? 'bg-blue-100 text-blue-800' :
-                            'bg-orange-100 text-orange-800'
-                          }`}>
+                          <div className={`px-2 py-1 rounded-full text-xs font-bold ${matchBadgeClass(load.matchScore)}`}>
                             {load.matchScore}% Match
                           </div>
                         </div>
                         
-                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-600">
+                        <div className={`flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm ${subText}`}>
                           <div className="flex items-center space-x-1">
                             <Ruler className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span>{load.distance} miles</span>
@@ -400,39 +415,39 @@ function BrowseLoad() {
                         <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">
                           ${load.estimatedFreight.toLocaleString()}
                         </div>
-                        <div className="text-xs sm:text-sm text-slate-500">Estimated Freight</div>
+                        <div className={`${subText} text-xs sm:text-sm`}>Estimated Freight</div>
                       </div>
                     </div>
 
                     {/* Details Grid */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-3 sm:mb-4">
-                      <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-lg">
-                        <Truck className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mx-auto mb-1" />
-                        <div className="text-xs sm:text-sm font-medium text-slate-900">{load.vehicleType}</div>
+                      <div className={`text-center p-2 sm:p-3 ${mutedBg} rounded-lg`}>
+                        <Truck className={`w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mx-auto mb-1`} />
+                        <div className={`text-xs sm:text-sm font-medium ${textClass}`}>{load.vehicleType}</div>
                       </div>
-                      <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-lg">
-                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mx-auto mb-1" />
-                        <div className="text-xs sm:text-sm font-medium text-slate-900">Pickup</div>
+                      <div className={`text-center p-2 sm:p-3 ${mutedBg} rounded-lg`}>
+                        <Calendar className={`w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mx-auto mb-1`} />
+                        <div className={`text-xs sm:text-sm font-medium ${textClass}`}>Pickup</div>
                       </div>
-                      <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-lg">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mx-auto mb-1" />
-                        <div className="text-xs sm:text-sm font-medium text-slate-900">1-2 Days</div>
+                      <div className={`text-center p-2 sm:p-3 ${mutedBg} rounded-lg`}>
+                        <Clock className={`w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mx-auto mb-1`} />
+                        <div className={`text-xs sm:text-sm font-medium ${textClass}`}>1-2 Days</div>
                       </div>
-                      <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-lg">
-                        <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 mx-auto mb-1" />
-                        <div className="text-xs sm:text-sm font-medium text-slate-900">{load.shipper.rating} ★</div>
+                      <div className={`text-center p-2 sm:p-3 ${mutedBg} rounded-lg`}>
+                        <Star className={`w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 mx-auto mb-1`} />
+                        <div className={`text-xs sm:text-sm font-medium ${textClass}`}>{load.shipper.rating} ★</div>
                       </div>
                     </div>
 
                     {/* Shipper Info */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div className="flex items-center space-x-2 sm:space-x-3">
-                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xs sm:text-sm font-bold">
+                        <div className={`w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xs sm:text-sm font-bold`}>
                           {load.shipper.name.charAt(0)}
                         </div>
                         <div>
-                          <div className="font-medium text-slate-900 text-sm sm:text-base">{load.shipper.name}</div>
-                          <div className="text-xs sm:text-sm text-slate-500">{load.shipper.reviews} reviews</div>
+                          <div className={`font-medium ${textClass} text-sm sm:text-base`}>{load.shipper.name}</div>
+                          <div className={`${subText} text-xs sm:text-sm`}>{load.shipper.reviews} reviews</div>
                         </div>
                       </div>
                       
@@ -452,13 +467,13 @@ function BrowseLoad() {
           {/* Map View */}
           {viewMode === 'map' && (
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-slate-200 p-4 sm:p-6 h-full">
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 sm:mb-4">Loads Map View</h3>
-                <div className="bg-slate-200 rounded-lg sm:rounded-xl h-64 sm:h-80 lg:h-96 flex items-center justify-center">
+              <div className={`${surface} rounded-xl sm:rounded-2xl shadow-lg border ${borderClass} p-4 sm:p-6 h-full`}>
+                <h3 className={`text-base sm:text-lg font-bold ${textClass} mb-3 sm:mb-4`}>Loads Map View</h3>
+                <div className={`${mutedBg2} rounded-lg sm:rounded-xl h-64 sm:h-80 lg:h-96 flex items-center justify-center`}>
                   <div className="text-center">
-                    <MapPin className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-slate-400 mx-auto mb-2 sm:mb-4" />
-                    <p className="text-slate-600 text-sm sm:text-base">Interactive map showing available loads</p>
-                    <p className="text-xs sm:text-sm text-slate-500 mt-1 sm:mt-2">Click on load markers to view details</p>
+                    <MapPin className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 ${subText} mx-auto mb-2 sm:mb-4`} />
+                    <p className={`${subText} text-sm sm:text-base`}>Interactive map showing available loads</p>
+                    <p className={`text-xs sm:text-sm ${subText} mt-1 sm:mt-2`}>Click on load markers to view details</p>
                   </div>
                 </div>
               </div>
@@ -475,98 +490,95 @@ function BrowseLoad() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden"
+              className={`${surface} rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden border ${borderClass}`}
             >
-              <div className="p-4 sm:p-6 border-b border-slate-200">
+              <div className={`p-4 sm:p-6 border-b ${borderClass}`}>
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900">Load Details</h2>
+                  <h2 className={`text-lg sm:text-xl lg:text-2xl font-bold ${textClass}`}>Load Details</h2>
                   <button
                     onClick={() => setSelectedLoad(null)}
-                    className="p-1 sm:p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                    className={`p-1 sm:p-2 rounded-lg transition-colors`}
                   >
-                    <X className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600" />
+                    <X className={`w-5 h-5 sm:w-6 sm:h-6 ${subText}`} />
                   </button>
                 </div>
               </div>
 
-              <div className="overflow-y-auto max-h-[70vh] p-4 sm:p-6">
+              <div className={`overflow-y-auto max-h-[70vh] p-4 sm:p-6`}>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
                   {/* Left Column - Load Details */}
                   <div className="space-y-4 sm:space-y-6">
                     {/* Route Information */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                    <div className={`rounded-xl sm:rounded-2xl p-4 sm:p-6 ${mutedBg2}`}>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 gap-2">
                         <div className="flex items-center space-x-2 sm:space-x-3">
                           <MapPin className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600" />
-                          <h3 className="text-base sm:text-lg font-bold text-slate-900">Route Information</h3>
+                          <h3 className={`text-base sm:text-lg font-bold ${textClass}`}>Route Information</h3>
                         </div>
-                        <div className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold ${
-                          selectedLoad.matchScore >= 90 ? 'bg-green-100 text-green-800' :
-                          selectedLoad.matchScore >= 80 ? 'bg-blue-100 text-blue-800' :
-                          'bg-orange-100 text-orange-800'
-                        }`}>
+                        <div className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold ${matchBadgeClass(selectedLoad.matchScore)}`}>
                           {selectedLoad.matchScore}% Match
                         </div>
                       </div>
                       
+                      
                       <div className="space-y-2 sm:space-y-3">
-                        <div className="flex justify-between items-center py-1 sm:py-2 border-b border-slate-200">
-                          <span className="text-slate-600 text-sm sm:text-base">From</span>
-                          <span className="font-semibold text-slate-900 text-sm sm:text-base">{selectedLoad.from}</span>
+                        <div className={`flex justify-between items-center py-1 sm:py-2 border-b ${borderClass}`}>
+                          <span className={`${subText} text-sm sm:text-base`}>From</span>
+                          <span className={`font-semibold ${textClass} text-sm sm:text-base`}>{selectedLoad.from}</span>
                         </div>
-                        <div className="flex justify-between items-center py-1 sm:py-2 border-b border-slate-200">
-                          <span className="text-slate-600 text-sm sm:text-base">To</span>
-                          <span className="font-semibold text-slate-900 text-sm sm:text-base">{selectedLoad.to}</span>
+                        <div className={`flex justify-between items-center py-1 sm:py-2 border-b ${borderClass}`}>
+                          <span className={`${subText} text-sm sm:text-base`}>To</span>
+                          <span className={`font-semibold ${textClass} text-sm sm:text-base`}>{selectedLoad.to}</span>
                         </div>
-                        <div className="flex justify-between items-center py-1 sm:py-2 border-b border-slate-200">
-                          <span className="text-slate-600 text-sm sm:text-base">Distance</span>
-                          <span className="font-semibold text-slate-900 text-sm sm:text-base">{selectedLoad.distance} miles</span>
+                        <div className={`flex justify-between items-center py-1 sm:py-2 border-b ${borderClass}`}>
+                          <span className={`${subText} text-sm sm:text-base`}>Distance</span>
+                          <span className={`font-semibold ${textClass} text-sm sm:text-base`}>{selectedLoad.distance} miles</span>
                         </div>
                         <div className="flex justify-between items-center py-1 sm:py-2">
-                          <span className="text-slate-600 text-sm sm:text-base">Est. Time</span>
-                          <span className="font-semibold text-slate-900 text-sm sm:text-base">1-2 days</span>
+                          <span className={`${subText} text-sm sm:text-base`}>Est. Time</span>
+                          <span className={`font-semibold ${textClass} text-sm sm:text-base`}>1-2 days</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Load Specifications */}
-                    <div className="bg-slate-50 rounded-xl sm:rounded-2xl p-4 sm:p-6">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 sm:mb-4">Load Specifications</h3>
+                    <div className={`rounded-xl sm:rounded-2xl p-4 sm:p-6 ${mutedBg2}`}>
+                      <h3 className={`text-base sm:text-lg font-bold ${textClass} mb-3 sm:mb-4`}>Load Specifications</h3>
                       <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                        <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl">
-                          <Weight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2" />
-                          <div className="text-xs sm:text-sm text-slate-600">Weight</div>
-                          <div className="font-bold text-slate-900 text-sm sm:text-base">{selectedLoad.loadWeight.toLocaleString()} lbs</div>
+                        <div className={`text-center p-2 sm:p-3 ${surface} rounded-lg sm:rounded-xl border ${borderClass}`}>
+                          <Weight className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2`} />
+                          <div className={`${subText} text-xs sm:text-sm`}>Weight</div>
+                          <div className={`font-bold ${textClass} text-sm sm:text-base`}>{selectedLoad.loadWeight.toLocaleString()} lbs</div>
                         </div>
-                        <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl">
-                          <Truck className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2" />
-                          <div className="text-xs sm:text-sm text-slate-600">Vehicle Type</div>
-                          <div className="font-bold text-slate-900 text-sm sm:text-base">{selectedLoad.vehicleType}</div>
+                        <div className={`text-center p-2 sm:p-3 ${surface} rounded-lg sm:rounded-xl border ${borderClass}`}>
+                          <Truck className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2`} />
+                          <div className={`${subText} text-xs sm:text-sm`}>Vehicle Type</div>
+                          <div className={`font-bold ${textClass} text-sm sm:text-base`}>{selectedLoad.vehicleType}</div>
                         </div>
-                        <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl">
-                          <Calendar className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2" />
-                          <div className="text-xs sm:text-sm text-slate-600">Pickup</div>
-                          <div className="font-bold text-slate-900 text-sm sm:text-base">{selectedLoad.pickupDate}</div>
+                        <div className={`text-center p-2 sm:p-3 ${surface} rounded-lg sm:rounded-xl border ${borderClass}`}>
+                          <Calendar className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2`} />
+                          <div className={`${subText} text-xs sm:text-sm`}>Pickup</div>
+                          <div className={`font-bold ${textClass} text-sm sm:text-base`}>{selectedLoad.pickupDate}</div>
                         </div>
-                        <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl">
-                          <Clock className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2" />
-                          <div className="text-xs sm:text-sm text-slate-600">Delivery</div>
-                          <div className="font-bold text-slate-900 text-sm sm:text-base">{selectedLoad.deliveryDate}</div>
+                        <div className={`text-center p-2 sm:p-3 ${surface} rounded-lg sm:rounded-xl border ${borderClass}`}>
+                          <Clock className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 mx-auto mb-1 sm:mb-2`} />
+                          <div className={`${subText} text-xs sm:text-sm`}>Delivery</div>
+                          <div className={`font-bold ${textClass} text-sm sm:text-base`}>{selectedLoad.deliveryDate}</div>
                         </div>
                       </div>
                     </div>
 
                     {/* Shipper Information */}
-                    <div className="bg-white rounded-xl sm:rounded-2xl border border-slate-200 p-4 sm:p-6">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 sm:mb-4">Shipper Information</h3>
+                    <div className={`${surface} rounded-xl sm:rounded-2xl border ${borderClass} p-4 sm:p-6`}>
+                      <h3 className={`text-base sm:text-lg font-bold ${textClass} mb-3 sm:mb-4`}>Shipper Information</h3>
                       <div className="flex items-center space-x-3 sm:space-x-4">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center text-white text-sm sm:text-lg font-bold">
+                        <div className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center text-white text-sm sm:text-lg font-bold`}>
                           {selectedLoad.shipper.name.charAt(0)}
                         </div>
                         <div className="flex-1">
-                          <div className="font-bold text-slate-900 text-sm sm:text-base lg:text-lg">{selectedLoad.shipper.name}</div>
-                          <div className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-slate-600">
-                            <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500" />
+                          <div className={`font-bold ${textClass} text-sm sm:text-base lg:text-lg`}>{selectedLoad.shipper.name}</div>
+                          <div className={`flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm ${subText}`}>
+                            <Star className={`w-3 h-3 sm:w-4 sm:h-4 text-yellow-500`} />
                             <span>{selectedLoad.shipper.rating} ★ ({selectedLoad.shipper.reviews} reviews)</span>
                           </div>
                         </div>
@@ -577,10 +589,10 @@ function BrowseLoad() {
                   {/* Right Column - Map & Financials */}
                   <div className="space-y-4 sm:space-y-6">
                     {/* Map Preview */}
-                    <div className="bg-slate-100 rounded-xl sm:rounded-2xl p-3 sm:p-4">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 sm:mb-4">Route Map</h3>
-                      <div className="bg-slate-200 rounded-lg sm:rounded-xl h-32 sm:h-40 lg:h-48 flex items-center justify-center mb-3 sm:mb-4">
-                        <div className="text-center text-slate-500 text-xs sm:text-sm">
+                    <div className={`${mutedBg2} rounded-xl sm:rounded-2xl p-3 sm:p-4`}>
+                      <h3 className={`text-base sm:text-lg font-bold ${textClass} mb-3 sm:mb-4`}>Route Map</h3>
+                      <div className={`${mutedBg2 === 'bg-slate-100' ? 'bg-slate-200' : mutedBg2} rounded-lg sm:rounded-xl h-32 sm:h-40 lg:h-48 flex items-center justify-center mb-3 sm:mb-4`}>
+                        <div className={`text-center ${subText} text-xs sm:text-sm`}>
                           <Navigation className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2" />
                           <p>Google Maps Route</p>
                           <p className="text-xs">{selectedLoad.distance} miles • {selectedLoad.from} to {selectedLoad.to}</p>
@@ -592,39 +604,39 @@ function BrowseLoad() {
                     </div>
 
                     {/* Financial Breakdown */}
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl sm:rounded-2xl p-4 sm:p-6">
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-3 sm:mb-4">Financial Breakdown</h3>
+                    <div className={`${financeBg} rounded-xl sm:rounded-2xl p-4 sm:p-6`}>
+                      <h3 className={`text-base sm:text-lg font-bold ${textClass} mb-3 sm:mb-4`}>Financial Breakdown</h3>
                       {(() => {
                         const expenses = calculateExpenses(selectedLoad);
                         return (
                           <div className="space-y-2 sm:space-y-3">
                             <div className="flex justify-between items-center">
-                              <span className="text-slate-600 text-sm sm:text-base">Estimated Freight</span>
-                              <span className="font-semibold text-slate-900 text-sm sm:text-base">${selectedLoad.estimatedFreight.toLocaleString()}</span>
+                              <span className={`${subText} text-sm sm:text-base`}>Estimated Freight</span>
+                              <span className={`font-semibold ${textClass} text-sm sm:text-base`}>${selectedLoad.estimatedFreight.toLocaleString()}</span>
                             </div>
-                            <div className="space-y-1 sm:space-y-2 border-t border-slate-200 pt-2 sm:pt-3">
+                            <div className={`space-y-1 sm:space-y-2 border-t ${borderClass} pt-2 sm:pt-3`}>
                               <div className="flex justify-between text-xs sm:text-sm">
-                                <span className="text-slate-600">Fuel Cost</span>
-                                <span>${expenses.fuelCost}</span>
+                                <span className={`${subText}`}>Fuel Cost</span>
+                                <span className={`${textClass}`}>${expenses.fuelCost}</span>
                               </div>
                               <div className="flex justify-between text-xs sm:text-sm">
-                                <span className="text-slate-600">Tolls & Fees</span>
-                                <span>${expenses.tolls}</span>
+                                <span className={`${subText}`}>Tolls & Fees</span>
+                                <span className={`${textClass}`}>${expenses.tolls}</span>
                               </div>
                               <div className="flex justify-between text-xs sm:text-sm">
-                                <span className="text-slate-600">Misc Expenses</span>
-                                <span>${expenses.misc}</span>
+                                <span className={`${subText}`}>Misc Expenses</span>
+                                <span className={`${textClass}`}>${expenses.misc}</span>
                               </div>
                             </div>
-                            <div className="flex justify-between border-t border-slate-200 pt-2 sm:pt-3">
-                              <span className="text-slate-600 text-sm sm:text-base">Total Expenses</span>
-                              <span className="font-semibold text-sm sm:text-base">${expenses.totalExpenses}</span>
+                            <div className={`flex justify-between border-t ${borderClass} pt-2 sm:pt-3`}>
+                              <span className={`${subText} text-sm sm:text-base`}>Total Expenses</span>
+                              <span className={`font-semibold ${textClass} text-sm sm:text-base`}>${expenses.totalExpenses}</span>
                             </div>
-                            <div className="flex justify-between border-t border-slate-200 pt-2 sm:pt-3">
-                              <span className="text-slate-600 text-sm sm:text-base">Estimated Profit</span>
+                            <div className={`flex justify-between border-t ${borderClass} pt-2 sm:pt-3`}>
+                              <span className={`${subText} text-sm sm:text-base`}>Estimated Profit</span>
                               <span className="font-bold text-green-600 text-base sm:text-lg">${expenses.estimatedProfit}</span>
                             </div>
-                            <div className="text-center text-xs sm:text-sm text-slate-600 mt-2">
+                            <div className={`text-center text-xs sm:text-sm ${subText} mt-2`}>
                               Profit Margin: {expenses.profitMargin}%
                             </div>
                           </div>
@@ -637,8 +649,8 @@ function BrowseLoad() {
                       <button className="flex-1 bg-blue-600 text-white py-3 sm:py-4 rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg text-sm sm:text-base">
                         Accept Load
                       </button>
-                      <button className="px-4 sm:px-6 py-3 sm:py-4 border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center">
-                        <Star className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600" />
+                      <button className={`px-4 sm:px-6 py-3 sm:py-4 border ${borderClass} rounded-xl hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center`}>
+                        <Star className={`w-5 h-5 sm:w-6 sm:h-6 ${subText}`} />
                       </button>
                     </div>
                   </div>
