@@ -36,8 +36,9 @@ import {
   AreaChart,
   Area
 } from "recharts";
-
+import { useTheme } from "../../context/ThemeContext"; 
 const Reports = () => {
+  const { theme, isDark } = useTheme();
   const [timeRange, setTimeRange] = useState("week");
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedMetric, setSelectedMetric] = useState("revenue");
@@ -111,8 +112,8 @@ const Reports = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg xs:rounded-xl sm:rounded-2xl p-2 xs:p-3 sm:p-4 shadow-2xl text-xs xs:text-sm">
-          <p className="font-semibold text-gray-900 mb-1 xs:mb-2">{label}</p>
+        <div className={`${theme.card.bg} ${theme.border.primary} rounded-lg xs:rounded-xl sm:rounded-2xl p-2 xs:p-3 sm:p-4 ${theme.shadow.xl} backdrop-blur-sm text-xs xs:text-sm`}>
+          <p className={`font-semibold ${theme.text.primary} mb-1 xs:mb-2`}>{label}</p>
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }}>
               {entry.name}: {entry.name.includes('₹') ? '₹' : ''}{entry.value.toLocaleString()}
@@ -132,10 +133,10 @@ const Reports = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       whileHover={{ scale: 1.02, y: -2 }}
-      className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+      className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}
     >
       <div className="flex items-center justify-between mb-2 xs:mb-3 sm:mb-4">
-        <div className="p-2 xs:p-3 bg-gray-50 rounded-lg xs:rounded-xl">
+        <div className={`p-2 xs:p-3 ${isDark ? 'bg-gray-800' : 'bg-gray-50'} rounded-lg xs:rounded-xl`}>
           {stat.icon}
         </div>
         <div className={`flex items-center gap-1 text-xs xs:text-sm font-medium ${
@@ -147,15 +148,21 @@ const Reports = () => {
       </div>
       
       <div className="space-y-0.5 xs:space-y-1">
-        <div className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">{stat.value}</div>
-        <div className="text-xs xs:text-sm font-medium text-gray-600">{stat.title}</div>
-        <div className="text-gray-500 text-xs">{stat.description}</div>
+        <div className={`text-lg xs:text-xl sm:text-2xl lg:text-3xl font-bold ${theme.text.primary} leading-tight`}>
+          {stat.value}
+        </div>
+        <div className={`text-xs xs:text-sm font-medium ${theme.text.secondary}`}>{stat.title}</div>
+        <div className={`text-xs ${theme.text.tertiary}`}>{stat.description}</div>
       </div>
     </motion.div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/20 to-purple-50/20 p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8">
+    <div className={`min-h-screen bg-gradient-to-br ${
+      isDark 
+        ? 'from-gray-900 via-gray-800 to-gray-900' 
+        : 'from-gray-50 via-blue-50/20 to-purple-50/20'
+    } p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8`}>
       <div className="max-w-7xl mx-auto space-y-3 xs:space-y-4 sm:space-y-5 md:space-y-6">
         {/* Header */}
         <motion.div
@@ -164,16 +171,16 @@ const Reports = () => {
           className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 xs:gap-3 sm:gap-4"
         >
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+            <h1 className={`text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-bold ${theme.text.primary} leading-tight`}>
               Analytics & <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Reports</span>
             </h1>
-            <p className="text-gray-600 mt-1 text-xs xs:text-sm sm:text-base leading-relaxed">
+            <p className={`${theme.text.secondary} mt-1 text-xs xs:text-sm sm:text-base leading-relaxed`}>
               Comprehensive insights into your logistics performance
             </p>
           </div>
           
           <div className="flex items-center gap-1 xs:gap-2 sm:gap-3 w-full lg:w-auto mt-2 lg:mt-0">
-            <div className="flex bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl p-1 border border-gray-200 flex-1 lg:flex-none">
+            <div className={`flex ${theme.card.bg} backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl p-1 ${theme.border.secondary} flex-1 lg:flex-none`}>
               {["week", "month", "quarter"].map((range) => (
                 <button
                   key={range}
@@ -181,7 +188,7 @@ const Reports = () => {
                   className={`flex-1 px-2 xs:px-3 sm:px-4 py-1 xs:py-2 rounded-lg xs:rounded-xl text-xs xs:text-sm font-medium capitalize transition-all ${
                     timeRange === range 
                       ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg" 
-                      : "text-gray-600 hover:text-gray-900"
+                      : `${theme.text.secondary} hover:${theme.text.primary}`
                   }`}
                 >
                   {range}
@@ -189,7 +196,7 @@ const Reports = () => {
               ))}
             </div>
             
-            <button className="p-2 xs:p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg xs:rounded-xl sm:rounded-2xl hover:shadow-lg transition-all flex-shrink-0">
+            <button className={`p-2 xs:p-3 ${theme.card.bg} backdrop-blur-sm ${theme.border.primary} rounded-lg xs:rounded-xl sm:rounded-2xl hover:${theme.shadow.md} transition-all flex-shrink-0`}>
               <Download className="size-3 xs:size-4 sm:size-5" />
             </button>
           </div>
@@ -212,7 +219,7 @@ const Reports = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl p-1 border border-gray-200 overflow-x-auto"
+          className={`flex ${theme.card.bg} backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl p-1 ${theme.border.secondary} overflow-x-auto`}
         >
           {[
             { id: "overview", label: "Overview", icon: <BarChart3 className="size-3 xs:size-4" /> },
@@ -226,7 +233,7 @@ const Reports = () => {
               className={`flex items-center gap-1 xs:gap-2 flex-1 min-w-0 px-2 xs:px-3 sm:px-4 py-2 xs:py-3 rounded-lg xs:rounded-xl text-xs xs:text-sm font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id 
                   ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg" 
-                  : "text-gray-600 hover:text-gray-900"
+                  : `${theme.text.secondary} hover:${theme.text.primary}`
               }`}
             >
               {tab.icon}
@@ -246,17 +253,21 @@ const Reports = () => {
               className="grid grid-cols-1 xl:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 md:gap-6"
             >
               {/* Revenue & Jobs Chart */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
                 <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Revenue & Jobs Trend</h3>
-                    <p className="text-gray-600 text-xs xs:text-sm mt-0.5">Weekly performance overview</p>
+                    <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                      Revenue & Jobs Trend
+                    </h3>
+                    <p className={`${theme.text.secondary} text-xs xs:text-sm mt-0.5`}>
+                      Weekly performance overview
+                    </p>
                   </div>
                   <div className="flex items-center gap-1 xs:gap-2 flex-shrink-0 ml-2">
-                    <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
+                    <button className={`p-1 xs:p-2 hover:${theme.bg.hover} rounded-lg xs:rounded-xl transition-colors`}>
                       <Eye className="size-3 xs:size-4" />
                     </button>
-                    <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
+                    <button className={`p-1 xs:p-2 hover:${theme.bg.hover} rounded-lg xs:rounded-xl transition-colors`}>
                       <MoreVertical className="size-3 xs:size-4" />
                     </button>
                   </div>
@@ -265,9 +276,16 @@ const Reports = () => {
                 <div className="h-48 xs:h-56 sm:h-64 md:h-72 lg:h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={currentData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey={timeRange === "week" ? "day" : "month"} tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#f0f0f0"} />
+                      <XAxis 
+                        dataKey={timeRange === "week" ? "day" : "month"} 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
                       <Tooltip content={<CustomTooltip />} />
                       <Legend />
                       <Bar dataKey="revenue" fill="#8b5cf6" radius={[2, 2, 0, 0]} name="Revenue (₹)" />
@@ -278,11 +296,15 @@ const Reports = () => {
               </div>
 
               {/* Commission Trend */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
                 <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Commission Trend</h3>
-                    <p className="text-gray-600 text-xs xs:text-sm mt-0.5">Earnings over time</p>
+                    <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                      Commission Trend
+                    </h3>
+                    <p className={`${theme.text.secondary} text-xs xs:text-sm mt-0.5`}>
+                      Earnings over time
+                    </p>
                   </div>
                   <DollarSign className="text-gray-400 size-3 xs:size-4 sm:size-5 flex-shrink-0" />
                 </div>
@@ -290,9 +312,16 @@ const Reports = () => {
                 <div className="h-48 xs:h-56 sm:h-64 md:h-72 lg:h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={currentData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey={timeRange === "week" ? "day" : "month"} tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#f0f0f0"} />
+                      <XAxis 
+                        dataKey={timeRange === "week" ? "day" : "month"} 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
                       <Tooltip content={<CustomTooltip />} />
                       <Area 
                         type="monotone" 
@@ -319,9 +348,11 @@ const Reports = () => {
               className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 md:gap-6"
             >
               {/* Performance Distribution */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
                 <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-                  <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Job Distribution</h3>
+                  <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                    Job Distribution
+                  </h3>
                   <PieChart className="text-gray-400 size-3 xs:size-4 sm:size-5 flex-shrink-0" />
                 </div>
                 
@@ -355,27 +386,40 @@ const Reports = () => {
                           className="w-2 h-2 xs:w-3 xs:h-3 rounded-full flex-shrink-0" 
                           style={{ backgroundColor: COLORS[index] }}
                         />
-                        <span className="text-xs xs:text-sm font-medium text-gray-700 truncate">{item.name}</span>
+                        <span className={`text-xs xs:text-sm font-medium ${theme.text.secondary} truncate`}>
+                          {item.name}
+                        </span>
                       </div>
-                      <div className="text-sm xs:text-base sm:text-lg font-bold leading-tight">{item.value}%</div>
+                      <div className={`text-sm xs:text-base sm:text-lg font-bold ${theme.text.primary} leading-tight`}>
+                        {item.value}%
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Distance Covered */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
                 <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-                  <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Distance Covered</h3>
+                  <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                    Distance Covered
+                  </h3>
                   <TrendingUp className="text-gray-400 size-3 xs:size-4 sm:size-5 flex-shrink-0" />
                 </div>
                 
                 <div className="h-48 xs:h-52 sm:h-56 md:h-60 lg:h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <ReLineChart data={weeklyData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="day" tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#f0f0f0"} />
+                      <XAxis 
+                        dataKey="day" 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
                       <Tooltip content={<CustomTooltip />} />
                       <Line 
                         type="monotone" 
@@ -399,12 +443,16 @@ const Reports = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+              className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}
             >
               <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Revenue Analytics</h3>
-                  <p className="text-gray-600 text-xs xs:text-sm mt-0.5">Monthly revenue breakdown and trends</p>
+                  <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                    Revenue Analytics
+                  </h3>
+                  <p className={`${theme.text.secondary} text-xs xs:text-sm mt-0.5`}>
+                    Monthly revenue breakdown and trends
+                  </p>
                 </div>
                 <div className="flex items-center gap-1 xs:gap-2 flex-shrink-0 ml-2">
                   {["revenue", "commission", "jobs"].map((metric) => (
@@ -414,7 +462,7 @@ const Reports = () => {
                       className={`px-2 xs:px-3 py-1 rounded-lg text-xs xs:text-sm font-medium capitalize ${
                         selectedMetric === metric
                           ? "bg-blue-500 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          : `${isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`
                       }`}
                     >
                       {metric}
@@ -426,9 +474,16 @@ const Reports = () => {
               <div className="h-64 xs:h-72 sm:h-80 md:h-96">
                 <ResponsiveContainer width="100%" height="100%">
                   <ReLineChart data={monthlyData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-                    <YAxis tick={{ fontSize: 10 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#f0f0f0"} />
+                    <XAxis 
+                      dataKey="month" 
+                      tick={{ fontSize: 10 }} 
+                      stroke={isDark ? "#9ca3af" : "#6b7280"}
+                    />
+                    <YAxis 
+                      tick={{ fontSize: 10 }} 
+                      stroke={isDark ? "#9ca3af" : "#6b7280"}
+                    />
                     <Tooltip content={<CustomTooltip />} />
                     <Line 
                       type="monotone" 
@@ -451,10 +506,12 @@ const Reports = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+          className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}
         >
           <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-            <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Recent Activity</h3>
+            <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+              Recent Activity
+            </h3>
             <Calendar className="text-gray-400 size-3 xs:size-4 sm:size-5 flex-shrink-0" />
           </div>
           
@@ -465,7 +522,9 @@ const Reports = () => {
               { action: "Job completed", amount: "Mumbai → Delhi", time: "1 day ago", type: "completion" },
               { action: "Payment received", amount: "₹18,500", time: "2 days ago", type: "payment" }
             ].map((activity, index) => (
-              <div key={index} className="flex items-center justify-between p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-100/50 transition-colors">
+              <div key={index} className={`flex items-center justify-between p-2 xs:p-3 sm:p-4 ${
+                isDark ? 'bg-gray-800/50' : 'bg-gray-50/50'
+              } rounded-lg xs:rounded-xl sm:rounded-2xl ${theme.bg.hover} transition-colors`}>
                 <div className="flex items-center gap-2 xs:gap-3 xs:gap-4 min-w-0 flex-1">
                   <div className={`w-8 h-8 xs:w-9 xs:h-9 sm:w-10 sm:h-10 rounded-lg xs:rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 ${
                     activity.type === "revenue" ? "bg-blue-500/10" :
@@ -479,14 +538,22 @@ const Reports = () => {
                   </div>
                   
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium text-gray-900 text-xs xs:text-sm truncate">{activity.action}</div>
-                    <div className="text-gray-600 text-xs mt-0.5">{activity.time}</div>
+                    <div className={`font-medium ${theme.text.primary} text-xs xs:text-sm truncate`}>
+                      {activity.action}
+                    </div>
+                    <div className={`${theme.text.secondary} text-xs mt-0.5`}>
+                      {activity.time}
+                    </div>
                   </div>
                 </div>
                 
                 <div className="text-right ml-2 flex-shrink-0">
-                  <div className="font-semibold text-gray-900 text-xs xs:text-sm truncate">{activity.amount}</div>
-                  <div className="text-gray-600 text-xs capitalize">{activity.type}</div>
+                  <div className={`font-semibold ${theme.text.primary} text-xs xs:text-sm truncate`}>
+                    {activity.amount}
+                  </div>
+                  <div className={`${theme.text.secondary} text-xs capitalize`}>
+                    {activity.type}
+                  </div>
                 </div>
               </div>
             ))}

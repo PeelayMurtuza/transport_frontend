@@ -20,6 +20,7 @@ import {
   Sparkles,
   PartyPopper
 } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext"; 
 
 const AfterPosting = ({ load = {
   id: "TC12478",
@@ -33,6 +34,7 @@ const AfterPosting = ({ load = {
   driverMatches: 12
 } }) => {
   const navigate = useNavigate();
+  const { theme, isDark } = useTheme();
   const [showConfetti, setShowConfetti] = useState(true);
   const [copiedId, setCopiedId] = useState(false);
 
@@ -89,20 +91,32 @@ const AfterPosting = ({ load = {
     </div>
   );
 
-  const StatCard = ({ icon, label, value, color }) => (
-    <motion.div
-      whileHover={{ scale: 1.05, y: -2 }}
-      className={`p-3 xs:p-4 sm:p-5 lg:p-6 rounded-xl xs:rounded-2xl lg:rounded-3xl backdrop-blur-sm border ${color} shadow-lg min-h-[80px] xs:min-h-[90px] sm:min-h-[100px] flex flex-col justify-center`}
-    >
-      <div className="flex items-center gap-2 xs:gap-3 mb-2 xs:mb-3">
-        <div className="p-1 xs:p-2 bg-white/20 rounded-lg xs:rounded-xl flex-shrink-0">
-          {React.cloneElement(icon, { className: "size-3 xs:size-4 sm:size-5" + (icon.props.className || "") })}
+  const StatCard = ({ icon, label, value, color }) => {
+    const bgColor = isDark 
+      ? color.replace('50', '900/30').replace('200', '700')
+      : color;
+    
+    return (
+      <motion.div
+        whileHover={{ scale: 1.05, y: -2 }}
+        className={`p-3 xs:p-4 sm:p-5 lg:p-6 rounded-xl xs:rounded-2xl lg:rounded-3xl backdrop-blur-sm border ${bgColor} ${theme.shadow.lg} min-h-[80px] xs:min-h-[90px] sm:min-h-[100px] flex flex-col justify-center`}
+      >
+        <div className="flex items-center gap-2 xs:gap-3 mb-2 xs:mb-3">
+          <div className={`p-1 xs:p-2 ${isDark ? 'bg-white/10' : 'bg-white/20'} rounded-lg xs:rounded-xl flex-shrink-0`}>
+            {React.cloneElement(icon, { 
+              className: "size-3 xs:size-4 sm:size-5" + (icon.props.className || "") 
+            })}
+          </div>
+          <div className={`text-xs xs:text-sm font-medium ${theme.text.secondary} truncate`}>
+            {label}
+          </div>
         </div>
-        <div className="text-xs xs:text-sm font-medium text-gray-600 truncate">{label}</div>
-      </div>
-      <div className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{value}</div>
-    </motion.div>
-  );
+        <div className={`text-lg xs:text-xl sm:text-2xl font-bold ${theme.text.primary} leading-tight`}>
+          {value}
+        </div>
+      </motion.div>
+    );
+  };
 
   const QuickAction = ({ icon, label, onClick, variant = "primary" }) => (
     <motion.button
@@ -112,7 +126,7 @@ const AfterPosting = ({ load = {
       className={`flex items-center gap-2 xs:gap-3 px-3 xs:px-4 sm:px-5 lg:px-6 py-2 xs:py-3 sm:py-4 rounded-lg xs:rounded-xl lg:rounded-2xl font-semibold transition-all text-xs xs:text-sm ${
         variant === "primary" 
           ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl"
-          : "bg-white/80 text-gray-700 border border-gray-200 hover:bg-white"
+          : `${theme.button.secondary} border ${theme.border.secondary} ${theme.shadow.sm}`
       }`}
     >
       {React.cloneElement(icon, { className: "size-3 xs:size-4 sm:size-5" })}
@@ -121,7 +135,11 @@ const AfterPosting = ({ load = {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50/30 to-purple-50/30 p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center">
+    <div className={`min-h-screen bg-gradient-to-br ${
+      isDark 
+        ? 'from-gray-900 via-gray-800 to-gray-900' 
+        : 'from-green-50 via-blue-50/30 to-purple-50/30'
+    } p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center`}>
       {/* Confetti Animation */}
       <AnimatePresence>
         {showConfetti && <Confetti />}
@@ -132,7 +150,9 @@ const AfterPosting = ({ load = {
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.6, type: "spring" }}
-          className="bg-white/80 backdrop-blur-xl rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl lg:shadow-2xl border border-white/20 overflow-hidden"
+          className={`${theme.card.bg} backdrop-blur-xl rounded-xl xs:rounded-2xl sm:rounded-3xl ${theme.shadow.xl} border ${
+            isDark ? 'border-gray-700' : 'border-white/20'
+          } overflow-hidden`}
         >
           {/* Header Section */}
           <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 xs:p-5 sm:p-6 lg:p-8 xl:p-10 text-center relative overflow-hidden">
@@ -178,15 +198,23 @@ const AfterPosting = ({ load = {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-col lg:flex-row items-center justify-between gap-3 xs:gap-4 mb-4 xs:mb-5 sm:mb-6 lg:mb-8 p-3 xs:p-4 sm:p-5 lg:p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl xs:rounded-2xl lg:rounded-3xl border border-blue-200/50"
+              className={`flex flex-col lg:flex-row items-center justify-between gap-3 xs:gap-4 mb-4 xs:mb-5 sm:mb-6 lg:mb-8 p-3 xs:p-4 sm:p-5 lg:p-6 rounded-xl xs:rounded-2xl lg:rounded-3xl border ${
+                isDark 
+                  ? 'bg-gradient-to-r from-blue-900/20 to-purple-900/20 border-blue-800/50' 
+                  : 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200/50'
+              }`}
             >
               <div className="flex items-center gap-2 xs:gap-3 min-w-0">
                 <div className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg xs:rounded-xl lg:rounded-2xl flex items-center justify-center flex-shrink-0">
                   <Truck className="text-white size-3 xs:size-4 sm:size-5 lg:size-6" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs xs:text-sm text-gray-600">Load Reference</div>
-                  <div className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">#{load.id}</div>
+                  <div className={`text-xs xs:text-sm ${theme.text.secondary}`}>
+                    Load Reference
+                  </div>
+                  <div className={`text-lg xs:text-xl sm:text-2xl font-bold ${theme.text.primary} truncate`}>
+                    #{load.id}
+                  </div>
                 </div>
               </div>
               
@@ -195,7 +223,9 @@ const AfterPosting = ({ load = {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={copyToClipboard}
-                  className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-2 bg-white border border-gray-200 rounded-lg xs:rounded-xl lg:rounded-2xl hover:bg-gray-50 transition-colors text-xs xs:text-sm"
+                  className={`flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-2 ${
+                    isDark ? 'bg-gray-700 border-gray-600 hover:bg-gray-600' : 'bg-white border-gray-200 hover:bg-gray-50'
+                  } border rounded-lg xs:rounded-xl lg:rounded-2xl transition-colors text-xs xs:text-sm`}
                 >
                   <Copy className="size-3 xs:size-4" />
                   <span>{copiedId ? "Copied!" : "Copy ID"}</span>
@@ -205,7 +235,9 @@ const AfterPosting = ({ load = {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={shareLoad}
-                  className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-2 bg-white border border-gray-200 rounded-lg xs:rounded-xl lg:rounded-2xl hover:bg-gray-50 transition-colors text-xs xs:text-sm"
+                  className={`flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-2 ${
+                    isDark ? 'bg-gray-700 border-gray-600 hover:bg-gray-600' : 'bg-white border-gray-200 hover:bg-gray-50'
+                  } border rounded-lg xs:rounded-xl lg:rounded-2xl transition-colors text-xs xs:text-sm`}
                 >
                   <Share2 className="size-3 xs:size-4" />
                   <span>Share</span>
@@ -224,25 +256,25 @@ const AfterPosting = ({ load = {
                 icon={<MapPin className="text-blue-500" />}
                 label="Total Distance"
                 value={load.distance}
-                color="bg-blue-50/50 border-blue-200"
+                color={isDark ? "bg-blue-900/30 border-blue-800" : "bg-blue-50/50 border-blue-200"}
               />
               <StatCard
                 icon={<IndianRupee className="text-green-500" />}
                 label="Expected Freight"
                 value={load.freight}
-                color="bg-green-50/50 border-green-200"
+                color={isDark ? "bg-green-900/30 border-green-800" : "bg-green-50/50 border-green-200"}
               />
               <StatCard
                 icon={<Users className="text-purple-500" />}
                 label="Driver Matches"
                 value={load.driverMatches}
-                color="bg-purple-50/50 border-purple-200"
+                color={isDark ? "bg-purple-900/30 border-purple-800" : "bg-purple-50/50 border-purple-200"}
               />
               <StatCard
                 icon={<Clock className="text-orange-500" />}
                 label="Avg Response"
                 value="< 15min"
-                color="bg-orange-50/50 border-orange-200"
+                color={isDark ? "bg-orange-900/30 border-orange-800" : "bg-orange-50/50 border-orange-200"}
               />
             </motion.div>
 
@@ -251,10 +283,14 @@ const AfterPosting = ({ load = {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="p-3 xs:p-4 sm:p-5 lg:p-6 bg-gray-50/50 rounded-xl xs:rounded-2xl lg:rounded-3xl border border-gray-200 mb-4 xs:mb-5 sm:mb-6 lg:mb-8"
+              className={`p-3 xs:p-4 sm:p-5 lg:p-6 rounded-xl xs:rounded-2xl lg:rounded-3xl border ${
+                isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50/50 border-gray-200'
+              } mb-4 xs:mb-5 sm:mb-6 lg:mb-8`}
             >
               <div className="flex items-center justify-between mb-3 xs:mb-4">
-                <h3 className="font-semibold text-gray-900 text-sm xs:text-base">Route Overview</h3>
+                <h3 className={`font-semibold ${theme.text.primary} text-sm xs:text-base`}>
+                  Route Overview
+                </h3>
                 <div className="flex items-center gap-1 text-green-600">
                   <Sparkles className="size-3 xs:size-4" />
                   <span className="text-xs xs:text-sm font-medium">Live Tracking Ready</span>
@@ -264,21 +300,25 @@ const AfterPosting = ({ load = {
               <div className="flex items-center justify-between">
                 <div className="text-center min-w-0 flex-1">
                   <div className="w-2 h-2 xs:w-3 xs:h-3 bg-blue-500 rounded-full mx-auto mb-1 xs:mb-2"></div>
-                  <div className="font-medium text-gray-900 text-xs xs:text-sm truncate">{load.from}</div>
-                  <div className="text-gray-600 text-xs">Pickup</div>
+                  <div className={`font-medium ${theme.text.primary} text-xs xs:text-sm truncate`}>
+                    {load.from}
+                  </div>
+                  <div className={`text-xs ${theme.text.secondary}`}>Pickup</div>
                 </div>
                 
                 <div className="flex-1 mx-2 xs:mx-3 sm:mx-4 relative">
                   <div className="h-1 bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 rounded-full"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Truck className="text-gray-400 animate-pulse size-3 xs:size-4 sm:size-5" />
+                    <Truck className={`${isDark ? 'text-gray-500' : 'text-gray-400'} animate-pulse size-3 xs:size-4 sm:size-5`} />
                   </div>
                 </div>
                 
                 <div className="text-center min-w-0 flex-1">
                   <div className="w-2 h-2 xs:w-3 xs:h-3 bg-green-500 rounded-full mx-auto mb-1 xs:mb-2"></div>
-                  <div className="font-medium text-gray-900 text-xs xs:text-sm truncate">{load.to}</div>
-                  <div className="text-gray-600 text-xs">Delivery</div>
+                  <div className={`font-medium ${theme.text.primary} text-xs xs:text-sm truncate`}>
+                    {load.to}
+                  </div>
+                  <div className={`text-xs ${theme.text.secondary}`}>Delivery</div>
                 </div>
               </div>
             </motion.div>
@@ -332,29 +372,30 @@ const AfterPosting = ({ load = {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
-              className="mt-4 xs:mt-5 sm:mt-6 lg:mt-8 p-3 xs:p-4 sm:p-5 lg:p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl xs:rounded-2xl lg:rounded-3xl border border-green-200"
+              className={`mt-4 xs:mt-5 sm:mt-6 lg:mt-8 p-3 xs:p-4 sm:p-5 lg:p-6 rounded-xl xs:rounded-2xl lg:rounded-3xl border ${
+                isDark 
+                  ? 'bg-gradient-to-r from-green-900/20 to-emerald-900/20 border-green-800' 
+                  : 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
+              }`}
             >
-              <h4 className="font-semibold text-gray-900 text-sm xs:text-base mb-2 xs:mb-3 flex items-center gap-1 xs:gap-2">
+              <h4 className={`font-semibold ${theme.text.primary} text-sm xs:text-base mb-2 xs:mb-3 flex items-center gap-1 xs:gap-2`}>
                 <CheckCircle className="text-green-500 size-4 xs:size-5" />
                 What happens next?
               </h4>
-              <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3 text-xs xs:text-sm text-gray-700">
-                <div className="flex items-center gap-1 xs:gap-2">
-                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                  <span className="leading-tight">Drivers will start bidding within minutes</span>
-                </div>
-                <div className="flex items-center gap-1 xs:gap-2">
-                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                  <span className="leading-tight">You'll receive push notifications for new bids</span>
-                </div>
-                <div className="flex items-center gap-1 xs:gap-2">
-                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                  <span className="leading-tight">Chat directly with interested drivers</span>
-                </div>
-                <div className="flex items-center gap-1 xs:gap-2">
-                  <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                  <span className="leading-tight">Track all activity in your loads dashboard</span>
-                </div>
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3 text-xs xs:text-sm">
+                {[
+                  "Drivers will start bidding within minutes",
+                  "You'll receive push notifications for new bids",
+                  "Chat directly with interested drivers",
+                  "Track all activity in your loads dashboard"
+                ].map((tip, index) => (
+                  <div key={index} className="flex items-center gap-1 xs:gap-2">
+                    <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                    <span className={`leading-tight ${theme.text.secondary}`}>
+                      {tip}
+                    </span>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </div>

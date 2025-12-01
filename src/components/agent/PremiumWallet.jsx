@@ -36,8 +36,9 @@ import {
   YAxis,
   CartesianGrid
 } from "recharts";
-
+import { useTheme } from "../../context/ThemeContext"; 
 const PremiumWallet = () => {
+  const { theme, isDark } = useTheme();
   const [balance, setBalance] = useState(14500);
   const [showBalance, setShowBalance] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
@@ -134,6 +135,22 @@ const PremiumWallet = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
+        <div className={`${theme.card.bg} ${theme.card.border} rounded-lg xs:rounded-xl sm:rounded-2xl p-2 xs:p-3 sm:p-4 ${theme.shadow.xl} backdrop-blur-sm text-xs xs:text-sm`}>
+          <p className={`font-semibold ${theme.text.primary}`}>{label}</p>
+          {payload.map((entry, index) => (
+            <p key={index} style={{ color: entry.color }}>
+              {entry.name}: ₹{entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const ModalCustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
         <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg xs:rounded-xl sm:rounded-2xl p-2 xs:p-3 sm:p-4 shadow-2xl text-xs xs:text-sm">
           <p className="font-semibold text-gray-900">{label}</p>
           {payload.map((entry, index) => (
@@ -148,7 +165,11 @@ const PremiumWallet = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/20 to-purple-50/20 p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8">
+    <div className={`min-h-screen bg-gradient-to-br ${
+      isDark 
+        ? 'from-gray-900 via-gray-800 to-gray-900' 
+        : 'from-gray-50 via-blue-50/20 to-purple-50/20'
+    } p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8`}>
       <div className="max-w-6xl mx-auto space-y-3 xs:space-y-4 sm:space-y-5 md:space-y-6">
         {/* Header */}
         <motion.div
@@ -157,10 +178,10 @@ const PremiumWallet = () => {
           className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 xs:gap-3 sm:gap-4"
         >
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+            <h1 className={`text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-bold ${theme.text.primary} leading-tight`}>
               Digital <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Wallet</span>
             </h1>
-            <p className="text-gray-600 mt-1 text-xs xs:text-sm sm:text-base leading-relaxed">
+            <p className={`${theme.text.secondary} mt-1 text-xs xs:text-sm sm:text-base leading-relaxed`}>
               Manage your earnings and payments securely
             </p>
           </div>
@@ -168,11 +189,14 @@ const PremiumWallet = () => {
           <div className="flex items-center gap-1 xs:gap-2 sm:gap-3 mt-2 lg:mt-0">
             <button
               onClick={() => setShowBalance(!showBalance)}
-              className="p-2 xs:p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg xs:rounded-xl sm:rounded-2xl hover:shadow-lg transition-all"
+              className={`p-2 xs:p-3 ${theme.card.bg} backdrop-blur-sm ${theme.border.primary} rounded-lg xs:rounded-xl sm:rounded-2xl ${theme.shadow.sm} hover:${theme.shadow.md} transition-all`}
             >
-              {showBalance ? <Eye className="size-3 xs:size-4 sm:size-5" /> : <EyeOff className="size-3 xs:size-4 sm:size-5" />}
+              {showBalance ? 
+                <Eye className="size-3 xs:size-4 sm:size-5" /> : 
+                <EyeOff className="size-3 xs:size-4 sm:size-5" />
+              }
             </button>
-            <button className="p-2 xs:p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg xs:rounded-xl sm:rounded-2xl hover:shadow-lg transition-all">
+            <button className={`p-2 xs:p-3 ${theme.card.bg} backdrop-blur-sm ${theme.border.primary} rounded-lg xs:rounded-xl sm:rounded-2xl ${theme.shadow.sm} hover:${theme.shadow.md} transition-all`}>
               <MoreVertical className="size-3 xs:size-4 sm:size-5" />
             </button>
           </div>
@@ -257,7 +281,7 @@ const PremiumWallet = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl p-1 border border-gray-200"
+          className={`flex ${theme.card.bg} backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl p-1 ${theme.border.secondary}`}
         >
           {["overview", "transactions", "analytics"].map((tab) => (
             <button
@@ -266,7 +290,7 @@ const PremiumWallet = () => {
               className={`flex-1 px-2 xs:px-3 sm:px-4 py-2 xs:py-3 rounded-lg xs:rounded-xl text-xs xs:text-sm font-medium capitalize transition-all ${
                 activeTab === tab 
                   ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg" 
-                  : "text-gray-600 hover:text-gray-900"
+                  : `${theme.text.secondary} hover:${theme.text.primary}`
               }`}
             >
               {tab}
@@ -285,9 +309,11 @@ const PremiumWallet = () => {
               className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 md:gap-6"
             >
               {/* Balance Distribution */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
                 <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-                  <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Balance Distribution</h3>
+                  <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                    Balance Distribution
+                  </h3>
                   <BarChart3 className="size-4 xs:size-5 text-gray-400" />
                 </div>
                 
@@ -318,27 +344,40 @@ const PremiumWallet = () => {
                           className="w-2 h-2 xs:w-3 xs:h-3 rounded-full flex-shrink-0" 
                           style={{ backgroundColor: COLORS[index] }}
                         />
-                        <span className="text-xs xs:text-sm font-medium text-gray-700 truncate">{item.name}</span>
+                        <span className={`text-xs xs:text-sm font-medium ${theme.text.secondary} truncate`}>
+                          {item.name}
+                        </span>
                       </div>
-                      <div className="text-sm xs:text-base sm:text-lg font-bold leading-tight">₹{item.value.toLocaleString()}</div>
+                      <div className={`text-sm xs:text-base sm:text-lg font-bold ${theme.text.primary} leading-tight`}>
+                        ₹{item.value.toLocaleString()}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Balance Trend */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
                 <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-                  <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Weekly Balance Trend</h3>
+                  <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                    Weekly Balance Trend
+                  </h3>
                   <TrendingUp className="size-4 xs:size-5 text-gray-400" />
                 </div>
                 
                 <div className="h-48 xs:h-52 sm:h-56 md:h-60 lg:h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="day" tick={{ fontSize: 10 }} />
-                      <YAxis tick={{ fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#f0f0f0"} />
+                      <XAxis 
+                        dataKey="day" 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 10 }} 
+                        stroke={isDark ? "#9ca3af" : "#6b7280"}
+                      />
                       <Tooltip content={<CustomTooltip />} />
                       <Area 
                         type="monotone" 
@@ -361,15 +400,17 @@ const PremiumWallet = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+              className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}
             >
               <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-                <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Transaction History</h3>
+                <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary}`}>
+                  Transaction History
+                </h3>
                 <div className="flex items-center gap-1 xs:gap-2">
-                  <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
+                  <button className={`p-1 xs:p-2 hover:${theme.bg.hover} rounded-lg xs:rounded-xl transition-colors`}>
                     <Download className="size-3 xs:size-4" />
                   </button>
-                  <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
+                  <button className={`p-1 xs:p-2 hover:${theme.bg.hover} rounded-lg xs:rounded-xl transition-colors`}>
                     <MoreVertical className="size-3 xs:size-4" />
                   </button>
                 </div>
@@ -381,7 +422,9 @@ const PremiumWallet = () => {
                     key={transaction.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="flex items-center justify-between p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-100/50 transition-colors group"
+                    className={`flex items-center justify-between p-2 xs:p-3 sm:p-4 ${
+                      isDark ? 'bg-gray-800/50' : 'bg-gray-50/50'
+                    } rounded-lg xs:rounded-xl sm:rounded-2xl ${theme.bg.hover} transition-colors group`}
                   >
                     <div className="flex items-center gap-2 xs:gap-3 xs:gap-4 min-w-0 flex-1">
                       <div className={`p-2 xs:p-3 rounded-lg xs:rounded-xl ${
@@ -396,10 +439,10 @@ const PremiumWallet = () => {
                       </div>
                       
                       <div className="min-w-0 flex-1">
-                        <div className="font-semibold text-gray-900 text-xs xs:text-sm truncate">
+                        <div className={`font-semibold ${theme.text.primary} text-xs xs:text-sm truncate`}>
                           {transaction.description}
                         </div>
-                        <div className="flex items-center gap-1 xs:gap-2 text-xs text-gray-600 mt-0.5">
+                        <div className={`flex items-center gap-1 xs:gap-2 text-xs ${theme.text.secondary} mt-0.5`}>
                           {transaction.icon}
                           <span>{transaction.date}</span>
                           <span className={`px-1 xs:px-2 py-0.5 xs:py-1 rounded-full text-xs ${
@@ -433,18 +476,24 @@ const PremiumWallet = () => {
               className="grid grid-cols-1 lg:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 md:gap-6"
             >
               {/* Monthly Earnings */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
-                <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 mb-3 xs:mb-4 sm:mb-5 lg:mb-6">Monthly Performance</h3>
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
+                <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary} mb-3 xs:mb-4 sm:mb-5 lg:mb-6`}>
+                  Monthly Performance
+                </h3>
                 <div className="space-y-2 xs:space-y-3 sm:space-y-4">
                   {[
                     { label: "Total Earnings", value: `₹${analytics.monthlyEarnings.toLocaleString()}`, change: "+12.5%" },
                     { label: "Withdrawals", value: `₹${analytics.totalWithdrawals.toLocaleString()}`, change: "+8.2%" },
                     { label: "Net Growth", value: `₹${(analytics.monthlyEarnings - analytics.totalWithdrawals).toLocaleString()}`, change: "+15.3%" }
                   ].map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl">
+                    <div key={index} className={`flex items-center justify-between p-2 xs:p-3 sm:p-4 ${
+                      isDark ? 'bg-gray-800/50' : 'bg-gray-50/50'
+                    } rounded-lg xs:rounded-xl sm:rounded-2xl`}>
                       <div className="min-w-0">
-                        <div className="text-xs xs:text-sm text-gray-600">{item.label}</div>
-                        <div className="text-base xs:text-lg sm:text-xl font-bold text-gray-900 leading-tight">{item.value}</div>
+                        <div className={`text-xs xs:text-sm ${theme.text.secondary}`}>{item.label}</div>
+                        <div className={`text-base xs:text-lg sm:text-xl font-bold ${theme.text.primary} leading-tight`}>
+                          {item.value}
+                        </div>
                       </div>
                       <div className="text-green-500 font-semibold text-xs xs:text-sm">{item.change}</div>
                     </div>
@@ -453,8 +502,10 @@ const PremiumWallet = () => {
               </div>
 
               {/* Payment Methods */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50">
-                <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 mb-3 xs:mb-4 sm:mb-5 lg:mb-6">Payment Methods</h3>
+              <div className={`${theme.card.bg} backdrop-blur-sm rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 ${theme.shadow.xl} ${theme.border.secondary}`}>
+                <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${theme.text.primary} mb-3 xs:mb-4 sm:mb-5 lg:mb-6`}>
+                  Payment Methods
+                </h3>
                 <div className="space-y-2 xs:space-y-3 sm:space-y-4">
                   {[
                     { icon: <Banknote className="size-3 xs:size-4 sm:size-5" />, name: "Bank Transfer", status: "Connected" },
@@ -462,13 +513,17 @@ const PremiumWallet = () => {
                     { icon: <Smartphone className="size-3 xs:size-4 sm:size-5" />, name: "UPI", status: "Verify" },
                     { icon: <Gift className="size-3 xs:size-4 sm:size-5" />, name: "Rewards", status: "Active" }
                   ].map((method, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-100/50 transition-colors">
+                    <div key={index} className={`flex items-center justify-between p-2 xs:p-3 sm:p-4 ${
+                      isDark ? 'bg-gray-800/50' : 'bg-gray-50/50'
+                    } rounded-lg xs:rounded-xl sm:rounded-2xl ${theme.bg.hover} transition-colors`}>
                       <div className="flex items-center gap-2 xs:gap-3 min-w-0 flex-1">
                         <div className="p-1 xs:p-2 bg-blue-500/10 rounded-lg xs:rounded-xl">
                           {method.icon}
                         </div>
                         <div className="min-w-0">
-                          <div className="font-semibold text-gray-900 text-xs xs:text-sm truncate">{method.name}</div>
+                          <div className={`font-semibold ${theme.text.primary} text-xs xs:text-sm truncate`}>
+                            {method.name}
+                          </div>
                           <div className={`text-xs ${
                             method.status === "Connected" ? "text-green-600" : 
                             method.status === "Verify" ? "text-yellow-600" : "text-blue-600"
@@ -477,7 +532,7 @@ const PremiumWallet = () => {
                           </div>
                         </div>
                       </div>
-                      <button className="text-blue-600 hover:text-blue-700 font-medium text-xs xs:text-sm ml-2">
+                      <button className={`text-blue-600 hover:text-blue-700 font-medium text-xs xs:text-sm ml-2`}>
                         Manage
                       </button>
                     </div>
@@ -501,13 +556,15 @@ const PremiumWallet = () => {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                className="bg-white rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 max-w-md w-full shadow-2xl"
+                className={`${theme.card.bg} rounded-xl xs:rounded-2xl sm:rounded-3xl p-3 xs:p-4 sm:p-5 lg:p-6 max-w-md w-full ${theme.shadow.xl}`}
               >
-                <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 mb-2 xs:mb-3 sm:mb-4">Add Money to Wallet</h3>
+                <h3 className={`text-lg xs:text-xl sm:text-2xl font-bold ${theme.text.primary} mb-2 xs:mb-3 sm:mb-4`}>
+                  Add Money to Wallet
+                </h3>
                 
                 <div className="space-y-3 xs:space-y-4">
                   <div>
-                    <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-1 xs:mb-2">
+                    <label className={`block text-xs xs:text-sm font-medium ${theme.text.secondary} mb-1 xs:mb-2`}>
                       Amount
                     </label>
                     <input
@@ -515,7 +572,7 @@ const PremiumWallet = () => {
                       value={addAmount}
                       onChange={(e) => setAddAmount(e.target.value)}
                       placeholder="Enter amount"
-                      className="w-full px-3 xs:px-4 py-2 xs:py-3 border border-gray-300 rounded-lg xs:rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs xs:text-sm"
+                      className={`w-full px-3 xs:px-4 py-2 xs:py-3 ${theme.border.primary} rounded-lg xs:rounded-xl sm:rounded-2xl ${theme.input.focus} text-xs xs:text-sm ${theme.input.bg} ${theme.input.text}`}
                     />
                   </div>
                   
@@ -524,7 +581,7 @@ const PremiumWallet = () => {
                       <button
                         key={amount}
                         onClick={() => setAddAmount(amount.toString())}
-                        className="p-2 xs:p-3 border border-gray-300 rounded-lg xs:rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-xs xs:text-sm"
+                        className={`p-2 xs:p-3 ${theme.border.primary} rounded-lg xs:rounded-xl hover:border-blue-500 hover:${theme.bg.accent} transition-colors text-xs xs:text-sm ${theme.text.primary}`}
                       >
                         ₹{amount}
                       </button>
@@ -534,7 +591,7 @@ const PremiumWallet = () => {
                   <div className="flex gap-2 xs:gap-3 pt-3 xs:pt-4">
                     <button
                       onClick={() => setIsAddingMoney(false)}
-                      className="flex-1 px-3 xs:px-4 py-2 xs:py-3 border border-gray-300 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-50 transition-colors text-xs xs:text-sm"
+                      className={`flex-1 px-3 xs:px-4 py-2 xs:py-3 ${theme.border.primary} rounded-lg xs:rounded-xl sm:rounded-2xl hover:${theme.bg.hover} transition-colors text-xs xs:text-sm ${theme.text.primary}`}
                     >
                       Cancel
                     </button>

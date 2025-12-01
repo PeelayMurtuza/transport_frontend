@@ -28,7 +28,9 @@ import {
   Cloud,
   Sparkles,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from "lucide-react";
 import {
   LineChart,
@@ -47,6 +49,7 @@ import {
   AreaChart,
   Area
 } from "recharts";
+import { useTheme } from "../../context/ThemeContext";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -55,6 +58,8 @@ const Dashboard = () => {
   const [connectionStatus, setConnectionStatus] = useState("online");
   const [batteryLevel, setBatteryLevel] = useState(100);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { theme, isDark, toggleTheme } = useTheme();
 
   // Simulate loading
   useEffect(() => {
@@ -77,14 +82,14 @@ const Dashboard = () => {
     window.addEventListener('offline', () => setConnectionStatus("offline"));
   }, []);
 
-  // Enhanced stats data
+  // Enhanced stats data with theme-based colors
   const stats = [
     {
       title: "Active Loads",
       value: "12",
       change: "+2",
       changeType: "increase",
-      color: "from-blue-500 to-cyan-500",
+      color: isDark ? "from-blue-600 to-cyan-600" : "from-blue-500 to-cyan-500",
       icon: <Truck className="size-4 xs:size-5 sm:size-6" />,
       description: "Currently in transit"
     },
@@ -93,7 +98,7 @@ const Dashboard = () => {
       value: "35",
       change: "+8",
       changeType: "increase",
-      color: "from-green-500 to-emerald-500",
+      color: isDark ? "from-green-600 to-emerald-600" : "from-green-500 to-emerald-500",
       icon: <Package className="size-4 xs:size-5 sm:size-6" />,
       description: "This month"
     },
@@ -102,7 +107,7 @@ const Dashboard = () => {
       value: "₹1,45,500",
       change: "+12%",
       changeType: "increase",
-      color: "from-purple-500 to-pink-500",
+      color: isDark ? "from-purple-600 to-pink-600" : "from-purple-500 to-pink-500",
       icon: <DollarSign className="size-4 xs:size-5 sm:size-6" />,
       description: "Monthly earnings"
     },
@@ -111,7 +116,7 @@ const Dashboard = () => {
       value: "94.2%",
       change: "+2.1%",
       changeType: "increase",
-      color: "from-orange-500 to-red-500",
+      color: isDark ? "from-orange-600 to-red-600" : "from-orange-500 to-red-500",
       icon: <Clock className="size-4 xs:size-5 sm:size-6" />,
       description: "Delivery performance"
     }
@@ -160,7 +165,7 @@ const Dashboard = () => {
       message: "New load posted: Mumbai → Delhi",
       time: "2 hours ago",
       status: "active",
-      icon: <Truck className="text-blue-500 size-3 xs:size-4 sm:size-5" />
+      icon: <Truck className={`${isDark ? 'text-blue-400' : 'text-blue-500'} size-3 xs:size-4 sm:size-5`} />
     },
     {
       id: 2,
@@ -168,7 +173,7 @@ const Dashboard = () => {
       message: "Job completed: Pune → Surat",
       time: "5 hours ago",
       status: "completed",
-      icon: <CheckCircle2 className="text-green-500 size-3 xs:size-4 sm:size-5" />
+      icon: <CheckCircle2 className={`${isDark ? 'text-green-400' : 'text-green-500'} size-3 xs:size-4 sm:size-5`} />
     },
     {
       id: 3,
@@ -176,7 +181,7 @@ const Dashboard = () => {
       message: "Payment received: ₹2,000",
       time: "1 day ago",
       status: "payment",
-      icon: <DollarSign className="text-purple-500 size-3 xs:size-4 sm:size-5" />
+      icon: <DollarSign className={`${isDark ? 'text-purple-400' : 'text-purple-500'} size-3 xs:size-4 sm:size-5`} />
     },
     {
       id: 4,
@@ -184,7 +189,7 @@ const Dashboard = () => {
       message: "Delay alert: Bangalore → Hyderabad",
       time: "2 days ago",
       status: "alert",
-      icon: <AlertCircle className="text-orange-500 size-3 xs:size-4 sm:size-5" />
+      icon: <AlertCircle className={`${isDark ? 'text-orange-400' : 'text-orange-500'} size-3 xs:size-4 sm:size-5`} />
     }
   ];
 
@@ -215,12 +220,23 @@ const Dashboard = () => {
     }
   ];
 
-  // Custom tooltip for charts
+  // Theme-based chart colors
+  const chartColors = {
+    grid: isDark ? '#374151' : '#f0f0f0',
+    text: isDark ? '#d1d5db' : '#6b7280',
+    tooltipBg: isDark ? '#1f2937' : '#ffffff',
+    tooltipText: isDark ? '#ffffff' : '#111827',
+    tooltipBorder: isDark ? '#374151' : '#e5e7eb',
+  };
+
+  // Custom tooltip for charts with theme support
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 shadow-2xl text-xs sm:text-sm">
-          <p className="font-semibold text-gray-900 text-xs sm:text-sm">{label}</p>
+        <div className={`${isDark ? 'bg-gray-800/95' : 'bg-white/95'} backdrop-blur-sm border ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        } rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 shadow-2xl text-xs sm:text-sm`}>
+          <p className={`font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'} text-xs sm:text-sm`}>{label}</p>
           {payload.map((entry, index) => (
             <p key={index} className="text-xs sm:text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value}
@@ -237,30 +253,49 @@ const Dashboard = () => {
       <div className="flex items-center gap-1 xs:gap-2 sm:gap-3 md:gap-4 flex-wrap">
         <div className={`flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full text-xs ${
           connectionStatus === "online" 
-            ? "bg-green-500/20 text-green-400" 
-            : "bg-red-500/20 text-red-400"
+            ? `${isDark ? 'bg-green-600/20' : 'bg-green-500/20'} ${isDark ? 'text-green-400' : 'text-green-600'}` 
+            : `${isDark ? 'bg-red-600/20' : 'bg-red-500/20'} ${isDark ? 'text-red-400' : 'text-red-600'}`
         }`}>
           <Wifi className="size-2 xs:size-3 sm:size-3 md:size-4" />
           <span className="capitalize hidden xs:inline">{connectionStatus}</span>
           <span className="capitalize xs:hidden">Online</span>
         </div>
         
-        <div className="flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs">
+        <div className={`flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full text-xs ${
+          isDark ? 'bg-blue-600/20 text-blue-400' : 'bg-blue-500/20 text-blue-600'
+        }`}>
           <Battery className="size-2 xs:size-3 sm:size-3 md:size-4" />
           <span>{batteryLevel}%</span>
         </div>
 
-        <div className="flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">
+        <div className={`flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full text-xs ${
+          isDark ? 'bg-purple-600/20 text-purple-400' : 'bg-purple-500/20 text-purple-600'
+        }`}>
           <Cloud className="size-2 xs:size-3 sm:size-3 md:size-4" />
           <span className="hidden sm:inline">Live Sync</span>
           <span className="sm:hidden">Sync</span>
         </div>
+
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className={`flex items-center gap-1 px-2 py-1 xs:px-2 xs:py-1 sm:px-3 sm:py-1 rounded-full text-xs ${
+            isDark ? 'bg-amber-600/20 text-amber-400' : 'bg-blue-500/20 text-blue-600'
+          }`}
+        >
+          {isDark ? (
+            <Sun className="size-2 xs:size-3 sm:size-3 md:size-4" />
+          ) : (
+            <Moon className="size-2 xs:size-3 sm:size-3 md:size-4" />
+          )}
+          <span className="hidden xs:inline">{isDark ? 'Light' : 'Dark'}</span>
+        </button>
       </div>
       
-      <div className="flex items-center gap-1 text-gray-500 text-xs xs:text-sm">
-        <Sparkles className="size-2 xs:size-3 sm:size-3 md:size-4" />
-        <span className="hidden xs:inline">TransConnect Premium</span>
-        <span className="xs:hidden">Premium</span>
+      <div className="flex items-center gap-1 text-xs xs:text-sm">
+        <Sparkles className={`size-2 xs:size-3 sm:size-3 md:size-4 ${isDark ? 'text-purple-400' : 'text-purple-500'}`} />
+        <span className={`hidden xs:inline ${isDark ? 'text-purple-300' : 'text-purple-600'}`}>TransConnect Premium</span>
+        <span className={`xs:hidden ${isDark ? 'text-purple-300' : 'text-purple-600'}`}>Premium</span>
       </div>
     </div>
   );
@@ -284,15 +319,15 @@ const Dashboard = () => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: "spring", damping: 30 }}
-            className="fixed top-0 right-0 h-full w-64 bg-white/95 backdrop-blur-sm z-50 lg:hidden p-3 sm:p-4"
+            className={`fixed top-0 right-0 h-full w-64 ${isDark ? 'bg-gray-800/95' : 'bg-white/95'} backdrop-blur-sm z-50 lg:hidden p-3 sm:p-4`}
           >
             <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Menu</h3>
+              <h3 className={`font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'} text-sm sm:text-base`}>Menu</h3>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-1 sm:p-2 hover:bg-gray-100 rounded-lg sm:rounded-xl"
+                className={`p-1 sm:p-2 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} rounded-lg sm:rounded-xl`}
               >
-                <X className="size-4 sm:size-5" />
+                <X className={`size-4 sm:size-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
               </button>
             </div>
             
@@ -307,7 +342,7 @@ const Dashboard = () => {
                   className={`w-full text-left px-3 py-2 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium capitalize transition-all ${
                     activeTab === tab 
                       ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white" 
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      : `${isDark ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`
                   }`}
                 >
                   {tab}
@@ -322,24 +357,36 @@ const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-3 sm:p-4">
+      <div className={`min-h-screen flex items-center justify-center p-3 sm:p-4 transition-colors duration-500 ${
+        isDark ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-gradient-to-br from-gray-50 to-blue-50'
+      }`}>
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <div className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 border-3 xs:border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2 xs:mb-3 sm:mb-4"></div>
-          <div className="text-lg xs:text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <div className={`w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 border-3 xs:border-4 ${
+            isDark ? 'border-blue-400' : 'border-blue-500'
+          } border-t-transparent rounded-full animate-spin mx-auto mb-2 xs:mb-3 sm:mb-4`}></div>
+          <div className={`text-lg xs:text-xl sm:text-2xl font-bold ${
+            isDark ? 'bg-gradient-to-r from-blue-400 to-purple-400' : 'bg-gradient-to-r from-blue-600 to-purple-600'
+          } bg-clip-text text-transparent transition-colors duration-500`}>
             TransConnect
           </div>
-          <div className="text-gray-500 mt-1 xs:mt-2 text-xs xs:text-sm sm:text-base">Loading your dashboard...</div>
+          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mt-1 xs:mt-2 text-xs xs:text-sm sm:text-base transition-colors duration-500`}>
+            Loading your dashboard...
+          </div>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8">
+    <div className={`min-h-screen p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 transition-colors duration-500 ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
+        : 'bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30'
+    }`}>
       <MobileMenu />
       
       <div className="max-w-7xl mx-auto space-y-3 xs:space-y-4 sm:space-y-5 md:space-y-6">
@@ -353,13 +400,17 @@ const Dashboard = () => {
           className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 xs:gap-3 sm:gap-4"
         >
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+            <h1 className={`text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ${
+              isDark ? 'text-gray-100' : 'text-gray-900'
+            } leading-tight transition-colors duration-500`}>
               Welcome back,{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block xs:inline">
+              <span className={`${
+                isDark ? 'bg-gradient-to-r from-blue-400 to-purple-400' : 'bg-gradient-to-r from-blue-600 to-purple-600'
+              } bg-clip-text text-transparent block xs:inline transition-colors duration-500`}>
                 Rajesh!
               </span>
             </h1>
-            <p className="text-gray-600 mt-1 text-xs xs:text-sm sm:text-base leading-relaxed">
+            <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 text-xs xs:text-sm sm:text-base leading-relaxed transition-colors duration-500`}>
               Here's what's happening with your logistics today
             </p>
           </div>
@@ -368,13 +419,21 @@ const Dashboard = () => {
             {/* Mobile Menu Button */}
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-1 xs:p-2 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg sm:rounded-xl hover:shadow-lg transition-all flex-shrink-0"
+              className={`lg:hidden p-1 xs:p-2 ${
+                isDark ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'
+              } backdrop-blur-sm border ${
+                isDark ? 'border-gray-700' : 'border-gray-200'
+              } rounded-lg sm:rounded-xl hover:shadow-lg transition-all flex-shrink-0`}
             >
-              <Menu className="size-3 xs:size-4 sm:size-5" />
+              <Menu className={`size-3 xs:size-4 sm:size-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
             </button>
 
             {/* Desktop Tabs */}
-            <div className="hidden lg:flex bg-white/80 backdrop-blur-sm rounded-xl p-1 border border-gray-200">
+            <div className={`hidden lg:flex ${
+              isDark ? 'bg-gray-800/80' : 'bg-white/80'
+            } backdrop-blur-sm rounded-xl p-1 border ${
+              isDark ? 'border-gray-700' : 'border-gray-200'
+            } transition-colors duration-500`}>
               {["overview", "analytics", "drivers", "reports"].map((tab) => (
                 <button
                   key={tab}
@@ -382,7 +441,7 @@ const Dashboard = () => {
                   className={`px-2 xs:px-3 py-1 xs:py-2 rounded-lg text-xs xs:text-sm font-medium capitalize transition-all ${
                     activeTab === tab 
                       ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg" 
-                      : "text-gray-600 hover:text-gray-900"
+                      : `${isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-600 hover:text-gray-900'}`
                   }`}
                 >
                   {tab}
@@ -390,8 +449,12 @@ const Dashboard = () => {
               ))}
             </div>
             
-            <button className="p-1 xs:p-2 sm:p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg sm:rounded-xl lg:rounded-2xl hover:shadow-lg transition-all flex-shrink-0">
-              <Filter className="size-3 xs:size-4 sm:size-5" />
+            <button className={`p-1 xs:p-2 sm:p-3 ${
+              isDark ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'
+            } backdrop-blur-sm border ${
+              isDark ? 'border-gray-700' : 'border-gray-200'
+            } rounded-lg sm:rounded-xl lg:rounded-2xl hover:shadow-lg transition-all flex-shrink-0`}>
+              <Filter className={`size-3 xs:size-4 sm:size-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
             </button>
           </div>
         </motion.div>
@@ -403,7 +466,7 @@ const Dashboard = () => {
           transition={{ delay: 0.1 }}
           className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 md:gap-5 lg:gap-6"
         >
-          {stats.map((stat, index) => (
+          {stats.map((stat) => (
             <motion.div
               key={stat.title}
               whileHover={{ scale: 1.02, y: -2 }}
@@ -449,32 +512,36 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+            className={`${isDark ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border ${
+              isDark ? 'border-gray-700/50' : 'border-gray-200/50'
+            } transition-colors duration-500`}
           >
             <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 truncate">
+                <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${
+                  isDark ? 'text-gray-100' : 'text-gray-900'
+                } truncate transition-colors duration-500`}>
                   Load Performance
                 </h3>
-                <p className="text-gray-600 text-xs xs:text-sm truncate mt-0.5">
+                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs xs:text-sm truncate mt-0.5 transition-colors duration-500`}>
                   Weekly overview of active and completed loads
                 </p>
               </div>
               <div className="flex items-center gap-1 xs:gap-2 flex-shrink-0 ml-2">
-                <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
-                  <Download className="size-3 xs:size-4 sm:size-5" />
+                <button className={`p-1 xs:p-2 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} rounded-lg xs:rounded-xl transition-colors`}>
+                  <Download className={`size-3 xs:size-4 sm:size-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
                 </button>
-                <button className="p-1 xs:p-2 hover:bg-gray-100 rounded-lg xs:rounded-xl transition-colors">
-                  <MoreVertical className="size-3 xs:size-4 sm:size-5" />
+                <button className={`p-1 xs:p-2 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} rounded-lg xs:rounded-xl transition-colors`}>
+                  <MoreVertical className={`size-3 xs:size-4 sm:size-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
                 </button>
               </div>
             </div>
             
             <ResponsiveContainer width="100%" height={180} className="text-xs">
               <AreaChart data={performanceData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="day" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                <XAxis dataKey="day" tick={{ fontSize: 10, fill: chartColors.text }} />
+                <YAxis tick={{ fontSize: 10, fill: chartColors.text }} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area type="monotone" dataKey="active" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} />
                 <Area type="monotone" dataKey="completed" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.2} />
@@ -487,27 +554,33 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+            className={`${isDark ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border ${
+              isDark ? 'border-gray-700/50' : 'border-gray-200/50'
+            } transition-colors duration-500`}
           >
             <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 truncate">
+                <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${
+                  isDark ? 'text-gray-100' : 'text-gray-900'
+                } truncate transition-colors duration-500`}>
                   Revenue Analytics
                 </h3>
-                <p className="text-gray-600 text-xs xs:text-sm truncate mt-0.5">
+                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs xs:text-sm truncate mt-0.5 transition-colors duration-500`}>
                   Monthly revenue and profit trends
                 </p>
               </div>
-              <div className="flex bg-gray-100 rounded-lg xs:rounded-xl p-0.5 xs:p-1 flex-shrink-0 ml-2">
+              <div className={`flex ${
+                isDark ? 'bg-gray-700' : 'bg-gray-100'
+              } rounded-lg xs:rounded-xl p-0.5 xs:p-1 flex-shrink-0 ml-2 transition-colors duration-500`}>
                 {["week", "month", "quarter"].map((range) => (
                   <button
                     key={range}
                     onClick={() => setTimeRange(range)}
                     className={`px-1 xs:px-2 py-0.5 xs:py-1 rounded-md xs:rounded-lg text-xs font-medium capitalize ${
                       timeRange === range 
-                        ? "bg-white text-gray-900 shadow-sm" 
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
+                        ? `${isDark ? 'bg-gray-600 text-gray-100' : 'bg-white text-gray-900'} shadow-sm` 
+                        : `${isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-600 hover:text-gray-900'}`
+                    } transition-colors duration-300`}
                   >
                     {range}
                   </button>
@@ -517,9 +590,9 @@ const Dashboard = () => {
             
             <ResponsiveContainer width="100%" height={180} className="text-xs">
               <BarChart data={revenueData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: chartColors.text }} />
+                <YAxis tick={{ fontSize: 10, fill: chartColors.text }} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="revenue" fill="#8b5cf6" radius={[2, 2, 0, 0]} />
                 <Bar dataKey="profit" fill="#10b981" radius={[2, 2, 0, 0]} />
@@ -532,11 +605,17 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+            className={`${isDark ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border ${
+              isDark ? 'border-gray-700/50' : 'border-gray-200/50'
+            } transition-colors duration-500`}
           >
             <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-              <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Load Distribution</h3>
-              <Eye className="size-3 xs:size-4 sm:size-5 text-gray-400" />
+              <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${
+                isDark ? 'text-gray-100' : 'text-gray-900'
+              } transition-colors duration-500`}>
+                Load Distribution
+              </h3>
+              <Eye className={`size-3 xs:size-4 sm:size-5 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
             </div>
             
             <div className="flex items-center justify-center h-32 xs:h-36 sm:h-40 md:h-48 lg:h-56 xl:h-64">
@@ -566,33 +645,53 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+            className={`${isDark ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border ${
+              isDark ? 'border-gray-700/50' : 'border-gray-200/50'
+            } transition-colors duration-500`}
           >
             <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-              <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Top Drivers</h3>
-              <Users className="size-3 xs:size-4 sm:size-5 text-gray-400" />
+              <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${
+                isDark ? 'text-gray-100' : 'text-gray-900'
+              } transition-colors duration-500`}>
+                Top Drivers
+              </h3>
+              <Users className={`size-3 xs:size-4 sm:size-5 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
             </div>
             
             <div className="space-y-2 xs:space-y-2 sm:space-y-3 md:space-y-4">
-              {driverPerformanceData.map((driver, index) => (
-                <div key={driver.driver} className="flex items-center justify-between p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-100/50 transition-colors">
+              {driverPerformanceData.map((driver) => (
+                <div key={driver.driver} className={`flex items-center justify-between p-2 xs:p-3 sm:p-4 rounded-lg xs:rounded-xl sm:rounded-2xl hover:${
+                  isDark ? 'bg-gray-700/50' : 'bg-gray-100/50'
+                } transition-colors ${
+                  isDark ? 'bg-gray-700/30' : 'bg-gray-50/50'
+                }`}>
                   <div className="flex items-center gap-2 xs:gap-3 min-w-0 flex-1">
                     <div className="w-6 h-6 xs:w-8 xs:h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg xs:rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-semibold text-xs xs:text-sm flex-shrink-0">
                       {driver.driver.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="font-semibold text-gray-900 text-xs xs:text-sm truncate">{driver.driver}</div>
-                      <div className="flex items-center gap-1 text-xs text-gray-600 mt-0.5">
-                        <span>⭐ {driver.rating}</span>
-                        <span>•</span>
-                        <span>{driver.loads} loads</span>
+                      <div className={`font-semibold ${
+                        isDark ? 'text-gray-100' : 'text-gray-900'
+                      } text-xs xs:text-sm truncate transition-colors duration-500`}>
+                        {driver.driver}
+                      </div>
+                      <div className="flex items-center gap-1 text-xs mt-0.5">
+                        <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>⭐ {driver.rating}</span>
+                        <span className={isDark ? 'text-gray-600' : 'text-gray-400'}>•</span>
+                        <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>{driver.loads} loads</span>
                       </div>
                     </div>
                   </div>
                   
                   <div className="text-right flex-shrink-0 ml-2">
-                    <div className="font-semibold text-green-600 text-xs xs:text-sm">{driver.onTime}%</div>
-                    <div className="text-xs text-gray-600">On-time</div>
+                    <div className={`font-semibold ${
+                      isDark ? 'text-green-400' : 'text-green-600'
+                    } text-xs xs:text-sm transition-colors duration-500`}>
+                      {driver.onTime}%
+                    </div>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'} transition-colors duration-500`}>
+                      On-time
+                    </div>
                   </div>
                 </div>
               ))}
@@ -607,33 +706,57 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border border-gray-200/50"
+            className={`lg:col-span-2 ${
+              isDark ? 'bg-gray-800/80' : 'bg-white/80'
+            } backdrop-blur-sm rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl border ${
+              isDark ? 'border-gray-700/50' : 'border-gray-200/50'
+            } transition-colors duration-500`}
           >
             <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-5 lg:mb-6">
-              <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900">Recent Activity</h3>
-              <RefreshCw className="size-3 xs:size-4 sm:size-5 text-gray-400 cursor-pointer hover:text-gray-600" />
+              <h3 className={`text-sm xs:text-base sm:text-lg font-semibold ${
+                isDark ? 'text-gray-100' : 'text-gray-900'
+              } transition-colors duration-500`}>
+                Recent Activity
+              </h3>
+              <RefreshCw className={`size-3 xs:size-4 sm:size-5 ${
+                isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'
+              } cursor-pointer transition-colors duration-300`} />
             </div>
             
             <div className="space-y-2 xs:space-y-2 sm:space-y-3 md:space-y-4">
               {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-center gap-2 xs:gap-3 p-2 xs:p-3 sm:p-4 bg-gray-50/50 rounded-lg xs:rounded-xl sm:rounded-2xl hover:bg-gray-100/50 transition-colors group">
-                  <div className="p-1 xs:p-2 bg-white rounded-lg xs:rounded-xl shadow-sm group-hover:shadow-md transition-shadow flex-shrink-0">
+                <div key={activity.id} className={`flex items-center gap-2 xs:gap-3 p-2 xs:p-3 sm:p-4 rounded-lg xs:rounded-xl sm:rounded-2xl hover:${
+                  isDark ? 'bg-gray-700/50' : 'bg-gray-100/50'
+                } transition-colors group ${
+                  isDark ? 'bg-gray-700/30' : 'bg-gray-50/50'
+                }`}>
+                  <div className={`p-1 xs:p-2 ${
+                    isDark ? 'bg-gray-800' : 'bg-white'
+                  } rounded-lg xs:rounded-xl shadow-sm group-hover:shadow-md transition-shadow flex-shrink-0`}>
                     {activity.icon}
                   </div>
                   
                   <div className="min-w-0 flex-1">
-                    <div className="font-medium text-gray-900 text-xs xs:text-sm sm:text-base truncate">
+                    <div className={`font-medium ${
+                      isDark ? 'text-gray-100' : 'text-gray-900'
+                    } text-xs xs:text-sm sm:text-base truncate transition-colors duration-500`}>
                       {activity.message}
                     </div>
-                    <div className="text-gray-600 text-xs xs:text-sm mt-0.5">{activity.time}</div>
+                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs xs:text-sm mt-0.5 transition-colors duration-500`}>
+                      {activity.time}
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
-                    <button className="p-1 xs:p-2 hover:bg-gray-200 rounded-lg xs:rounded-xl transition-colors">
-                      <Eye className="size-2 xs:size-3 sm:size-4" />
+                    <button className={`p-1 xs:p-2 ${
+                      isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-200'
+                    } rounded-lg xs:rounded-xl transition-colors`}>
+                      <Eye className={`size-2 xs:size-3 sm:size-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
                     </button>
-                    <button className="p-1 xs:p-2 hover:bg-gray-200 rounded-lg xs:rounded-xl transition-colors">
-                      <MessageCircle className="size-2 xs:size-3 sm:size-4" />
+                    <button className={`p-1 xs:p-2 ${
+                      isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-200'
+                    } rounded-lg xs:rounded-xl transition-colors`}>
+                      <MessageCircle className={`size-2 xs:size-3 sm:size-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
                     </button>
                   </div>
                 </div>
@@ -646,7 +769,9 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl relative overflow-hidden"
+            className={`bg-gradient-to-br ${
+              isDark ? 'from-blue-600 to-purple-700' : 'from-blue-500 to-purple-600'
+            } text-white rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-3xl p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg sm:shadow-xl lg:shadow-2xl relative overflow-hidden`}
           >
             {/* Background pattern */}
             <div className="absolute top-0 right-0 w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 bg-white/10 rounded-full -translate-y-4 xs:-translate-y-6 sm:-translate-y-8 translate-x-4 xs:translate-x-6 sm:translate-x-8" />
