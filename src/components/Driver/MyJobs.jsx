@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CheckCircle2, Download, FileText, Calendar, MapPin, 
-  DollarSign, Clock, Truck, Package, Star, Filter,
+  Clock, Truck, Package, Star, Filter,
   Search, ChevronDown, ChevronUp, Eye, Share2,
   BarChart3, TrendingUp, Award, Trophy, BadgeCheck,
   Receipt, Calculator, Zap, Sparkles, Crown,
@@ -256,8 +256,8 @@ function MyJobs() {
           {[
             { 
               label: 'Total Earnings', 
-              value: `$${stats.totalEarnings.toLocaleString()}`, 
-              icon: DollarSign, 
+              value: `₹${stats.totalEarnings.toLocaleString()}`, 
+              icon: TrendingUp, 
               colorType: 'green',
               trend: '+12.5%'
             },
@@ -465,13 +465,13 @@ function MyJobs() {
                           </div>
                         </div>
                         <div className="flex items-center space-x-2 sm:space-x-3">
-                          <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
+                          <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
                           <div className="min-w-0">
                             <div className={`text-xs sm:text-sm ${theme.text.secondary} transition-colors duration-200`}>
                               Net Earnings
                             </div>
                             <div className="font-bold text-emerald-600 text-base sm:text-lg truncate">
-                              ${job.netEarnings.toLocaleString()}
+                              ₹{job.netEarnings.toLocaleString()}
                             </div>
                           </div>
                         </div>
@@ -554,14 +554,14 @@ function MyJobs() {
                                     Load Payment
                                   </span>
                                   <span className={`font-semibold ${theme.text.primary} text-sm sm:text-base transition-colors duration-200`}>
-                                    ${job.payment.toLocaleString()}
+                                    ₹{job.payment.toLocaleString()}
                                   </span>
                                 </div>
                                 <div className="flex justify-between items-center text-xs sm:text-sm">
                                   <span className={`${theme.text.secondary} transition-colors duration-200`}>
                                     Platform Commission (3.5%)
                                   </span>
-                                  <span className="text-red-500">-${job.commission.toLocaleString()}</span>
+                                  <span className="text-red-500">-₹{job.commission.toLocaleString()}</span>
                                 </div>
                                 <div className={`${
                                   isDark ? 'border-green-800/30' : 'border-green-200'
@@ -571,7 +571,7 @@ function MyJobs() {
                                       Net Earnings
                                     </span>
                                     <span className="font-bold text-emerald-600 text-lg sm:text-xl">
-                                      ${job.netEarnings.toLocaleString()}
+                                      ₹{job.netEarnings.toLocaleString()}
                                     </span>
                                   </div>
                                 </div>

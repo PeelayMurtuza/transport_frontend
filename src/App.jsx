@@ -42,16 +42,16 @@ const NavBar = ({ menuOpen, toggleMenu, closeMenu }) => {
   };
 
   const linkClasses = ({ isActive }) =>
-    `block px-3 py-2 font-semibold transition-colors duration-200 ${
+    `block px-4 sm:px-3 py-3 sm:py-2 text-sm sm:text-base font-semibold transition-colors duration-200 ${
       isDark 
         ? `hover:text-blue-400 ${isActive ? "text-blue-400 border-b-2 border-blue-400" : "text-gray-300"}` 
         : `hover:text-blue-600 ${isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-700"}`
     }`;
 
   return (
-    <nav className={`${isDark ? theme.navbar.bg : theme.navbar.bg} border-b ${isDark ? 'border-gray-700' : 'border-gray-300'} shadow-md transition-colors duration-300`}>
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <h1 className={`text-2xl font-bold ${isDark ? 'text-blue-400' : 'text-blue-600'} transition-colors duration-300`}>TransConnect</h1>
+    <nav className={`sticky top-0 z-50 ${isDark ? theme.navbar.bg : theme.navbar.bg} border-b ${isDark ? 'border-gray-700' : 'border-gray-300'} shadow-md transition-colors duration-300`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+        <h1 className={`text-xl sm:text-2xl font-bold ${isDark ? 'text-blue-400' : 'text-blue-600'} transition-colors duration-300`}>TransConnect</h1>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
@@ -124,7 +124,7 @@ const NavBar = ({ menuOpen, toggleMenu, closeMenu }) => {
 
       {/* Mobile Dropdown Menu */}
       {menuOpen && (
-        <div className={`md:hidden ${isDark ? 'bg-gray-800 border-t border-gray-700' : 'bg-slate-200 border-t border-gray-300'} transition-all duration-300`}>
+        <div className={`md:hidden flex flex-col ${isDark ? 'bg-gray-800 border-t border-gray-700' : 'bg-slate-200 border-t border-gray-300'} transition-all duration-300 max-h-screen overflow-y-auto`}>
           {!user ? (
             <>
               <NavLink to="/" onClick={closeMenu} className={linkClasses}>

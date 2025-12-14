@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MapPin, Navigation, Truck, Calendar, Clock, 
-  DollarSign, Weight, Ruler, Filter, Search,
+  Weight, Ruler, Filter, Search,
   X, ArrowRight, Star, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -338,7 +338,7 @@ function BrowseLoad() {
                   
                   <div className="xs:col-span-2 lg:col-span-1">
                     <label className={`${subText} block text-xs sm:text-sm font-medium mb-1 sm:mb-2`}>
-                      Min Pay: ${filters.minPay}
+                      Min Pay: ₹{filters.minPay}
                     </label>
                     <input
                       type="range"
@@ -401,8 +401,8 @@ function BrowseLoad() {
                             <span>{load.distance} miles</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <DollarSign className="w-3 h-3 sm:w-4 sm:h-4" />
-                            <span>${load.estimatedFreight.toLocaleString()}</span>
+                            <span className="text-emerald-600 font-semibold">₹</span>
+                            <span>{load.estimatedFreight.toLocaleString()}</span>
                           </div>
                           <div className="flex items-center space-x-1">
                             <Weight className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -413,7 +413,7 @@ function BrowseLoad() {
                       
                       <div className="text-right">
                         <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">
-                          ${load.estimatedFreight.toLocaleString()}
+                          ₹{load.estimatedFreight.toLocaleString()}
                         </div>
                         <div className={`${subText} text-xs sm:text-sm`}>Estimated Freight</div>
                       </div>
@@ -612,29 +612,29 @@ function BrowseLoad() {
                           <div className="space-y-2 sm:space-y-3">
                             <div className="flex justify-between items-center">
                               <span className={`${subText} text-sm sm:text-base`}>Estimated Freight</span>
-                              <span className={`font-semibold ${textClass} text-sm sm:text-base`}>${selectedLoad.estimatedFreight.toLocaleString()}</span>
+                              <span className={`font-semibold ${textClass} text-sm sm:text-base`}>₹{selectedLoad.estimatedFreight.toLocaleString()}</span>
                             </div>
                             <div className={`space-y-1 sm:space-y-2 border-t ${borderClass} pt-2 sm:pt-3`}>
                               <div className="flex justify-between text-xs sm:text-sm">
                                 <span className={`${subText}`}>Fuel Cost</span>
-                                <span className={`${textClass}`}>${expenses.fuelCost}</span>
+                                <span className={`${textClass}`}>₹{expenses.fuelCost}</span>
                               </div>
                               <div className="flex justify-between text-xs sm:text-sm">
                                 <span className={`${subText}`}>Tolls & Fees</span>
-                                <span className={`${textClass}`}>${expenses.tolls}</span>
+                                <span className={`${textClass}`}>₹{expenses.tolls}</span>
                               </div>
                               <div className="flex justify-between text-xs sm:text-sm">
                                 <span className={`${subText}`}>Misc Expenses</span>
-                                <span className={`${textClass}`}>${expenses.misc}</span>
+                                <span className={`${textClass}`}>₹{expenses.misc}</span>
                               </div>
                             </div>
                             <div className={`flex justify-between border-t ${borderClass} pt-2 sm:pt-3`}>
                               <span className={`${subText} text-sm sm:text-base`}>Total Expenses</span>
-                              <span className={`font-semibold ${textClass} text-sm sm:text-base`}>${expenses.totalExpenses}</span>
+                              <span className={`font-semibold ${textClass} text-sm sm:text-base`}>₹{expenses.totalExpenses}</span>
                             </div>
                             <div className={`flex justify-between border-t ${borderClass} pt-2 sm:pt-3`}>
                               <span className={`${subText} text-sm sm:text-base`}>Estimated Profit</span>
-                              <span className="font-bold text-green-600 text-base sm:text-lg">${expenses.estimatedProfit}</span>
+                              <span className="font-bold text-green-600 text-base sm:text-lg">₹{expenses.estimatedProfit}</span>
                             </div>
                             <div className={`text-center text-xs sm:text-sm ${subText} mt-2`}>
                               Profit Margin: {expenses.profitMargin}%

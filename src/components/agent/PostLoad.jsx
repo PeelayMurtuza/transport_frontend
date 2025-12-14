@@ -60,22 +60,7 @@ const PostLoad = () => {
     }, 3000);
   };
 
-  const locations = [
-    "Mumbai, Maharashtra", "Delhi, NCR", "Bangalore, Karnataka", 
-    "Hyderabad, Telangana", "Chennai, Tamil Nadu", "Kolkata, West Bengal",
-    "Pune, Maharashtra", "Ahmedabad, Gujarat", "Surat, Gujarat", "Jaipur, Rajasthan"
-  ];
-
-  const vehicleTypes = [
-    { value: "open", label: "Open Truck", capacity: "5-25 Tons" },
-    { value: "container", label: "Container", capacity: "10-30 Tons" },
-    { value: "tanker", label: "Tanker", capacity: "15-35 Tons" },
-    { value: "trailer", label: "Trailer", capacity: "20-40 Tons" },
-    { value: "flatbed", label: "Flatbed", capacity: "8-20 Tons" },
-    { value: "refrigerated", label: "Refrigerated", capacity: "5-15 Tons" }
-  ];
-
-  const FormField = ({ icon, label, name, type = "select", options, placeholder, ...props }) => (
+  const FormField = ({ icon, label, name, type = "text", options, placeholder, ...props }) => (
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileFocus={{ scale: 1.02 }}
@@ -88,38 +73,33 @@ const PostLoad = () => {
         <span className="truncate">{label}</span>
       </label>
       
-      {type === "select" ? (
-        <select
-          name={name}
-          value={form[name]}
-          onChange={handleChange}
-          className={`w-full p-2 xs:p-3 sm:p-4 border rounded-lg xs:rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm text-xs xs:text-sm transition-colors duration-500 ${
-            isDark 
-              ? 'bg-gray-700 border-gray-600 text-gray-100' 
-              : 'bg-white/90 border-gray-200 text-gray-900'
-          }`}
-          required
-          {...props}
-        >
-          <option value="">{placeholder}</option>
-          {options?.map((option) => (
-            <option key={option.value || option} value={option.value || option} className={isDark ? 'bg-gray-800' : 'bg-white'}>
-              {option.label || option}
-            </option>
-          ))}
-        </select>
-      ) : (
+      {type === "textarea" ? (
         <textarea
           name={name}
           value={form[name]}
           onChange={handleChange}
           placeholder={placeholder}
-          className={`w-full p-2 xs:p-3 sm:p-4 border rounded-lg xs:rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm resize-none text-xs xs:text-sm transition-colors duration-500 ${
+          className={`w-full p-2 xs:p-3 sm:p-4 border rounded-lg xs:rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm resize-none text-xs xs:text-sm ${
             isDark 
               ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' 
               : 'bg-white/90 border-gray-200 text-gray-900 placeholder-gray-500'
           }`}
           rows={2}
+          {...props}
+        />
+      ) : (
+        <input
+          type={type}
+          name={name}
+          value={form[name]}
+          onChange={handleChange}
+          placeholder={placeholder}
+          className={`w-full p-2 xs:p-3 sm:p-4 border rounded-lg xs:rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all backdrop-blur-sm text-xs xs:text-sm ${
+            isDark 
+              ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' 
+              : 'bg-white/90 border-gray-200 text-gray-900 placeholder-gray-500'
+          }`}
+          required
           {...props}
         />
       )}
@@ -224,16 +204,16 @@ const PostLoad = () => {
                 icon={<MapPin className={isDark ? "text-blue-400" : "text-blue-500"} />}
                 label="Pickup Location"
                 name="from"
-                placeholder="Select pickup location"
-                options={locations}
+                type="text"
+                placeholder="Enter pickup location (e.g., Mumbai, Maharashtra)"
               />
               
               <FormField
                 icon={<MapPin className={isDark ? "text-green-400" : "text-green-500"} />}
                 label="Delivery Location"
                 name="to"
-                placeholder="Select delivery location"
-                options={locations}
+                type="text"
+                placeholder="Enter delivery location (e.g., Delhi, NCR)"
               />
             </div>
 
@@ -243,29 +223,16 @@ const PostLoad = () => {
                 icon={<Package className={isDark ? "text-orange-400" : "text-orange-500"} />}
                 label="Load Weight"
                 name="weight"
-                placeholder="Select load weight"
-                options={[
-                  "1-5 Tons (Light)",
-                  "5-10 Tons (Medium)", 
-                  "10-20 Tons (Heavy)",
-                  "20-30 Tons (Extra Heavy)",
-                  "30+ Tons (Special)"
-                ]}
+                type="text"
+                placeholder="Enter load weight (e.g., 15 Tons)"
               />
               
               <FormField
                 icon={<IndianRupee className={isDark ? "text-green-400" : "text-green-500"} />}
                 label="Expected Freight"
                 name="freight"
-                placeholder="Select freight range"
-                options={[
-                  "₹5,000 - ₹10,000",
-                  "₹10,000 - ₹20,000", 
-                  "₹20,000 - ₹35,000",
-                  "₹35,000 - ₹50,000",
-                  "₹50,000 - ₹75,000",
-                  "₹75,000+ (Negotiable)"
-                ]}
+                type="text"
+                placeholder="Enter expected freight (e.g., ₹25,000)"
               />
             </div>
 
@@ -275,25 +242,16 @@ const PostLoad = () => {
                 icon={<Calendar className={isDark ? "text-purple-400" : "text-purple-500"} />}
                 label="Preferred Date & Time"
                 name="datetime"
-                placeholder="Select pickup timing"
-                options={[
-                  "Today - Morning (6 AM - 12 PM)",
-                  "Today - Afternoon (12 PM - 4 PM)",
-                  "Today - Evening (4 PM - 8 PM)",
-                  "Tomorrow - Morning",
-                  "Tomorrow - Afternoon", 
-                  "Tomorrow - Evening",
-                  "Within 3 days - Flexible",
-                  "Custom Schedule"
-                ]}
+                type="datetime-local"
+                placeholder="Select pickup date and time"
               />
               
               <FormField
                 icon={<Truck className={isDark ? "text-gray-400" : "text-gray-600"} />}
                 label="Vehicle Type Required"
                 name="vehicle"
-                placeholder="Select vehicle type"
-                options={vehicleTypes}
+                type="text"
+                placeholder="Enter vehicle type (e.g., Open Truck, Container, Tanker)"
               />
             </div>
 
@@ -303,15 +261,8 @@ const PostLoad = () => {
                 icon={<CreditCard className={isDark ? "text-yellow-400" : "text-yellow-500"} />}
                 label="Additional Charges"
                 name="charges"
-                placeholder="Select additional charges"
-                options={[
-                  "No Extra Charges",
-                  "Includes Toll Charges",
-                  "Includes Loading/Unloading",
-                  "Includes Both Toll & Loading",
-                  "Fuel Surcharge Included",
-                  "All Inclusive Package"
-                ]}
+                type="text"
+                placeholder="Enter additional charges (e.g., Toll included, Loading/Unloading ₹5,000)"
               />
               
               <FormField

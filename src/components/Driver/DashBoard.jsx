@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import { 
   Truck, Package, Wallet, Navigation, MapPin, 
-  Clock, DollarSign, TrendingUp, AlertCircle,
+  Clock, TrendingUp, AlertCircle,
   CheckCircle2, RefreshCw, MoreVertical,
   Menu, X, Moon, Sun
 } from 'lucide-react';
@@ -144,7 +144,7 @@ function Dashboard() {
   return (
     <div className={`min-h-screen ${theme.bg.primary} transition-colors duration-200`}>
       {/* Header */}
-      <header className={`${theme.bg.primary} ${theme.border.primary} border-b`}>
+      <header className={`${theme.bg.primary} ${theme.border.primary} border-b sticky top-0 z-50` }>
         <div className="px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-4">
@@ -241,7 +241,7 @@ function Dashboard() {
                 {[
                   { 
                     label: 'Wallet Balance', 
-                    value: `$${dashboardData.wallet.balance.toLocaleString()}`, 
+                    value: `₹${dashboardData.wallet.balance.toLocaleString()}`, 
                     change: '+12.5%', 
                     icon: Wallet,
                     color: isDark ? 'text-green-400' : 'text-green-600',
@@ -257,7 +257,7 @@ function Dashboard() {
                   },
                   { 
                     label: 'Weekly Earnings', 
-                    value: '$2,845', 
+                    value: '₹2,845', 
                     change: '+8.2%', 
                     icon: TrendingUp,
                     color: isDark ? 'text-purple-400' : 'text-purple-600',
@@ -366,7 +366,7 @@ function Dashboard() {
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-4">
                         {[
                           { label: 'Distance', value: `${dashboardData.activeJob.distance} mi`, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' },
-                          { label: 'Est. Pay', value: `$${dashboardData.activeJob.estimatedPay}`, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' },
+                          { label: 'Est. Pay', value: `₹${dashboardData.activeJob.estimatedPay}`, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' },
                           { label: 'ETA', value: dashboardData.activeJob.eta, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' },
                           { label: 'Current', value: dashboardData.activeJob.currentLocation, bg: isDark ? 'bg-gray-700' : 'bg-gray-50' }
                         ].map((detail, index) => (
@@ -457,7 +457,7 @@ function Dashboard() {
                         Total Balance
                       </p>
                       <p className={`${getResponsiveText.stat} ${theme.text.primary} mt-1`}>
-                        ${dashboardData.wallet.balance.toLocaleString()}
+                        ₹{dashboardData.wallet.balance.toLocaleString()}
                       </p>
                       <p className={`text-green-600 text-xs md:text-sm mt-1 flex items-center justify-center ${
                         isDark ? 'text-green-400' : 'text-green-600'
@@ -477,7 +477,7 @@ function Dashboard() {
                           Available
                         </p>
                         <p className={`${getResponsiveText.metric} ${theme.text.primary}`}>
-                          ${dashboardData.wallet.available.toLocaleString()}
+                          ₹{dashboardData.wallet.available.toLocaleString()}
                         </p>
                       </div>
                       <div className={`text-center p-2 md:p-3 ${
@@ -489,7 +489,7 @@ function Dashboard() {
                           Pending
                         </p>
                         <p className={`${getResponsiveText.metric} ${theme.text.primary}`}>
-                          ${dashboardData.wallet.pending.toLocaleString()}
+                          ₹{dashboardData.wallet.pending.toLocaleString()}
                         </p>
                       </div>
                     </div>
@@ -653,7 +653,7 @@ function Dashboard() {
                           <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                             {[
                               { label: 'Distance', value: `${load.distance} miles` },
-                              { label: 'Pay', value: `$${load.pay}` },
+                              { label: 'Pay', value: `₹${load.pay}` },
                               { label: 'Pickup', value: load.pickupTime },
                               { label: 'Type', value: load.type }
                             ].map((item, idx) => (
